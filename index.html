@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistem Asesmen PJOK SD</title>
+    <title>Sistem Asesmen PJOK SD (Deep Learning)</title>
     
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
     
@@ -73,9 +73,6 @@
 
         /* Badges */
         .badge { padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: bold; color: white; }
-        .badge-motorik { background-color: #3498db; }
-        .badge-pengetahuan { background-color: #e67e22; }
-        .badge-motivasi { background-color: #9b59b6; }
         .badge-semua { background-color: #2ecc71; }
         .badge-normatif { background-color: #7f8c8d; }
 
@@ -133,27 +130,27 @@
                     <li id="nav-asesmen" class="nav-item dropdown">
                         Manajemen Asesmen ▾
                         <ul class="dropdown-content">
-                            <li onclick="navigasiKe('kriteria')">Kriteria Penilaian</li>
+                            <li onclick="navigasiKe('kriteria')">Instrumen Penilaian</li>
                             <li onclick="navigasiKe('halaman-assesment')">Halaman Assesment</li>
                         </ul>
                     </li>
                     <li id="nav-panduan" class="nav-item" onclick="navigasiKe('panduan')">Panduan</li>
                 </ul>
                 <div>
-                    <span style="margin-right: 15px;">Guru: <b>Budi Santoso</b></span>
+                    <span style="margin-right: 15px;">Guru: <b>Puspita Sari</b></span>
                     <button class="btn-logout">Keluar</button>
                 </div>
             </div>
 
             <div id="mobile-menu" class="mobile-menu">
-                <div class="mobile-user-info">Guru: <b>Budi Santoso</b></div>
+                <div class="mobile-user-info">Guru: <b>Puspita Sari</b></div>
                 <ul class="mobile-nav-list">
                     <li onclick="navigasiKe('beranda')">Beranda</li>
                     <li onclick="navigasiKe('manajemen-siswa')">Manajemen Siswa</li>
                     <li onclick="toggleMobDropdown(event)">
                         Manajemen Asesmen ▾
                         <ul id="mob-asesmen-content" class="mob-dropdown-content hidden">
-                            <li onclick="navigasiKe('kriteria', true)">Kriteria Penilaian</li>
+                            <li onclick="navigasiKe('kriteria', true)">Instrumen Penilaian</li>
                             <li onclick="navigasiKe('halaman-assesment', true)">Halaman Assesment</li>
                         </ul>
                     </li>
@@ -172,22 +169,22 @@
             <div class="stats-grid">
                 <div class="stat-card" style="border-bottom-color: var(--success);">
                     <h3>Total Siswa Terdaftar</h3>
-                    <div class="value" id="stat-siswa">0</div>
+                    <div class="value" id="count-siswa">0</div>
                 </div>
                 <div class="stat-card" style="border-bottom-color: var(--warning);">
                     <h3>Total Sesi Assesment</h3>
-                    <div class="value" id="stat-assesment">0</div>
+                    <div class="value" id="count-assesment">0</div>
                 </div>
                 <div class="stat-card" style="border-bottom-color: var(--primary);">
-                    <h3>Rata-rata Nilai Keseluruhan</h3>
-                    <div class="value" id="stat-rata-rata">0</div>
+                    <h3>Riwayat Penilaian Tersimpan</h3>
+                    <div class="value" id="count-riwayat">0</div>
                 </div>
             </div>
 
             <div class="card">
-                <h3 style="margin-bottom: 20px; color: var(--text-dark);">Grafik Progres Capaian per Jenis Assesment</h3>
+                <h3 style="margin-bottom: 20px; color: var(--text-dark);">Grafik Progres Capaian per Aspek Instrumen</h3>
                 <div class="chart-container">
-                    <canvas id="progressChart"></canvas>
+                    <canvas id="progresChart"></canvas>
                 </div>
             </div>
         </div>
@@ -220,18 +217,17 @@
         <div id="page-kriteria" class="page-content hidden">
             <div class="card">
                 <div class="flex-between">
-                    <h2 class="page-title" style="margin-bottom: 0; border: none; padding: 0;">Kriteria Penilaian</h2>
-                    <button class="btn btn-success" onclick="bukaModalKriteria()">+ Tambah Kriteria</button>
+                    <h2 class="page-title" style="margin-bottom: 0; border: none; padding: 0;">Manajemen Instrumen Penilaian</h2>
+                    <button class="btn btn-success" onclick="bukaModalKriteria()">+ Tambah Instrumen</button>
                 </div>
                 <div class="table-responsive">
                     <table id="tabel-data-kriteria" class="display" style="width:100%">
                         <thead>
                             <tr>
                                 <th style="width: 30px;">No</th>
-                                <th>Judul Kriteria</th>
-                                <th>Jenis</th>
+                                <th>Judul Instrumen</th>
                                 <th>Keterangan</th>
-                                <th>Normatif</th>
+                                <th>Jumlah Butir</th>
                                 <th style="width: 120px;">Aksi</th>
                             </tr>
                         </thead>
@@ -254,7 +250,6 @@
                                 <th style="width: 30px;">No</th>
                                 <th>Judul Assesment</th>
                                 <th style="width: 80px;">Tanggal</th>
-                                <th style="width: 80px;">Jenis</th>
                                 <th style="width: 80px;">Rata-rata</th>
                                 <th>Keterangan</th>
                                 <th style="width: 60px;">Opsi</th>
@@ -271,7 +266,7 @@
                         <div>
                             <h2 style="color: var(--primary); margin-bottom: 5px;" id="ongoing-judul">Judul</h2>
                             <p style="color: var(--text-light); font-size: 0.9rem;">
-                                Jenis: <b id="ongoing-jenis" style="text-transform: uppercase;">Jenis</b> | Tanggal: <span id="ongoing-tanggal">Tgl</span>
+                                Tanggal: <span id="ongoing-tanggal">Tgl</span>
                             </p>
                         </div>
                         <button class="btn btn-warning" onclick="akhiriAssesment()">Akhiri & Simpan Penilaian</button>
@@ -297,34 +292,17 @@
                 </div>
             </div>
 
-            <div id="view-assesment-detail" class="hidden">
-                <div class="card" style="border-top: 4px solid var(--success);">
-                    <div class="flex-between">
+            <div id="view-assesment-detail" class="view-section hidden">
+                <div class="card">
+                    <div class="flex-between" style="margin-bottom: 20px;">
                         <div>
-                            <h2 style="color: var(--success); margin-bottom: 5px;">Detail Hasil Assesment</h2>
-                            <p style="color: var(--text-light); font-size: 0.9rem;" id="detail-info">Informasi Assesment</p>
+                            <h3 id="detail-title-assesment">Detail Hasil Rekapitulasi Asesmen</h3>
+                            <p id="detail-meta-assesment" class="text-light"></p>
                         </div>
                         <button class="btn btn-outline" onclick="tutupDetailAssesment()">Kembali</button>
                     </div>
-                </div>
-                <div class="card">
-                    <h3 style="margin-bottom: 15px;">Tabel Riwayat Penilaian</h3>
                     <div class="table-responsive">
-                        <table id="tabel-riwayat-penilaian" class="display" style="width:100%">
-                            <thead>
-                                <tr>
-                                    <th style="width: 30px;">No</th>
-                                    <th>Nama</th>
-                                    <th>Kelas</th>
-                                    <th>Absen</th>
-                                    <th>Skor Total</th>
-                                    <th>Motorik</th>
-                                    <th>Pengetahuan</th>
-                                    <th>Motivasi</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tabel-riwayat-body"></tbody>
-                        </table>
+                        <div id="container-tabel-riwayat"></div>
                     </div>
                 </div>
             </div>
@@ -335,8 +313,8 @@
             <div class="guide-grid">
                 <div class="guide-card card-beranda"><div class="guide-icon">🏠</div><h3>1. Beranda</h3><p>Review singkat hasil dan progress assesment.</p></div>
                 <div class="guide-card card-siswa"><div class="guide-icon">👥</div><h3>2. Manajemen Siswa</h3><p>Input dan kelola data siswa sebelum assesment.</p></div>
-                <div class="guide-card card-asesmen"><div class="guide-icon">📝</div><h3>3. Kriteria Penilaian</h3><p>Input daftar normatif / checklist yang akan dinilai.</p></div>
-                <div class="guide-card card-panduan"><div class="guide-icon">⭐</div><h3>4. Halaman Assesment</h3><p>Tempat guru mengeksekusi penilaian siswa.</p></div>
+                <div class="guide-card card-asesmen"><div class="guide-icon">📝</div><h3>3. Instrumen Penilaian</h3><p>Input daftar instrumen dan butir indikator yang dinilai.</p></div>
+                <div class="guide-card card-panduan"><div class="guide-icon">⭐</div><h3>4. Halaman Assesment</h3><p>Tempat guru mengeksekusi penilaian siswa skala 1-5.</p></div>
             </div>
         </div>
     </div>
@@ -365,22 +343,31 @@
     <div id="modal-kriteria" class="modal-overlay hidden">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 id="modal-title-kriteria">Kriteria</h3>
+                <h3 id="modal-title-kriteria">Form Instrumen Penilaian</h3>
                 <button class="close-btn" onclick="tutupModal('modal-kriteria')">&times;</button>
             </div>
             <form id="form-kriteria" onsubmit="simpanKriteria(event)">
                 <input type="hidden" id="kriteria-id">
-                <div class="form-group"><label>Judul</label><input type="text" id="kriteria-judul" required></div>
                 <div class="form-group">
-                    <label>Jenis</label>
-                    <select id="kriteria-jenis" required><option value="motorik">Motorik</option><option value="pengetahuan">Pengetahuan</option><option value="motivasi">Motivasi</option></select>
+                    <label>Judul Instrumen</label>
+                    <input type="text" id="kriteria-judul" required placeholder="Contoh: Asesmen Berkesadaran (Mindful)">
                 </div>
-                <div class="form-group"><label>Keterangan</label><textarea id="kriteria-keterangan" rows="2"></textarea></div>
                 <div class="form-group">
-                    <div class="flex-between"><label style="margin: 0;">Normatif</label><button type="button" class="btn btn-sm btn-primary" onclick="tambahInputNormatif()">+ Normatif</button></div>
-                    <div id="container-normatif" style="margin-top: 10px; padding: 10px; background: #f9f9f9; border-radius: 5px;"></div>
+                    <label>Keterangan / Deskripsi</label>
+                    <textarea id="kriteria-keterangan" rows="2" placeholder="Jelaskan ruang lingkup penilaian instrumen ini..."></textarea>
                 </div>
-                <div class="modal-footer"><button type="button" class="btn btn-outline" onclick="tutupModal('modal-kriteria')">Batal</button><button type="submit" class="btn btn-success">Simpan</button></div>
+                <div class="form-group">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                        <label style="margin: 0;">Butir-Butir Indikator Instrumen</label>
+                        <button type="button" class="btn btn-sm btn-primary" onclick="tambahInputNormatif()">+ Tambah Butir</button>
+                    </div>
+                    <div id="container-normatif" style="max-height: 200px; overflow-y: auto; padding: 10px; background: #f9f9f9; border-radius: 5px; border: 1px solid #ddd;">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline" onclick="tutupModal('modal-kriteria')">Batal</button>
+                    <button type="submit" class="btn btn-success">Simpan Instrumen</button>
+                </div>
             </form>
         </div>
     </div>
@@ -397,15 +384,6 @@
                     <input type="text" id="setup-judul" placeholder="Contoh: Ujian Tengah Semester Praktik" required>
                 </div>
                 <div class="form-group">
-                    <label>Jenis Assesment (Yang akan diujikan)</label>
-                    <select id="setup-jenis" required>
-                        <option value="semua">Semua Jenis (Motorik, Teori, Sikap)</option>
-                        <option value="motorik">Hanya Motorik (Praktik)</option>
-                        <option value="pengetahuan">Hanya Pengetahuan (Teori)</option>
-                        <option value="motivasi">Hanya Sikap & Motivasi</option>
-                    </select>
-                </div>
-                <div class="form-group">
                     <label>Keterangan Tambahan</label>
                     <textarea id="setup-keterangan" rows="2" placeholder="Detail sesi penilaian..."></textarea>
                 </div>
@@ -417,500 +395,1254 @@
         </div>
     </div>
 
-    <div id="modal-nilai-siswa" class="modal-overlay hidden">
-        <div class="modal-content">
+    <!-- <div id="modal-nilai-siswa" class="modal-overlay hidden">
+        <div class="modal-content" style="max-width: 700px;">
             <div class="modal-header">
-                <h3>Penilaian: <span id="nilai-nama-siswa" style="color:var(--primary);">Nama Siswa</span></h3>
+                <h3>Penilaian Capaian Siswa</h3>
                 <button class="close-btn" onclick="tutupModal('modal-nilai-siswa')">&times;</button>
             </div>
+            <div style="margin-bottom: 15px; background: #eef5fc; padding: 10px; border-radius: 5px;">
+                Nama Siswa: <b id="nilai-nama-siswa">-</b>
+            </div>
             <form id="form-nilai-siswa" onsubmit="simpanNilaiSiswa(event)">
-                <div id="container-checklist-kriteria" style="max-height: 50vh; overflow-y: auto; padding-right: 10px;">
-                    </div>
+
+                <div id="container-checklist-kriteria" style="max-height: 50vh; overflow-y: auto; padding-right: 5px; margin-bottom: 15px;">
+                </div>
+
+                <div class="form-group" style="padding-top: 15px; border-top: 1px solid #eee;">
+                    <label><b>Catatan Evaluasi Guru (Opsional)</b></label>
+                    <textarea id="catatan-guru-asesmen" class="form-control" rows="3" style="width:100%; padding: 8px; border-radius: 4px; border: 1px solid #ccc;" placeholder="Tuliskan catatan kemajuan, kendala, atau rekomendasi untuk siswa ini..."></textarea>
+                </div>
+
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline" onclick="tutupModal('modal-nilai-siswa')">Batal</button>
-                    <button type="submit" class="btn btn-success">Simpan Nilai Siswa</button>
+                    <button type="submit" class="btn btn-success">Simpan Nilai</button>
+                </div>
+            </form>
+        </div>
+    </div> -->
+
+    <!-- MODAL INPUT NILAI SISWA -->
+    <div id="modal-nilai-siswa" class="modal-overlay hidden">
+        <div class="modal-content" style="max-width: 700px;">
+            <div class="modal-header">
+                <h3>Penilaian Capaian Siswa</h3>
+                <button class="close-btn" onclick="tutupModal('modal-nilai-siswa')">&times;</button>
+            </div>
+            <div style="margin-bottom: 15px; background: #eef5fc; padding: 10px; border-radius: 5px;">
+                Nama Siswa: <b id="nilai-nama-siswa">-</b>
+            </div>
+            <form id="form-nilai-siswa" onsubmit="simpanNilaiSiswa(event)">
+
+                <!-- Area ini akan menampung Butir Instrumen DAN Catatan Guru sekaligus -->
+                <div id="container-checklist-kriteria" style="max-height: 60vh; overflow-y: auto; padding-right: 10px; margin-bottom: 15px;">
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline" onclick="tutupModal('modal-nilai-siswa')">Batal</button>
+                    <button type="submit" class="btn btn-success">Simpan Nilai</button>
                 </div>
             </form>
         </div>
     </div>
 
-
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+    
     <script>
-        // --- INISIALISASI DATABASE ---
+        // ==========================================
+        // 1. INITIALISASI DATABASE DENGAN INSTRUMEN DEEP LEARNING
+        // ==========================================
         function initDB() {
-            if(!localStorage.getItem('dataSiswa')) localStorage.setItem('dataSiswa', JSON.stringify([]));
-            if(!localStorage.getItem('dataAssesment')) localStorage.setItem('dataAssesment', JSON.stringify([]));
-            if(!localStorage.getItem('dataPenilaian')) localStorage.setItem('dataPenilaian', JSON.stringify([]));
-            if(!localStorage.getItem('kriteriaAssesment')) {
+            if (!localStorage.getItem('dataSiswa')) {
+                localStorage.setItem('dataSiswa', JSON.stringify([]));
+            }
+            if (!localStorage.getItem('dataAssesment')) {
+                localStorage.setItem('dataAssesment', JSON.stringify([]));
+            }
+            if (!localStorage.getItem('riwayatPenilaian')) {
+                localStorage.setItem('riwayatPenilaian', JSON.stringify([]));
+            }
+            
+            // Default Instrumen disesuaikan dengan Prinsip Deep Learning Kemdikbud
+            if (!localStorage.getItem('kriteriaAssesment')) {
                 const defaultKriteria = [
-                    { id_kriteria: "k1", judul: "Dasar Lempar Tangkap", keterangan: "-", jenis: "motorik", normatif: ["Posisi kaki", "Pandangan", "Ayunan", "Tangkapan", "Keseimbangan"] },
-                    { id_kriteria: "k2", judul: "Aturan Permainan", keterangan: "-", jenis: "pengetahuan", normatif: ["Tahu jumlah pemain", "Paham poin", "Mengerti lapangan", "Tahu posisi", "Paham pelanggaran"] },
-                    { id_kriteria: "k3", judul: "Sikap Sportivitas", keterangan: "-", jenis: "motivasi", normatif: ["Terima kekalahan", "Tidak mengejek", "Ikut instruksi", "Hargai wasit", "Kerja sama"] }
+                { 
+                    id_kriteria: "k_1", 
+                    judul: "Berkesadaran (Mindful)", 
+                    keterangan: "Menilai fokus, kesadaran posisi tubuh, pemahaman tujuan aktivitas, dan kemampuan refleksi diri.", 
+                    normatif: [
+                    "Siswa mampu menyebutkan tujuan aktivitas PJOK sebelum melakukan praktik.",
+                    "Siswa menunjukkan fokus, konsentrasi, dan perhatian penuh terhadap keselamatan diri.",
+                    "Siswa mampu melakukan refleksi atau mengungkapkan apa yang dirasakan setelah pembelajaran."
+                    ] 
+                },
+                { 
+                    id_kriteria: "k_2", 
+                    judul: "Bermakna (Meaningful)", 
+                    keterangan: "Menilai kemampuan siswa mengaitkan gerakan fisik dengan kesehatan dan manfaat kehidupan nyata.", 
+                    normatif: [
+                    "Siswa mampu mengaitkan aktivitas gerak dengan kebugaran jasmani dan gaya hidup aktif.",
+                    "Siswa dapat menjelaskan alasan pemilihan strategi atau keputusan gerak yang diambil.",
+                    "Siswa mampu menetapkan target pribadi untuk perbaikan kualitas geraknya."
+                    ] 
+                },
+                { 
+                    id_kriteria: "k_3", 
+                    judul: "Menggembirakan (Joyful)", 
+                    keterangan: "Menilai tingkat antusiasme, kenyamanan emosi, rasa percaya diri, dan kegembiraan siswa.", 
+                    normatif: [
+                    "Siswa menunjukkan emosi positif, keceriaan, dan antusiasme tinggi selama aktivitas.",
+                    "Siswa terlibat aktif tanpa merasa terbebani atau takut melakukan kesalahan gerak.",
+                    "Siswa menghargai pilihan aktivitas gerak sesuai minat atau tingkat kemampuannya."
+                    ] 
+                },
+                { 
+                    id_kriteria: "k_4", 
+                    judul: "Belajar Melalui Gerak", 
+                    keterangan: "Menilai aspek sosial-emosional seperti kolaborasi, komunikasi, tanggung jawab, dan fair play.", 
+                    normatif: [
+                    "Siswa mampu berkomunikasi secara efektif dan berkolaborasi dalam kelompok.",
+                    "Siswa menampilkan sikap sportivitas (fair play), empati, dan tanggung jawab sosial."
+                    ] 
+                },
+                { 
+                    id_kriteria: "k_5", 
+                    judul: "Pemanfaatan Web-Based Assessment", 
+                    keterangan: "Menilai kejujuran, objektivitas, serta kemandirian siswa dalam memanfaatkan sistem digital.", 
+                    normatif: [
+                    "Siswa mengisi penilaian refleksi diri di aplikasi secara jujur, objektif, dan mandiri.",
+                    "Siswa memanfaatkan data/umpan balik dari aplikasi web sebagai panduan perbaikan belajar."
+                    ] 
+                }
                 ];
                 localStorage.setItem('kriteriaAssesment', JSON.stringify(defaultKriteria));
             }
         }
 
-        function getDB(table) { return JSON.parse(localStorage.getItem(table)); }
-        function setDB(table, data) { localStorage.setItem(table, JSON.stringify(data)); }
-        function generateId() { return Date.now().toString(36) + Math.random().toString(36).substr(2); }
+        function getDB(key) { return JSON.parse(localStorage.getItem(key)) || []; }
+        function updateDB(key, data) { localStorage.setItem(key, JSON.stringify(data)); }
+        function generateId() { return Math.random().toString(36).substr(2, 9); }
 
-        // --- GLOBAL VARIABLES (STATE) ---
+        // Variabel global state Assesment Ongoing
         let tempAssesment = null;
         let tempPenilaianArray = [];
         let aktifIdSiswa = null;
-        let progresChartInstance = null; 
+        let progresChartInstance = null;
 
-        // --- NAVIGASI RESPONSIVE ---
-        function toggleMobileMenu(e) { if(e) e.stopPropagation(); document.getElementById('mobile-menu').classList.toggle('active'); }
-        function toggleMobDropdown(e) { if(e) e.stopPropagation(); document.getElementById('mob-asesmen-content').classList.toggle('hidden'); }
-        document.addEventListener('click', function(event) {
-            const mobileMenu = document.getElementById('mobile-menu');
-            const menuToggle = document.querySelector('.menu-toggle');
-            if (mobileMenu.classList.contains('active')) {
-                if (!mobileMenu.contains(event.target) && !menuToggle.contains(event.target)) mobileMenu.classList.remove('active');
-            }
-        });
+        // Navigasi SPA & Menu Mobile
+        // function navigasiKe(idHalaman, fromMobile = false) {
+        //     document.querySelectorAll('.page-content').forEach(el => el.classList.add('hidden'));
+        //     document.getElementById('page-' + idHalaman).classList.remove('hidden');
 
-        function navigasiKe(halaman, isSubmenu = false) {
-            document.getElementById('mobile-menu').classList.remove('active');
-            document.querySelectorAll('.page-content').forEach(el => el.classList.add('hidden'));
-            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-            document.getElementById(`page-${halaman}`).classList.remove('hidden');
+        //     document.querySelectorAll('.nav-menu > li').forEach(el => el.classList.remove('active'));
+        //     if(document.getElementById('nav-' + idHalaman)) {
+        //         document.getElementById('nav-' + idHalaman).classList.add('active');
+        //     }
 
-            if (['kriteria', 'halaman-assesment'].includes(halaman)) document.getElementById('nav-asesmen').classList.add('active');
-            else { let navElement = document.getElementById(`nav-${halaman}`); if(navElement) navElement.classList.add('active'); }
+        //     if(idHalaman === 'manajemen-siswa') renderSiswa();
+        //     if(idHalaman === 'kriteria') renderKriteria();
+        //     if(idHalaman === 'halaman-assesment') renderAssesmentList();
+        //     if(idHalaman === 'beranda') renderBeranda();
 
-            if(halaman === 'beranda') renderBeranda();
-            if(halaman === 'manajemen-siswa') renderSiswa();
-            if(halaman === 'kriteria') renderKriteria();
-            if(halaman === 'halaman-assesment') renderHalamanAssesment();
-            
-            if(isSubmenu && window.event) window.event.stopPropagation();
-        }
+        //     if(fromMobile || window.innerWidth <= 768) {
+        //         document.getElementById('mobile-menu').classList.remove('active');
+        //     }
+        // }
 
-        function tutupModal(id) { document.getElementById(id).classList.add('hidden'); }
+        // Navigasi SPA & Menu Mobile
+        function navigasiKe(idHalaman, fromMobile = false) {
+    // 1. Sembunyikan semua halaman utama
+    document.querySelectorAll('.page-content').forEach(el => el.classList.add('hidden'));
+    document.getElementById('page-' + idHalaman).classList.remove('hidden');
+    
+    // 2. Atur status menu aktif
+    document.querySelectorAll('.nav-menu > li').forEach(el => el.classList.remove('active'));
+    if(document.getElementById('nav-' + idHalaman)) {
+        document.getElementById('nav-' + idHalaman).classList.add('active');
+    }
 
-        // ==========================================
-        // RENDER BERANDA (DASHBOARD)
-        // ==========================================
-        function renderBeranda() {
-            const dbSiswa = getDB('dataSiswa');
-            const dbAssesment = getDB('dataAssesment');
-
-            // 1. Update Card Info
-            document.getElementById('stat-siswa').innerText = dbSiswa.length;
-            document.getElementById('stat-assesment').innerText = dbAssesment.length;
-
-            let avgAll = 0;
-            if (dbAssesment.length > 0) {
-                let total = dbAssesment.reduce((acc, curr) => {
-                    // Backward compatibility guard (jika masih angka)
-                    let val = typeof curr.rata_rata_nilai === 'number' ? curr.rata_rata_nilai : (curr.rata_rata_nilai.total || 0);
-                    return acc + val;
-                }, 0);
-                avgAll = Math.round(total / dbAssesment.length);
-            }
-            document.getElementById('stat-rata-rata').innerText = avgAll;
-
-            // 2. Persiapan Data untuk ChartJS (Filter per Kategori Spesifik)
-            const hitungRataJenis = (jenisKey) => {
-                // Cari assesment yang jenisnya sesuai atau "semua"
-                let filtered = dbAssesment.filter(a => a.jenis === jenisKey || a.jenis === 'semua');
-                if(filtered.length === 0) return 0;
-                let sum = filtered.reduce((acc, curr) => {
-                    let val = 0;
-                    if(typeof curr.rata_rata_nilai === 'object' && curr.rata_rata_nilai[jenisKey]) {
-                        val = curr.rata_rata_nilai[jenisKey];
-                    } else if (typeof curr.rata_rata_nilai === 'number' && curr.jenis === jenisKey) {
-                        val = curr.rata_rata_nilai;
-                    }
-                    return acc + val;
-                }, 0);
-                return Math.round(sum / filtered.length);
-            };
-
-            const dataMotorik = hitungRataJenis('motorik');
-            const dataPengetahuan = hitungRataJenis('pengetahuan');
-            const dataMotivasi = hitungRataJenis('motivasi');
-
-            // 3. Render ChartJS
-            const ctx = document.getElementById('progressChart').getContext('2d');
-            if (progresChartInstance) { progresChartInstance.destroy(); }
-
-            progresChartInstance = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: ['Motorik (Praktik)', 'Pengetahuan (Teori)', 'Sikap & Motivasi'],
-                    datasets: [
-                        {
-                            label: 'Rata-rata Nilai Kelas',
-                            data: [dataMotorik, dataPengetahuan, dataMotivasi],
-                            backgroundColor: '#1E56A0',
-                            borderRadius: 5
-                        },
-                        {
-                            label: 'Target Maksimal (100)',
-                            data: [100, 100, 100],
-                            backgroundColor: '#E74C3C',
-                            borderRadius: 5
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false, 
-                    plugins: { legend: { position: 'bottom' } },
-                    scales: { y: { beginAtZero: true, max: 100 } }
-                }
-            });
-        }
-
-        // ==========================================
-        // MANAJEMEN SISWA & KRITERIA
-        // ==========================================
-        function renderSiswa() {
-            const siswa = getDB('dataSiswa');
-            if ($.fn.DataTable.isDataTable('#tabel-data-siswa')) { $('#tabel-data-siswa').DataTable().destroy(); }
-            const tbody = document.getElementById('tabel-siswa'); tbody.innerHTML = '';
-            siswa.sort((a, b) => a.kelas.localeCompare(b.kelas) || a.absen - b.absen);
-            siswa.forEach((s, index) => {
-                tbody.innerHTML += `<tr><td>${index + 1}</td><td>${s.absen}</td><td class="ellipsis">${s.nama}</td><td>${s.kelas}</td><td>${s.jenis_kelamin}</td><td class="ellipsis">${s.sekolah}</td><td><button class="btn btn-sm btn-primary" onclick="editSiswa('${s.id_siswa}')">Edit</button><button class="btn btn-sm btn-danger" onclick="hapusSiswa('${s.id_siswa}')">Hapus</button></td></tr>`;
-            });
-            $('#tabel-data-siswa').DataTable({ "language": { "url": "//cdn.datatables.net/plug-ins/1.13.7/i18n/id.json" }, "columnDefs": [{ "orderable": false, "targets": 6 }] });
-        }
-        function bukaModalSiswa() { document.getElementById('form-siswa').reset(); document.getElementById('siswa-id').value = ''; document.getElementById('modal-siswa').classList.remove('hidden'); }
-        function simpanSiswa(e) { e.preventDefault(); let db = getDB('dataSiswa'); const dataBaru = { id_siswa: document.getElementById('siswa-id').value || generateId(), absen: parseInt(document.getElementById('siswa-absen').value), nama: document.getElementById('siswa-nama').value, jenis_kelamin: document.getElementById('siswa-jk').value, kelas: document.getElementById('siswa-kelas').value, sekolah: document.getElementById('siswa-sekolah').value }; if(dataBaru.id_siswa.length<10) dataBaru.id_siswa = generateId(); if(document.getElementById('siswa-id').value === "") db.push(dataBaru); else db[db.findIndex(s => s.id_siswa === dataBaru.id_siswa)] = dataBaru; setDB('dataSiswa', db); tutupModal('modal-siswa'); renderSiswa(); }
-        function editSiswa(id) { const s = getDB('dataSiswa').find(s => s.id_siswa === id); if(s) { document.getElementById('siswa-id').value = s.id_siswa; document.getElementById('siswa-absen').value = s.absen; document.getElementById('siswa-nama').value = s.nama; document.getElementById('siswa-jk').value = s.jenis_kelamin; document.getElementById('siswa-kelas').value = s.kelas; document.getElementById('siswa-sekolah').value = s.sekolah; document.getElementById('modal-siswa').classList.remove('hidden'); } }
-        function hapusSiswa(id) { if(confirm('Hapus?')) { setDB('dataSiswa', getDB('dataSiswa').filter(s => s.id_siswa !== id)); renderSiswa(); } }
-
-        function renderKriteria() {
-            const kriteria = getDB('kriteriaAssesment');
-            if ($.fn.DataTable.isDataTable('#tabel-data-kriteria')) { $('#tabel-data-kriteria').DataTable().destroy(); }
-            const tbody = document.getElementById('tabel-kriteria'); tbody.innerHTML = '';
-            kriteria.forEach((k, index) => { tbody.innerHTML += `<tr><td>${index + 1}</td><td class="ellipsis"><b>${k.judul}</b></td><td><span class="badge badge-${k.jenis}">${k.jenis.toUpperCase()}</span></td><td class="ellipsis">${k.keterangan || '-'}</td><td><span class="badge badge-normatif">${k.normatif.length} Item</span></td><td><button class="btn btn-sm btn-primary" onclick="editKriteria('${k.id_kriteria}')">Edit</button><button class="btn btn-sm btn-danger" onclick="hapusKriteria('${k.id_kriteria}')">Hapus</button></td></tr>`; });
-            $('#tabel-data-kriteria').DataTable({ "language": { "url": "//cdn.datatables.net/plug-ins/1.13.7/i18n/id.json" }, "columnDefs": [ { "orderable": false, "targets": 5 } ] });
-        }
-        function tambahInputNormatif(val='') { const c = document.getElementById('container-normatif'); const div = document.createElement('div'); div.className = 'flex-between'; div.style.marginBottom='8px'; div.innerHTML = `<input type="text" class="form-control input-normatif-kriteria" value="${val}" required><button type="button" class="btn btn-danger btn-sm" onclick="this.parentElement.remove()" style="margin-left:10px; margin-bottom:0;">X</button>`; c.appendChild(div); }
-        function bukaModalKriteria() { document.getElementById('form-kriteria').reset(); document.getElementById('kriteria-id').value=''; document.getElementById('container-normatif').innerHTML=''; tambahInputNormatif(); document.getElementById('modal-kriteria').classList.remove('hidden'); }
-        function simpanKriteria(e) { e.preventDefault(); let db=getDB('kriteriaAssesment'); let normatif=[]; document.querySelectorAll('.input-normatif-kriteria').forEach(i=>{if(i.value.trim()!="")normatif.push(i.value.trim())}); if(normatif.length===0) return alert('Min 1 normatif!'); const d={id_kriteria:document.getElementById('kriteria-id').value||generateId(), judul:document.getElementById('kriteria-judul').value, keterangan:document.getElementById('kriteria-keterangan').value, jenis:document.getElementById('kriteria-jenis').value, normatif:normatif}; if(d.id_kriteria.length<5)d.id_kriteria=generateId(); if(document.getElementById('kriteria-id').value==="")db.push(d); else db[db.findIndex(k=>k.id_kriteria===d.id_kriteria)]=d; setDB('kriteriaAssesment',db); tutupModal('modal-kriteria'); renderKriteria(); }
-        function editKriteria(id) { const k=getDB('kriteriaAssesment').find(k=>k.id_kriteria===id); if(k){ document.getElementById('kriteria-id').value=k.id_kriteria; document.getElementById('kriteria-judul').value=k.judul; document.getElementById('kriteria-keterangan').value=k.keterangan; document.getElementById('kriteria-jenis').value=k.jenis; document.getElementById('container-normatif').innerHTML=''; k.normatif.forEach(n=>tambahInputNormatif(n)); if(k.normatif.length===0)tambahInputNormatif(); document.getElementById('modal-kriteria').classList.remove('hidden'); } }
-        function hapusKriteria(id) { if(confirm('Hapus?')) { setDB('kriteriaAssesment', getDB('kriteriaAssesment').filter(k=>k.id_kriteria!==id)); renderKriteria(); } }
-
-        // ==========================================
-        // ALUR MULAI ASSESMENT (DENGAN TIPE OBJECT)
-        // ==========================================
-        function renderHalamanAssesment() {
+    // 3. Render data sesuai halaman yang dituju
+    if(idHalaman === 'manajemen-siswa') renderSiswa();
+    if(idHalaman === 'kriteria') renderKriteria();
+    if(idHalaman === 'beranda') renderBeranda();
+    
+    // 4. PERBAIKAN STATE: Logika khusus untuk Halaman Asesmen
+    if(idHalaman === 'halaman-assesment') {
+        // Selalu tutup paksa layar detail jika masuk ke menu ini
+        document.getElementById('view-assesment-detail').classList.add('hidden'); 
+        
+        if (tempAssesment !== null) {
+            // Jika sebelumnya guru sedang di tengah-tengah menilai (belum disimpan), 
+            // kembalikan layar ke daftar siswa yang sedang dinilai.
+            document.getElementById('view-assesment-ongoing').classList.remove('hidden');
+            document.getElementById('view-assesment-list').classList.add('hidden');
+        } else {
+            // Jika tidak ada penilaian yang sedang berjalan, tampilkan tabel riwayat (list)
             document.getElementById('view-assesment-list').classList.remove('hidden');
             document.getElementById('view-assesment-ongoing').classList.add('hidden');
-            document.getElementById('view-assesment-detail').classList.add('hidden');
+        }
+        renderAssesmentList();
+    }
 
-            const dbAssesment = getDB('dataAssesment');
-            if ($.fn.DataTable.isDataTable('#tabel-data-assesment')) { $('#tabel-data-assesment').DataTable().destroy(); }
-            
+    // 5. Tutup menu mobile jika diklik dari HP
+    if(fromMobile || window.innerWidth <= 768) {
+        document.getElementById('mobile-menu').classList.remove('active');
+    }
+}
+
+function toggleMobileMenu(e) {
+    e.stopPropagation();
+    document.getElementById('mobile-menu').classList.toggle('active');
+}
+
+function toggleMobDropdown(e) {
+    e.stopPropagation();
+    document.getElementById('mob-asesmen-content').classList.toggle('hidden');
+}
+
+function tutupModal(id) {
+    document.getElementById(id).classList.add('hidden');
+}
+
+        // ==========================================
+        // 2. MANAJEMEN SISWA
+        // ==========================================
+        // function renderSiswa() {
+        //     const list = getDB('dataSiswa');
+        //     const tbody = document.getElementById('tabel-siswa');
+        //     if(!tbody) return;
+        //     tbody.innerHTML = '';
+
+        //     list.forEach((item, index) => {
+        //         tbody.innerHTML += `
+        //         <tr>
+        //         <td>${index + 1}</td>
+        //         <td>${item.absen}</td>
+        //         <td class="ellipsis"><b>${item.nama}</b></td>
+        //         <td>${item.kelas}</td>
+        //         <td>${item.jk}</td>
+        //         <td class="ellipsis">${item.sekolah}</td>
+        //         <td>
+        //         <button class="btn btn-warning btn-sm" onclick="editSiswa('${item.id_siswa}')">Edit</button>
+        //         <button class="btn btn-danger btn-sm" onclick="hapusSiswa('${item.id_siswa}')">Hapus</button>
+        //         </td>
+        //         </tr>
+        //         `;
+        //     });
+
+        //     if ($.fn.DataTable.isDataTable('#tabel-data-siswa')) { $('#tabel-data-siswa').DataTable().destroy(); }
+        //     $('#tabel-data-siswa').DataTable({ "language": { "url": "//cdn.datatables.net/plug-ins/1.13.7/i18n/id.json" }});
+        // }
+
+        function renderSiswa() {
+            const list = getDB('dataSiswa');
+            const tbody = document.getElementById('tabel-siswa');
+            if(!tbody) return;
+
+    // 1. Hancurkan DataTables lama SEBELUM merombak isi tabel
+    if ($.fn.DataTable.isDataTable('#tabel-data-siswa')) { 
+        $('#tabel-data-siswa').DataTable().destroy(); 
+    }
+    
+    // 2. Kosongkan dan isi ulang tabel dengan data terbaru
+    tbody.innerHTML = '';
+    list.forEach((item, index) => {
+        tbody.innerHTML += `
+        <tr>
+        <td>${index + 1}</td>
+        <td>${item.absen}</td>
+        <td class="ellipsis"><b>${item.nama}</b></td>
+        <td>${item.kelas}</td>
+        <td>${item.jk}</td>
+        <td class="ellipsis">${item.sekolah}</td>
+        <td>
+        <button class="btn btn-warning btn-sm" onclick="editSiswa('${item.id_siswa}')">Edit</button>
+        <button class="btn btn-danger btn-sm" onclick="hapusSiswa('${item.id_siswa}')">Hapus</button>
+        </td>
+        </tr>
+        `;
+    });
+
+    // 3. Bangun kembali DataTables
+    $('#tabel-data-siswa').DataTable({ "language": { "url": "//cdn.datatables.net/plug-ins/1.13.7/i18n/id.json" }});
+}
+
+function bukaModalSiswa() {
+    document.getElementById('form-siswa').reset();
+    document.getElementById('siswa-id').value = '';
+    document.getElementById('modal-title-siswa').innerText = "Tambah Siswa Baru";
+    document.getElementById('modal-siswa').classList.remove('hidden');
+}
+
+function simpanSiswa(e) {
+    e.preventDefault();
+    const id = document.getElementById('siswa-id').value;
+    const dataBaru = {
+        id_siswa: id || 's_' + generateId(),
+        absen: document.getElementById('siswa-absen').value,
+        nama: document.getElementById('siswa-nama').value,
+        jk: document.getElementById('siswa-jk').value,
+        kelas: document.getElementById('siswa-kelas').value,
+        sekolah: document.getElementById('siswa-sekolah').value
+    };
+
+    let list = getDB('dataSiswa');
+    if(id) list = list.map(s => s.id_siswa === id ? dataBaru : s);
+    else list.push(dataBaru);
+
+    updateDB('dataSiswa', list);
+    tutupModal('modal-siswa');
+    renderSiswa();
+}
+
+function hapusSiswa(id) {
+    if(confirm("Hapus data siswa ini?")) {
+        let list = getDB('dataSiswa');
+        list = list.filter(s => s.id_siswa !== id);
+        updateDB('dataSiswa', list);
+        renderSiswa();
+    }
+}
+function editSiswa(id) {
+    const item = getDB('dataSiswa').find(s => s.id_siswa === id);
+    if(!item) return;
+    document.getElementById('siswa-id').value = item.id_siswa;
+    document.getElementById('siswa-absen').value = item.absen;
+    document.getElementById('siswa-nama').value = item.nama;
+    document.getElementById('siswa-jk').value = item.jk;
+    document.getElementById('siswa-kelas').value = item.kelas;
+    document.getElementById('siswa-sekolah').value = item.sekolah;
+    document.getElementById('modal-title-siswa').innerText = "Edit Siswa";
+    document.getElementById('modal-siswa').classList.remove('hidden');
+}
+
+        // ==========================================
+        // 3. MANAJEMEN INSTRUMEN / KRITERIA
+        // ==========================================
+        // function renderKriteria() {
+        //     const list = getDB('kriteriaAssesment');
+        //     const tbody = document.getElementById('tabel-kriteria');
+        //     if(!tbody) return;
+        //     tbody.innerHTML = '';
+
+        //     list.forEach((item, index) => {
+        //         tbody.innerHTML += `
+        //         <tr>
+        //         <td>${index + 1}</td>
+        //         <td><b>${item.judul}</b></td>
+        //         <td><small class="text-light">${item.keterangan || '-'}</small></td>
+        //         <td><span class="badge badge-semua">${item.normatif.length} Butir</span></td>
+        //         <td>
+        //         <button class="btn btn-warning btn-sm" onclick="editKriteria('${item.id_kriteria}')">Edit</button>
+        //         <button class="btn btn-danger btn-sm" onclick="hapusKriteria('${item.id_kriteria}')">Hapus</button>
+        //         </td>
+        //         </tr>
+        //         `;
+        //     });
+
+        //     if ($.fn.DataTable.isDataTable('#tabel-data-kriteria')) { $('#tabel-data-kriteria').DataTable().destroy(); }
+        //     $('#tabel-data-kriteria').DataTable({ "language": { "url": "//cdn.datatables.net/plug-ins/1.13.7/i18n/id.json" }});
+        // }
+
+        function renderKriteria() {
+            const list = getDB('kriteriaAssesment');
+            const tbody = document.getElementById('tabel-kriteria');
+            if(!tbody) return;
+
+    // 1. Hancurkan DataTables lama
+    if ($.fn.DataTable.isDataTable('#tabel-data-kriteria')) { 
+        $('#tabel-data-kriteria').DataTable().destroy(); 
+    }
+    
+    // 2. Render ulang
+    tbody.innerHTML = '';
+    list.forEach((item, index) => {
+        tbody.innerHTML += `
+        <tr>
+        <td>${index + 1}</td>
+        <td><b>${item.judul}</b></td>
+        <td><small class="text-light">${item.keterangan || '-'}</small></td>
+        <td><span class="badge badge-semua">${item.normatif.length} Butir</span></td>
+        <td>
+        <button class="btn btn-warning btn-sm" onclick="editKriteria('${item.id_kriteria}')">Edit</button>
+        <button class="btn btn-danger btn-sm" onclick="hapusKriteria('${item.id_kriteria}')">Hapus</button>
+        </td>
+        </tr>
+        `;
+    });
+
+    // 3. Re-inisialisasi
+    $('#tabel-data-kriteria').DataTable({ "language": { "url": "//cdn.datatables.net/plug-ins/1.13.7/i18n/id.json" }});
+}
+
+function tambahInputNormatif(value = "") {
+    const container = document.getElementById('container-normatif');
+    const div = document.createElement('div');
+    div.className = 'flex-between';
+    div.style.marginBottom = '8px';
+    div.innerHTML = `
+    <input type="text" class="input-normatif-item" style="flex:1; margin-right:8px; padding:6px; border:1px solid #ccc; border-radius:4px;" value="${value}" required placeholder="Tulis butir indikator penilaian...">
+    <button type="button" class="btn btn-danger btn-sm" onclick="this.parentElement.remove()" style="padding: 4px 8px;">&times;</button>
+    `;
+    container.appendChild(div);
+}
+
+function bukaModalKriteria() {
+    document.getElementById('form-kriteria').reset();
+    document.getElementById('kriteria-id').value = '';
+    document.getElementById('container-normatif').innerHTML = '';
+    document.getElementById('modal-title-kriteria').innerText = "Tambah Instrumen Penilaian";
+    tambahInputNormatif(); 
+    document.getElementById('modal-kriteria').classList.remove('hidden');
+}
+
+function editKriteria(id) {
+    const item = getDB('kriteriaAssesment').find(k => k.id_kriteria === id);
+    if(!item) return;
+
+    document.getElementById('kriteria-id').value = item.id_kriteria;
+    document.getElementById('kriteria-judul').value = item.judul;
+    document.getElementById('kriteria-keterangan').value = item.keterangan || '';
+
+    const container = document.getElementById('container-normatif');
+    container.innerHTML = '';
+    item.normatif.forEach(norm => tambahInputNormatif(norm));
+
+    document.getElementById('modal-title-kriteria').innerText = "Edit Instrumen Penilaian";
+    document.getElementById('modal-kriteria').classList.remove('hidden');
+}
+
+function simpanKriteria(e) {
+    e.preventDefault();
+    const id = document.getElementById('kriteria-id').value;
+    const judul = document.getElementById('kriteria-judul').value;
+    const keterangan = document.getElementById('kriteria-keterangan').value;
+
+    const normatifElements = document.querySelectorAll('.input-normatif-item');
+    const normatifData = [];
+    normatifElements.forEach(el => {
+        if(el.value.trim() !== "") normatifData.push(el.value.trim());
+    });
+
+    let list = getDB('kriteriaAssesment');
+
+    if(id) {
+        list = list.map(k => k.id_kriteria === id ? { ...k, judul, keterangan, normatif: normatifData } : k);
+    } else {
+        list.push({ id_kriteria: 'k_' + generateId(), judul, keterangan, normatif: normatifData });
+    }
+
+    updateDB('kriteriaAssesment', list);
+    tutupModal('modal-kriteria');
+    renderKriteria();
+}
+
+function hapusKriteria(id) {
+    if(confirm("Apakah Anda yakin ingin menghapus instrumen ini beserta seluruh butir indikatornya?")) {
+        let list = getDB('kriteriaAssesment');
+        list = list.filter(k => k.id_kriteria !== id);
+        updateDB('kriteriaAssesment', list);
+        renderKriteria();
+    }
+}
+
+        // ==========================================
+        // 4. ALUR ASSESMENT (MULAI, NILAI, AKHIRI)
+        // ==========================================
+        // function renderAssesmentList() {
+        //     const list = getDB('dataAssesment');
+        //     const tbody = document.getElementById('tabel-assesment');
+        //     if(!tbody) return;
+        //     tbody.innerHTML = '';
+
+        //     list.forEach((item, index) => {
+        //         tbody.innerHTML += `
+        //         <tr>
+        //         <td>${index + 1}</td>
+        //         <td><b>${item.nama_materi}</b></td>
+        //         <td>${item.tanggal}</td>
+        //         <td><span style="color:var(--primary); font-weight:bold;">${item.rata_rata || 0}</span></td>
+        //         <td class="ellipsis"><small>${item.keterangan || '-'}</small></td>
+        //         <td>
+        //         <button class="btn btn-primary btn-sm" onclick="lihatDetailAssesment('${item.id_assesment}')">Detail</button>
+        //         <button class="btn btn-danger btn-sm" onclick="hapusAssesment('${item.id_assesment}')">Hapus</button>
+        //         </td>
+        //         </tr>
+        //         `;
+        //     });
+
+        //     if ($.fn.DataTable.isDataTable('#tabel-data-assesment')) { $('#tabel-data-assesment').DataTable().destroy(); }
+        //     $('#tabel-data-assesment').DataTable({ "language": { "url": "//cdn.datatables.net/plug-ins/1.13.7/i18n/id.json" }, "order": [[ 0, "desc" ]] });
+        // }
+
+        function renderAssesmentList() {
+            const list = getDB('dataAssesment');
             const tbody = document.getElementById('tabel-assesment');
-            tbody.innerHTML = '';
-            
-            dbAssesment.forEach((a, idx) => {
-                let badgeClass = a.jenis === 'semua' ? 'badge-semua' : `badge-${a.jenis}`;
-                let labelJenis = a.jenis === 'semua' ? 'SEMUA JENIS' : a.jenis.toUpperCase();
-                
-                // Ambil nilai total (backward compat angka vs object)
-                let showAvg = typeof a.rata_rata_nilai === 'object' ? a.rata_rata_nilai.total : a.rata_rata_nilai;
+            if(!tbody) return;
 
-                tbody.innerHTML += `
-                    <tr>
-                        <td>${idx + 1}</td>
-                        <td class="ellipsis"><b>${a.judul_assesment}</b></td>
-                        <td>${a.tanggal}</td>
-                        <td><span class="badge ${badgeClass}">${labelJenis}</span></td>
-                        <td><b>${showAvg}</b></td>
-                        <td class="ellipsis">${a.keterangan}</td>
-                        <td>
-                            <button class="btn btn-sm btn-outline" onclick="lihatDetailAssesment('${a.id_assesment}')">Detail</button>
-                        </td>
-                    </tr>
-                `;
-            });
+    // 1. Hancurkan DataTables lama
+    if ($.fn.DataTable.isDataTable('#tabel-data-assesment')) { 
+        $('#tabel-data-assesment').DataTable().destroy(); 
+    }
+    
+    // 2. Render ulang
+    tbody.innerHTML = '';
+    list.forEach((item, index) => {
+        tbody.innerHTML += `
+        <tr>
+        <td>${index + 1}</td>
+        <td><b>${item.nama_materi}</b></td>
+        <td>${item.tanggal}</td>
+        <td><span style="color:var(--primary); font-weight:bold;">${item.rata_rata || 0}</span></td>
+        <td class="ellipsis"><small>${item.keterangan || '-'}</small></td>
+        <td>
+        <button class="btn btn-primary btn-sm" onclick="lihatDetailAssesment('${item.id_assesment}')">Detail</button>
+        <button class="btn btn-danger btn-sm" onclick="hapusAssesment('${item.id_assesment}')">Hapus</button>
+        </td>
+        </tr>
+        `;
+    });
 
-            $('#tabel-data-assesment').DataTable({
-                "language": { "url": "//cdn.datatables.net/plug-ins/1.13.7/i18n/id.json" },
-                "columnDefs": [ { "orderable": false, "targets": 6 } ]
-            });
-        }
+    // 3. Re-inisialisasi
+    $('#tabel-data-assesment').DataTable({ "language": { "url": "//cdn.datatables.net/plug-ins/1.13.7/i18n/id.json" }, "order": [[ 0, "desc" ]] });
+}
 
-        function bukaModalSetupAssesment() {
-            document.getElementById('form-setup-assesment').reset();
-            document.getElementById('modal-setup-assesment').classList.remove('hidden');
-        }
+function bukaModalSetupAssesment() {
+    if(getDB('dataSiswa').length === 0) {
+        alert("Harap input data siswa terlebih dahulu di menu Manajemen Siswa!");
+        return;
+    }
+    if(getDB('kriteriaAssesment').length === 0) {
+        alert("Harap input instrumen penilaian terlebih dahulu di Manajemen Asesmen!");
+        return;
+    }
+    document.getElementById('form-setup-assesment').reset();
+    document.getElementById('modal-setup-assesment').classList.remove('hidden');
+}
 
-        function eksekusiMulaiAssesment(e) {
-            e.preventDefault();
-            const jenisDipilih = document.getElementById('setup-jenis').value;
-            const semuaKriteria = getDB('kriteriaAssesment');
-            
-            let kriteriaRelevan = [];
-            if(jenisDipilih === 'semua') {
-                kriteriaRelevan = semuaKriteria;
-            } else {
-                kriteriaRelevan = semuaKriteria.filter(k => k.jenis === jenisDipilih);
-            }
+function eksekusiMulaiAssesment(e) {
+    e.preventDefault();
+    const judul = document.getElementById('setup-judul').value;
+    const ket = document.getElementById('setup-keterangan').value;
 
-            if(kriteriaRelevan.length === 0) {
-                alert(`Tidak dapat memulai. Belum ada Kriteria Penilaian yang sesuai.`);
-                return;
-            }
+    const today = new Date();
+    const dateStr = today.getDate() + '/' + (today.getMonth()+1) + '/' + today.getFullYear();
 
-            // Inisiasi Variabel Global menggunakan struktur Object untuk rata-rata
-            tempAssesment = {
-                id_assesment: 'asm_' + generateId(),
-                judul_assesment: document.getElementById('setup-judul').value,
-                tanggal: new Date().toISOString().split('T')[0], 
-                jenis: jenisDipilih,
-                rata_rata_nilai: { total: 0, motorik: 0, pengetahuan: 0, motivasi: 0 },
-                keterangan: document.getElementById('setup-keterangan').value
-            };
-            
-            tempPenilaianArray = [];
+    tempAssesment = {
+        id_assesment: 'asm_' + generateId(),
+        nama_materi: judul,
+        tanggal: dateStr,
+        keterangan: ket,
+        rata_rata: 0,
+        kelas: "Semua Kelas"
+    };
+    tempPenilaianArray = [];
 
-            document.getElementById('ongoing-judul').innerText = tempAssesment.judul_assesment;
-            document.getElementById('ongoing-jenis').innerText = tempAssesment.jenis === 'semua' ? 'Semua Kriteria' : tempAssesment.jenis;
-            document.getElementById('ongoing-tanggal').innerText = tempAssesment.tanggal;
+    document.getElementById('ongoing-judul').innerText = tempAssesment.nama_materi;
+    document.getElementById('ongoing-tanggal').innerText = tempAssesment.tanggal;
 
-            tutupModal('modal-setup-assesment');
-            document.getElementById('view-assesment-list').classList.add('hidden');
-            document.getElementById('view-assesment-ongoing').classList.remove('hidden');
-            
-            renderSiswaOngoing();
-        }
+    tutupModal('modal-setup-assesment');
+    document.getElementById('view-assesment-list').classList.add('hidden');
+    document.getElementById('view-assesment-ongoing').classList.remove('hidden');
 
-        function renderSiswaOngoing() {
-            const siswa = getDB('dataSiswa');
-            if ($.fn.DataTable.isDataTable('#tabel-ongoing-siswa')) { $('#tabel-ongoing-siswa').DataTable().destroy(); }
-            
-            const tbody = document.getElementById('tabel-ongoing-body');
-            tbody.innerHTML = '';
-            
-            siswa.sort((a, b) => a.kelas.localeCompare(b.kelas) || a.absen - b.absen);
+    renderSiswaOngoing();
+}
 
-            siswa.forEach((s, index) => {
-                let sudahDinilai = tempPenilaianArray.find(p => p.id_siswa === s.id_siswa);
-                let btnAksi = ""; let statusSpan = "";
+function renderSiswaOngoing() {
+    const listSiswa = getDB('dataSiswa');
+    const tbody = document.getElementById('tabel-ongoing-body');
+    tbody.innerHTML = '';
 
-                if(sudahDinilai) {
-                    let avgAkhir = sudahDinilai.nilai_akhir.total;
-                    statusSpan = `<span style="color:var(--success); font-weight:bold;">Selesai (${avgAkhir})</span>`;
-                    btnAksi = `<button class="btn btn-sm btn-outline" onclick="bukaModalNilai('${s.id_siswa}')">Edit Nilai</button>`;
-                } else {
-                    statusSpan = `<span style="color:var(--danger);">Belum Dinilai</span>`;
-                    btnAksi = `<button class="btn btn-sm btn-nilai-eye" onclick="bukaModalNilai('${s.id_siswa}')">Nilai Sekarang</button>`;
-                }
+    listSiswa.forEach((item, index) => {
+        const nilaiAda = tempPenilaianArray.find(p => p.id_siswa === item.id_siswa);
+        let badgeStatus = nilaiAda ? '<span class="badge badge-semua">Sudah Dinilai</span>' : '<span class="badge badge-normatif">Belum Dinilai</span>';
+        let classTombol = nilaiAda ? 'btn-success' : 'btn-nilai-eye';
+        let teksTombol = nilaiAda ? 'Edit Nilai' : 'Mulai Nilai';
 
-                tbody.innerHTML += `
-                    <tr>
-                        <td>${index + 1}</td>
-                        <td>${s.absen}</td>
-                        <td class="ellipsis"><b>${s.nama}</b></td>
-                        <td>${s.kelas}</td>
-                        <td>${statusSpan}</td>
-                        <td>${btnAksi}</td>
-                    </tr>
-                `;
-            });
+        tbody.innerHTML += `
+        <tr>
+        <td>${index + 1}</td>
+        <td>${item.absen}</td>
+        <td class="ellipsis"><b>${item.nama}</b></td>
+        <td>${item.kelas}</td>
+        <td>${badgeStatus}</td>
+        <td><button class="btn ${classTombol} btn-sm" onclick="bukaModalNilai('${item.id_siswa}')">${teksTombol}</button></td>
+        </tr>
+        `;
+    });
+}
 
-            $('#tabel-ongoing-siswa').DataTable({
-                "language": { "url": "//cdn.datatables.net/plug-ins/1.13.7/i18n/id.json" },
-                "pageLength": 10,
-                "columnDefs": [ { "orderable": false, "targets": 5 } ]
-            });
-        }
+        // ==========================================
+        // 5. PENILAIAN SISWA (RADIO BUTTON DINAMIS)
+        // ==========================================
+        // function bukaModalNilai(idSiswa) {
+        //     aktifIdSiswa = idSiswa;
+        //     const siswa = getDB('dataSiswa').find(s => s.id_siswa === idSiswa);
+        //     if(!siswa) return;
+
+        //     document.getElementById('nilai-nama-siswa').innerText = siswa.nama;
+
+        //     // Cek nilai lama
+        //     const nilaiLama = tempPenilaianArray.find(p => p.id_siswa === idSiswa);
+        //     document.getElementById('catatan-guru-asesmen').value = nilaiLama ? (nilaiLama.catatan_guru || '') : '';
+
+        //     const listInstrumen = getDB('kriteriaAssesment');
+        //     const container = document.getElementById('container-checklist-kriteria');
+        //     container.innerHTML = '';
+
+        //     if(listInstrumen.length === 0) {
+        //         container.innerHTML = `<div style="text-align:center; color:red; padding:20px;">Belum ada instrumen penilaian aktif.</div>`;
+        //         return;
+        //     }
+
+        //     listInstrumen.forEach((instrumen) => {
+        //         let htmlBlock = `
+        //         <div class="instrumen-card-scoring" style="margin-bottom: 20px; background: #fff; padding: 15px; border-radius: 6px; border: 1px solid #ddd; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+        //         <h4 style="color: var(--primary); margin-top: 0; margin-bottom: 4px; border-bottom: 2px solid #eef5fc; padding-bottom: 6px;">${instrumen.judul}</h4>
+        //         <p style="font-size: 0.8rem; color: #666; margin-bottom: 12px; font-style: italic;">${instrumen.keterangan || 'Tidak ada deskripsi.'}</p>
+        //         `;
+
+        //         if(instrumen.normatif.length === 0) {
+        //             htmlBlock += `<p style="color:#e74c3c; font-size:0.85rem;">Tidak ada butir indikator.</p>`;
+        //         } else {
+        //             instrumen.normatif.forEach((butir, idx) => {
+        //                 let inputName = `score_${instrumen.id_kriteria}_${idx}`;
+
+        //                 let checkedValue = 0;
+        //                 if(nilaiLama && nilaiLama.detail_skor_mentah && nilaiLama.detail_skor_mentah[inputName]) {
+        //                     checkedValue = nilaiLama.detail_skor_mentah[inputName];
+        //                 }
+
+        //                 htmlBlock += `
+        //                 <div class="butir-row-scoring" style="margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px dashed #eee;">
+        //                 <p style="font-size: 0.9rem; margin-bottom: 8px; color:#333; line-height:1.4;">${idx + 1}. ${butir}</p>
+        //                 <div style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
+        //                 <span style="font-size: 0.75rem; color: #888;">Sangat Kurang</span>
+        //                 ${[1, 2, 3, 4, 5].map(val => `
+        //                     <label style="display: flex; align-items: center; gap: 4px; cursor: pointer; font-size: 0.9rem; font-weight: bold; color: var(--primary);">
+        //                     <input type="radio" name="${inputName}" data-id-instrumen="${instrumen.id_kriteria}" value="${val}" ${checkedValue == val ? 'checked' : ''} required>
+        //                     ${val}
+        //                     </label>
+        //                     `).join('')}
+        //                 <span style="font-size: 0.75rem; color: #888;">Sangat Baik</span>
+        //                 </div>
+        //                 </div>
+        //                 `;
+        //             });
+        //         }
+
+        //         htmlBlock += `</div>`;
+        //         container.innerHTML += htmlBlock;
+        //     });
+
+        //     document.getElementById('modal-nilai-siswa').classList.remove('hidden');
+        // }
 
         function bukaModalNilai(idSiswa) {
             aktifIdSiswa = idSiswa;
             const siswa = getDB('dataSiswa').find(s => s.id_siswa === idSiswa);
+            if(!siswa) return;
+
             document.getElementById('nilai-nama-siswa').innerText = siswa.nama;
 
-            let kriteriaRelevan = [];
-            if(tempAssesment.jenis === 'semua') kriteriaRelevan = getDB('kriteriaAssesment');
-            else kriteriaRelevan = getDB('kriteriaAssesment').filter(k => k.jenis === tempAssesment.jenis);
+    // Ambil data nilai lama jika sudah pernah dinilai di sesi ini
+    const nilaiLama = tempPenilaianArray.find(p => p.id_siswa === idSiswa);
+    const catatanLama = nilaiLama ? (nilaiLama.catatan_guru || '') : '';
 
-            const container = document.getElementById('container-checklist-kriteria');
-            container.innerHTML = '';
+    const listInstrumen = getDB('kriteriaAssesment');
+    const container = document.getElementById('container-checklist-kriteria');
+    container.innerHTML = '';
 
-            kriteriaRelevan.forEach(k => {
-                let badgeJenis = `<span class="badge badge-${k.jenis}" style="font-size:0.7rem;">${k.jenis.toUpperCase()}</span>`;
-                let htmlBlock = `<div class="kriteria-block">`;
-                htmlBlock += `<div class="checklist-kriteria-title"><span>${k.judul}</span> ${badgeJenis}</div>`;
-                k.normatif.forEach(n => {
-                    // Gunakan data-jenis untuk mengklasifikasi perhitungan
-                    htmlBlock += `
-                        <label class="checklist-item">
-                            <input type="checkbox" class="cb-penilaian" data-jenis="${k.jenis}" value="1">
-                            <span style="flex:1;">${n}</span>
-                        </label>
-                    `;
-                });
-                htmlBlock += `</div>`;
-                container.innerHTML += htmlBlock;
+    if(listInstrumen.length === 0) {
+        container.innerHTML = `<div style="text-align:center; color:red; padding:20px;">Belum ada instrumen penilaian aktif.</div>`;
+        return;
+    }
+
+    listInstrumen.forEach((instrumen) => {
+        let htmlBlock = `
+        <div class="instrumen-card-scoring" style="margin-bottom: 20px; background: #fff; padding: 15px; border-radius: 6px; border: 1px solid #ddd; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+        <h4 style="color: var(--primary); margin-top: 0; margin-bottom: 4px; border-bottom: 2px solid #eef5fc; padding-bottom: 6px;">${instrumen.judul}</h4>
+        <p style="font-size: 0.8rem; color: #666; margin-bottom: 12px; font-style: italic;">${instrumen.keterangan || 'Tidak ada deskripsi.'}</p>
+        `;
+
+        if(instrumen.normatif.length === 0) {
+            htmlBlock += `<p style="color:#e74c3c; font-size:0.85rem;">Tidak ada butir indikator.</p>`;
+        } else {
+            instrumen.normatif.forEach((butir, idx) => {
+                let inputName = `score_${instrumen.id_kriteria}_${idx}`;
+                
+                let checkedValue = 0;
+                if(nilaiLama && nilaiLama.detail_skor_mentah && nilaiLama.detail_skor_mentah[inputName]) {
+                    checkedValue = nilaiLama.detail_skor_mentah[inputName];
+                }
+
+                htmlBlock += `
+                <div class="butir-row-scoring" style="margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px dashed #eee;">
+                <p style="font-size: 0.9rem; margin-bottom: 8px; color:#333; line-height:1.4;">${idx + 1}. ${butir}</p>
+                <div style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
+                <span style="font-size: 0.75rem; color: #888;">Sangat Kurang</span>
+                ${[1, 2, 3, 4, 5].map(val => `
+                    <label style="display: flex; align-items: center; gap: 4px; cursor: pointer; font-size: 0.9rem; font-weight: bold; color: var(--primary);">
+                    <input type="radio" name="${inputName}" data-id-instrumen="${instrumen.id_kriteria}" value="${val}" ${checkedValue == val ? 'checked' : ''} required>
+                    ${val}
+                    </label>
+                    `).join('')}
+                <span style="font-size: 0.75rem; color: #888;">Sangat Baik</span>
+                </div>
+                </div>
+                `;
             });
-
-            document.getElementById('modal-nilai-siswa').classList.remove('hidden');
         }
+
+        htmlBlock += `</div>`;
+        container.innerHTML += htmlBlock;
+    });
+
+    // Menambahkan blok Catatan Guru di dalam container scroll (paling bawah)
+    container.innerHTML += `
+    <div class="form-group instrumen-card-scoring" style="background: #fff; padding: 15px; border-radius: 6px; border: 1px solid #ddd; box-shadow: 0 2px 4px rgba(0,0,0,0.02); margin-bottom: 10px;">
+    <label style="color: var(--primary); font-size: 1.1rem; margin-bottom: 8px; display: block;"><b>Catatan Evaluasi Guru (Opsional)</b></label>
+    <textarea id="catatan-guru-asesmen" class="form-control" rows="3" style="width:100%; padding: 10px; border-radius: 5px; border: 1px solid #ccc; font-size: 0.95rem;" placeholder="Tuliskan catatan kemajuan, kendala, atau rekomendasi untuk siswa ini...">${catatanLama}</textarea>
+    </div>
+    `;
+
+    document.getElementById('modal-nilai-siswa').classList.remove('hidden');
+
+    // Memaksa posisi scroll kembali ke paling atas
+    setTimeout(() => {
+        container.scrollTop = 0;
+        const modalContent = document.querySelector('#modal-nilai-siswa .modal-content');
+        if (modalContent) modalContent.scrollTop = 0;
+    }, 10);
+}
+
+        // function simpanNilaiSiswa(e) {
+        //     e.preventDefault();
+
+        //     const listInstrumen = getDB('kriteriaAssesment');
+        //     const rekapInstrumen = {}; 
+        //     const detailSkorMentah = {};
+        //     let totalSkorKumulatif = 0;
+        //     let totalButirKumulatif = 0;
+
+        //     const checkedRadios = document.querySelectorAll('#container-checklist-kriteria input[type="radio"]:checked');
+
+        //     checkedRadios.forEach(radio => {
+        //         const idInstrumen = radio.getAttribute('data-id-instrumen');
+        //         const nameRadio = radio.getAttribute('name');
+        //         const nilai = parseInt(radio.value);
+
+        //         detailSkorMentah[nameRadio] = nilai;
+
+        //         if (!rekapInstrumen[idInstrumen]) { rekapInstrumen[idInstrumen] = { skorTotal: 0, jumlahButir: 0 }; }
+
+        //         rekapInstrumen[idInstrumen].skorTotal += nilai;
+        //         rekapInstrumen[idInstrumen].jumlahButir++;
+        //         totalSkorKumulatif += nilai;
+        //         totalButirKumulatif++;
+        //     });
+
+        //     // Konversi Skor Skala 1-5 ke Persentase Skala 0-100
+        //     const konversiKeSkala100 = (skor, jumlah) => {
+        //         if(jumlah === 0) return 0;
+        //         let rataRata = skor / jumlah;
+        //         return Math.round(((rataRata - 1) / 4) * 100);
+        //     };
+
+        //     const objNilaiAkhir = { total: konversiKeSkala100(totalSkorKumulatif, totalButirKumulatif) };
+
+        //     listInstrumen.forEach(ins => {
+        //         if(rekapInstrumen[ins.id_kriteria]) {
+        //             objNilaiAkhir[ins.id_kriteria] = konversiKeSkala100(
+        //                 rekapInstrumen[ins.id_kriteria].skorTotal, 
+        //                 rekapInstrumen[ins.id_kriteria].jumlahButir
+        //             );
+        //         } else {
+        //             objNilaiAkhir[ins.id_kriteria] = 0; 
+        //         }
+        //     });
+
+        //     const catatanGuruText = document.getElementById('catatan-guru-asesmen').value;
+        //     const siswa = getDB('dataSiswa').find(s => s.id_siswa === aktifIdSiswa);
+
+        //     const dataNilaiBaru = {
+        //         id_penilaian: 'pen_' + generateId(),
+        //         id_assesment: tempAssesment.id_assesment,
+        //         id_siswa: aktifIdSiswa,
+        //         nama_siswa: siswa.nama,
+        //         nilai_akhir: objNilaiAkhir, 
+        //         detail_skor_mentah: detailSkorMentah, 
+        //         catatan_guru: catatanGuruText
+        //     };
+
+        //     const indexLama = tempPenilaianArray.findIndex(p => p.id_siswa === aktifIdSiswa);
+        //     if(indexLama !== -1) tempPenilaianArray[indexLama] = dataNilaiBaru;
+        //     else tempPenilaianArray.push(dataNilaiBaru);
+
+        //     tutupModal('modal-nilai-siswa');
+        //     renderSiswaOngoing();
+        // }
 
         function simpanNilaiSiswa(e) {
             e.preventDefault();
-            
-            // Variabel bantuan untuk memisahkan hitungan per jenis
-            let stats = {
-                motorik: { centang: 0, total: 0 },
-                pengetahuan: { centang: 0, total: 0 },
-                motivasi: { centang: 0, total: 0 },
-                all: { centang: 0, total: 0 }
-            };
 
-            document.querySelectorAll('.cb-penilaian').forEach(cb => {
-                let jenis = cb.getAttribute('data-jenis');
-                stats[jenis].total++;
-                stats.all.total++;
-                if(cb.checked) {
-                    stats[jenis].centang++;
-                    stats.all.centang++;
-                }
+            const listInstrumen = getDB('kriteriaAssesment');
+            const rekapInstrumen = {}; 
+            const detailSkorMentah = {};
+            let totalSkorKumulatif = 0;
+            let totalButirKumulatif = 0;
+
+            const checkedRadios = document.querySelectorAll('#container-checklist-kriteria input[type="radio"]:checked');
+
+            checkedRadios.forEach(radio => {
+                const idInstrumen = radio.getAttribute('data-id-instrumen');
+                const nameRadio = radio.getAttribute('name');
+                const nilai = parseInt(radio.value);
+
+                detailSkorMentah[nameRadio] = nilai;
+
+                if (!rekapInstrumen[idInstrumen]) { rekapInstrumen[idInstrumen] = { skorTotal: 0, jumlahButir: 0 }; }
+
+                rekapInstrumen[idInstrumen].skorTotal += nilai;
+                rekapInstrumen[idInstrumen].jumlahButir++;
+                totalSkorKumulatif += nilai;
+                totalButirKumulatif++;
             });
 
-            // Rumus perhitungan (Cegah pembagian dengan 0)
-            const calcNilai = (c, t) => t > 0 ? Math.round((c / t) * 100) : 0;
+    // Format Baru: Menyimpan Skor Mentah, Skor Maksimal, Persentase, dan Teks (Skor/Max)
+    const formatNilai = (skor, jumlahButir) => {
+        if (jumlahButir === 0) return { skor: 0, max: 0, persen: 0, teks: "0/0" };
+        const max = jumlahButir * 5; // Karena nilai maksimal per radio button adalah 5
+        const persen = Math.round((skor / max) * 100);
+        return { skor: skor, max: max, persen: persen, teks: `${skor}/${max}` };
+    };
 
-            let objNilaiAkhir = {
-                total: calcNilai(stats.all.centang, stats.all.total),
-                motorik: calcNilai(stats.motorik.centang, stats.motorik.total),
-                pengetahuan: calcNilai(stats.pengetahuan.centang, stats.pengetahuan.total),
-                motivasi: calcNilai(stats.motivasi.centang, stats.motivasi.total)
-            };
+    const objNilaiAkhir = { 
+        total: formatNilai(totalSkorKumulatif, totalButirKumulatif) 
+    };
 
-            const siswa = getDB('dataSiswa').find(s => s.id_siswa === aktifIdSiswa);
-            
-            const dataNilai = {
-                id_penilaian: 'pen_' + generateId(),
-                id_assesment: tempAssesment.id_assesment,
-                id_siswa: aktifIdSiswa,
-                nama_siswa: siswa.nama,
-                total_nilai: stats.all.centang, // raw point
-                nilai_akhir: objNilaiAkhir // Menyimpan object
-            };
-
-            const cekIndex = tempPenilaianArray.findIndex(p => p.id_siswa === aktifIdSiswa);
-            if(cekIndex !== -1) tempPenilaianArray[cekIndex] = dataNilai;
-            else tempPenilaianArray.push(dataNilai);
-
-            tutupModal('modal-nilai-siswa');
-            renderSiswaOngoing();
+    listInstrumen.forEach(ins => {
+        if(rekapInstrumen[ins.id_kriteria]) {
+            objNilaiAkhir[ins.id_kriteria] = formatNilai(
+                rekapInstrumen[ins.id_kriteria].skorTotal, 
+                rekapInstrumen[ins.id_kriteria].jumlahButir
+                );
+        } else {
+            objNilaiAkhir[ins.id_kriteria] = { skor: 0, max: 0, persen: 0, teks: "0/0" }; 
         }
+    });
 
-        function akhiriAssesment() {
-            const dataSiswaTotal = getDB('dataSiswa').length;
-            
-            if(tempPenilaianArray.length < dataSiswaTotal) {
-                let lanjut = confirm(`Peringatan: Baru ${tempPenilaianArray.length} dari ${dataSiswaTotal} siswa yang dinilai. Yakin ingin mengakhiri asesmen ini?`);
-                if(!lanjut) return;
-            }
+    const catatanGuruText = document.getElementById('catatan-guru-asesmen').value;
+    const siswa = getDB('dataSiswa').find(s => s.id_siswa === aktifIdSiswa);
+    
+    const dataNilaiBaru = {
+        id_penilaian: 'pen_' + generateId(),
+        id_assesment: tempAssesment.id_assesment,
+        id_siswa: aktifIdSiswa,
+        nama_siswa: siswa.nama,
+        nilai_akhir: objNilaiAkhir, 
+        detail_skor_mentah: detailSkorMentah, 
+        catatan_guru: catatanGuruText
+    };
 
-            let sum = { total: 0, motorik: 0, pengetahuan: 0, motivasi: 0 };
-            let count = tempPenilaianArray.length;
+    const indexLama = tempPenilaianArray.findIndex(p => p.id_siswa === aktifIdSiswa);
+    if(indexLama !== -1) tempPenilaianArray[indexLama] = dataNilaiBaru;
+    else tempPenilaianArray.push(dataNilaiBaru);
 
-            if(count > 0) {
-                tempPenilaianArray.forEach(p => {
-                    sum.total += p.nilai_akhir.total;
-                    sum.motorik += p.nilai_akhir.motorik;
-                    sum.pengetahuan += p.nilai_akhir.pengetahuan;
-                    sum.motivasi += p.nilai_akhir.motivasi;
-                });
-                
-                tempAssesment.rata_rata_nilai = {
-                    total: Math.round(sum.total / count),
-                    motorik: Math.round(sum.motorik / count),
-                    pengetahuan: Math.round(sum.pengetahuan / count),
-                    motivasi: Math.round(sum.motivasi / count)
-                };
-            }
+    tutupModal('modal-nilai-siswa');
+    renderSiswaOngoing();
+}
 
-            let dbAssesment = getDB('dataAssesment');
-            dbAssesment.push(tempAssesment);
-            setDB('dataAssesment', dbAssesment);
+// function akhiriAssesment() {
+//     if(tempPenilaianArray.length === 0) {
+//         alert("Belum ada satupun siswa yang dinilai. Assesment dibatalkan.");
+//         document.getElementById('view-assesment-ongoing').classList.add('hidden');
+//         document.getElementById('view-assesment-list').classList.remove('hidden');
+//         return;
+//     }
 
-            let dbPenilaian = getDB('dataPenilaian');
-            dbPenilaian = dbPenilaian.concat(tempPenilaianArray);
-            setDB('dataPenilaian', dbPenilaian);
+//     if(confirm("Anda yakin ingin mengakhiri dan menyimpan sesi assesment ini?")) {
+//         let totalSiswaDinilai = tempPenilaianArray.length;
+//         let akumulasiTotal = 0;
+//         tempPenilaianArray.forEach(p => akumulasiTotal += (p.nilai_akhir.total || 0));
 
-            tempAssesment = null; tempPenilaianArray = []; aktifIdSiswa = null;
+//         tempAssesment.rata_rata = Math.round(akumulasiTotal / totalSiswaDinilai);
 
-            alert("Assesment berhasil disimpan ke database!");
-            renderBeranda(); 
-            renderHalamanAssesment(); 
-        }
+//         let dbAssesment = getDB('dataAssesment');
+//         dbAssesment.push(tempAssesment);
+//         updateDB('dataAssesment', dbAssesment);
+
+//         let dbRiwayat = getDB('riwayatPenilaian');
+//         tempPenilaianArray.forEach(p => dbRiwayat.push(p));
+//         updateDB('riwayatPenilaian', dbRiwayat);
+
+//         tempAssesment = null;
+//         tempPenilaianArray = [];
+
+//         document.getElementById('view-assesment-ongoing').classList.add('hidden');
+//         document.getElementById('view-assesment-list').classList.remove('hidden');
+//         renderAssesmentList();
+//         renderBeranda();
+//         alert("Data Assesment Berhasil Disimpan!");
+//     }
+// }
+function akhiriAssesment() {
+    if(tempPenilaianArray.length === 0) {
+        alert("Belum ada satupun siswa yang dinilai. Assesment dibatalkan.");
+        document.getElementById('view-assesment-ongoing').classList.add('hidden');
+        document.getElementById('view-assesment-list').classList.remove('hidden');
+        return;
+    }
+
+    if(confirm("Anda yakin ingin mengakhiri dan menyimpan sesi assesment ini?")) {
+        let totalSiswaDinilai = tempPenilaianArray.length;
+        let akumulasiTotalPersen = 0;
+        
+        tempPenilaianArray.forEach(p => {
+            let nTotal = p.nilai_akhir.total;
+            let persenVal = (typeof nTotal === 'object' && nTotal !== null) ? nTotal.persen : (nTotal || 0);
+            akumulasiTotalPersen += persenVal;
+        });
+        
+        // Rata-rata sesi disimpan dalam persentase
+        tempAssesment.rata_rata = Math.round(akumulasiTotalPersen / totalSiswaDinilai);
+
+        let dbAssesment = getDB('dataAssesment');
+        dbAssesment.push(tempAssesment);
+        updateDB('dataAssesment', dbAssesment);
+
+        let dbRiwayat = getDB('riwayatPenilaian');
+        tempPenilaianArray.forEach(p => dbRiwayat.push(p));
+        updateDB('riwayatPenilaian', dbRiwayat);
+
+        tempAssesment = null;
+        tempPenilaianArray = [];
+
+        document.getElementById('view-assesment-ongoing').classList.add('hidden');
+        document.getElementById('view-assesment-list').classList.remove('hidden');
+        renderAssesmentList();
+        renderBeranda();
+        alert("Data Assesment Berhasil Disimpan!");
+    }
+}
+
+function hapusAssesment(id) {
+    if(confirm("Data assesment dan seluruh nilai riwayat siswa di sesi ini akan dihapus secara permanen. Yakin?")) {
+        let dbAsm = getDB('dataAssesment').filter(a => a.id_assesment !== id);
+        let dbRwt = getDB('riwayatPenilaian').filter(r => r.id_assesment !== id);
+        updateDB('dataAssesment', dbAsm);
+        updateDB('riwayatPenilaian', dbRwt);
+        renderAssesmentList();
+        renderBeranda();
+    }
+}
 
         // ==========================================
-        // DETAIL ASSESMENT & RIWAYAT
+        // 6. DETAIL REKAPITULASI (DINAMIS HEADER)
         // ==========================================
+        // function lihatDetailAssesment(idAssesment) {
+        //     const listAssesment = getDB('dataAssesment');
+        //     const riwayatPenilaian = getDB('riwayatPenilaian');
+        //     const listInstrumen = getDB('kriteriaAssesment');
+
+        //     const asm = listAssesment.find(a => a.id_assesment === idAssesment);
+        //     if(!asm) return;
+
+        //     document.getElementById('detail-title-assesment').innerText = `Rekapitulasi: ${asm.nama_materi}`;
+        //     document.getElementById('detail-meta-assesment').innerText = `Tanggal Pembuatan: ${asm.tanggal}`;
+
+        //     const containerTabel = document.getElementById('container-tabel-riwayat');
+        //     containerTabel.innerHTML = '';
+
+        //     let tableHtml = `
+        //     <table id="tabel-riwayat-penilaian" class="display" style="width:100%">
+        //     <thead>
+        //     <tr>
+        //     <th>No</th>
+        //     <th>Nama Siswa</th>
+        //     <th>Nilai Akhir (Total)</th>
+        //     ${listInstrumen.map(ins => `<th>${ins.judul}</th>`).join('')}
+        //     <th>Catatan Evaluasi Guru</th>
+        //     </tr>
+        //     </thead>
+        //     <tbody>
+        //     `;
+
+        //     let counter = 1;
+        //     riwayatPenilaian.forEach(p => {
+        //         if(p.id_assesment === idAssesment) {
+        //             let nTotal = p.nilai_akhir && p.nilai_akhir.total !== undefined ? p.nilai_akhir.total : 0;
+        //             let catatan = p.catatan_guru ? p.catatan_guru : '<i style="color:#aaa;">Tidak ada catatan</i>';
+
+        //             tableHtml += `
+        //             <tr>
+        //             <td>${counter++}</td>
+        //             <td><b>${p.nama_siswa}</b></td>
+        //             <td style="color:var(--primary); font-weight:bold;">${nTotal}</td>
+        //             ${listInstrumen.map(ins => {
+        //                 let nAspek = (p.nilai_akhir && p.nilai_akhir[ins.id_kriteria] !== undefined) ? p.nilai_akhir[ins.id_kriteria] : 0;
+        //                 return `<td>${nAspek}</td>`;
+        //             }).join('')}
+        //             <td><small>${catatan}</small></td>
+        //             </tr>
+        //             `;
+        //         }
+        //     });
+
+        //     tableHtml += `</tbody></table>`;
+        //     containerTabel.innerHTML = tableHtml;
+
+        //     if ($.fn.DataTable.isDataTable('#tabel-riwayat-penilaian')) {
+        //         $('#tabel-riwayat-penilaian').DataTable().destroy();
+        //     }
+
+        //     $('#tabel-riwayat-penilaian').DataTable({
+        //         "language": { "url": "//cdn.datatables.net/plug-ins/1.13.7/i18n/id.json" },
+        //         "scrollX": true
+        //     });
+
+        //     document.getElementById('view-assesment-list').classList.add('hidden');
+        //     document.getElementById('view-assesment-detail').classList.remove('hidden');
+        // }
+
+        // function lihatDetailAssesment(idAssesment) {
+        //     const listAssesment = getDB('dataAssesment');
+        //     const riwayatPenilaian = getDB('riwayatPenilaian');
+        //     const listInstrumen = getDB('kriteriaAssesment');
+
+        //     const asm = listAssesment.find(a => a.id_assesment === idAssesment);
+        //     if(!asm) return;
+
+        //     document.getElementById('detail-title-assesment').innerText = `Rekapitulasi: ${asm.nama_materi}`;
+        //     document.getElementById('detail-meta-assesment').innerText = `Tanggal Pembuatan: ${asm.tanggal}`;
+
+        //     const containerTabel = document.getElementById('container-tabel-riwayat');
+        //     containerTabel.innerHTML = '';
+
+        //     let tableHtml = `
+        //     <table id="tabel-riwayat-penilaian" class="display" style="width:100%">
+        //     <thead>
+        //     <tr>
+        //     <th>No</th>
+        //     <th>Nama Siswa</th>
+        //     <th style="text-align:center;">Total Keseluruhan</th>
+        //     ${listInstrumen.map(ins => `<th style="text-align:center;">${ins.judul}</th>`).join('')}
+        //     <th>Catatan Evaluasi Guru</th>
+        //     </tr>
+        //     </thead>
+        //     <tbody>
+        //     `;
+
+        //     let counter = 1;
+        //     riwayatPenilaian.forEach(p => {
+        //         if(p.id_assesment === idAssesment) {
+
+        //     // Helper untuk merender Teks "Nilai/Max (Persen%)"
+        //     const getTampilanNilai = (obj) => {
+        //         if(typeof obj === 'object' && obj !== null && obj.teks) {
+        //             return `<b>${obj.teks}</b> <br><small class="text-light">(${obj.persen}%)</small>`;
+        //         }
+        //         return '0/0';
+        //     };
+
+        //     let nTotal = p.nilai_akhir && p.nilai_akhir.total !== undefined ? getTampilanNilai(p.nilai_akhir.total) : '0/0';
+        //     let catatan = p.catatan_guru ? p.catatan_guru : '<i style="color:#aaa;">Tidak ada catatan</i>';
+
+        //     tableHtml += `
+        //     <tr>
+        //     <td>${counter++}</td>
+        //     <td><b>${p.nama_siswa}</b></td>
+        //     <td style="color:var(--primary); text-align:center; vertical-align:middle;">${nTotal}</td>
+        //     ${listInstrumen.map(ins => {
+        //         let nAspek = (p.nilai_akhir && p.nilai_akhir[ins.id_kriteria] !== undefined) ? getTampilanNilai(p.nilai_akhir[ins.id_kriteria]) : '0/0';
+        //         return `<td style="text-align:center; vertical-align:middle;">${nAspek}</td>`;
+        //     }).join('')}
+        //     <td><small>${catatan}</small></td>
+        //     </tr>
+        //     `;
+        //         }
+        //     });
+
+        //     tableHtml += `</tbody></table>`;
+        //     containerTabel.innerHTML = tableHtml;
+
+        //     if ($.fn.DataTable.isDataTable('#tabel-riwayat-penilaian')) {
+        //         $('#tabel-riwayat-penilaian').DataTable().destroy();
+        //     }
+
+        //     $('#tabel-riwayat-penilaian').DataTable({
+        //         "language": { "url": "//cdn.datatables.net/plug-ins/1.13.7/i18n/id.json" },
+        //         "scrollX": true
+        //     });
+
+        //     document.getElementById('view-assesment-list').classList.add('hidden');
+        //     document.getElementById('view-assesment-detail').classList.remove('hidden');
+        // }
+
         function lihatDetailAssesment(idAssesment) {
-            const dbAssesment = getDB('dataAssesment').find(a => a.id_assesment === idAssesment);
-            const dbPenilaian = getDB('dataPenilaian').filter(p => p.id_assesment === idAssesment);
-            const dbSiswa = getDB('dataSiswa');
+            const listAssesment = getDB('dataAssesment');
+            const riwayatPenilaian = getDB('riwayatPenilaian');
+            const listInstrumen = getDB('kriteriaAssesment');
 
-            if(!dbAssesment) return;
+            const asm = listAssesment.find(a => a.id_assesment === idAssesment);
+            if(!asm) return;
+
+            document.getElementById('detail-title-assesment').innerText = `Rekapitulasi: ${asm.nama_materi}`;
+            document.getElementById('detail-meta-assesment').innerText = `Tanggal Pembuatan: ${asm.tanggal}`;
+
+            const containerTabel = document.getElementById('container-tabel-riwayat');
+
+    // HANCURKAN DATATABLES LAMA DI SINI (Sebelum container ditimpa)
+    if ($.fn.DataTable.isDataTable('#tabel-riwayat-penilaian')) {
+        $('#tabel-riwayat-penilaian').DataTable().destroy();
+    }
+
+    // Susun Struktur Header
+    let tableHtml = `
+    <table id="tabel-riwayat-penilaian" class="display" style="width:100%">
+    <thead>
+    <tr>
+    <th>No</th>
+    <th>Nama Siswa</th>
+    <th style="text-align:center;">Total Keseluruhan</th>
+    ${listInstrumen.map(ins => `<th style="text-align:center;">${ins.judul}</th>`).join('')}
+    <th>Catatan Evaluasi Guru</th>
+    </tr>
+    </thead>
+    <tbody>
+    `;
+
+    let counter = 1;
+    riwayatPenilaian.forEach(p => {
+        if(p.id_assesment === idAssesment) {
+
+            const getTampilanNilai = (obj) => {
+                if(typeof obj === 'object' && obj !== null && obj.teks) {
+                    return `<b>${obj.teks}</b> <br><small class="text-light">(${obj.persen}%)</small>`;
+                }
+                return '0/0';
+            };
+
+            let nTotal = p.nilai_akhir && p.nilai_akhir.total !== undefined ? getTampilanNilai(p.nilai_akhir.total) : '0/0';
+            let catatan = p.catatan_guru ? p.catatan_guru : '<i style="color:#aaa;">Tidak ada catatan</i>';
             
-            let labelJenis = dbAssesment.jenis === 'semua' ? 'Semua Kriteria' : dbAssesment.jenis.toUpperCase();
-            let showAvg = typeof dbAssesment.rata_rata_nilai === 'object' ? dbAssesment.rata_rata_nilai.total : dbAssesment.rata_rata_nilai;
+            tableHtml += `
+            <tr>
+            <td>${counter++}</td>
+            <td><b>${p.nama_siswa}</b></td>
+            <td style="color:var(--primary); text-align:center; vertical-align:middle;">${nTotal}</td>
+            ${listInstrumen.map(ins => {
+                let nAspek = (p.nilai_akhir && p.nilai_akhir[ins.id_kriteria] !== undefined) ? getTampilanNilai(p.nilai_akhir[ins.id_kriteria]) : '0/0';
+                return `<td style="text-align:center; vertical-align:middle;">${nAspek}</td>`;
+            }).join('')}
+            <td><small>${catatan}</small></td>
+            </tr>
+            `;
+        }
+    });
 
-            document.getElementById('detail-info').innerText = `${dbAssesment.judul_assesment} | Jenis: ${labelJenis} | Rata-rata Kelas: ${showAvg}`;
+    tableHtml += `</tbody></table>`;
+    
+    // BARU TIMPA DOM
+    containerTabel.innerHTML = tableHtml;
 
-            if ($.fn.DataTable.isDataTable('#tabel-riwayat-penilaian')) { $('#tabel-riwayat-penilaian').DataTable().destroy(); }
+    // INISIALISASI ULANG DATATABLES
+    $('#tabel-riwayat-penilaian').DataTable({
+        "language": { "url": "//cdn.datatables.net/plug-ins/1.13.7/i18n/id.json" },
+        "scrollX": true
+    });
+
+    document.getElementById('view-assesment-list').classList.add('hidden');
+    document.getElementById('view-assesment-detail').classList.remove('hidden');
+}
+
+function tutupDetailAssesment() {
+    document.getElementById('view-assesment-detail').classList.add('hidden');
+    document.getElementById('view-assesment-list').classList.remove('hidden');
+}
+
+        // ==========================================
+        // 7. GRAFIK BERANDA DINAMIS
+        // ==========================================
+        function renderBeranda() {
+            const listSiswa = getDB('dataSiswa');
+            const listAssesment = getDB('dataAssesment');
+            const riwayatPenilaian = getDB('riwayatPenilaian');
+            const listInstrumen = getDB('kriteriaAssesment');
+
+            document.getElementById('count-siswa').innerText = listSiswa.length;
+            document.getElementById('count-assesment').innerText = listAssesment.length;
+            document.getElementById('count-riwayat').innerText = riwayatPenilaian.length;
+
+            const ctx = document.getElementById('progresChart');
+            if(!ctx) return;
+
+            if (progresChartInstance) { progresChartInstance.destroy(); }
+
+            const labelAspekDinamis = listInstrumen.map(ins => ins.judul);
             
-            const tbody = document.getElementById('tabel-riwayat-body');
-            tbody.innerHTML = '';
+            // const dataRataRataDinamis = listInstrumen.map(ins => {
+            //     let akumulasiNilaiAspek = 0;
+            //     let jumlahSiswaDitemukan = 0;
 
-            dbPenilaian.forEach((p, index) => {
-                const s = dbSiswa.find(siswa => siswa.id_siswa === p.id_siswa);
-                if(s) {
-                    // Extract Object Nilai (dengan default fallback 0 jika data lama)
-                    let nTotal = typeof p.nilai_akhir === 'object' ? p.nilai_akhir.total : p.nilai_akhir;
-                    let nMot = typeof p.nilai_akhir === 'object' ? p.nilai_akhir.motorik : 0;
-                    let nPen = typeof p.nilai_akhir === 'object' ? p.nilai_akhir.pengetahuan : 0;
-                    let nSik = typeof p.nilai_akhir === 'object' ? p.nilai_akhir.motivasi : 0;
+            //     riwayatPenilaian.forEach(p => {
+            //         if(p.nilai_akhir && p.nilai_akhir[ins.id_kriteria] !== undefined) {
+            //             akumulasiNilaiAspek += p.nilai_akhir[ins.id_kriteria];
+            //             jumlahSiswaDitemukan++;
+            //         }
+            //     });
+            //     return jumlahSiswaDitemukan > 0 ? Math.round(akumulasiNilaiAspek / jumlahSiswaDitemukan) : 0;
+            // });
 
-                    tbody.innerHTML += `
-                        <tr>
-                            <td>${index + 1}</td>
-                            <td class="ellipsis"><b>${s.nama}</b></td>
-                            <td>${s.kelas}</td>
-                            <td>${s.absen}</td>
-                            <td style="color:var(--primary);"><b>${nTotal}</b></td>
-                            <td>${nMot}</td>
-                            <td>${nPen}</td>
-                            <td>${nSik}</td>
-                        </tr>
-                    `;
+            const dataRataRataDinamis = listInstrumen.map(ins => {
+                let akumulasiNilaiAspek = 0;
+                let jumlahSiswaDitemukan = 0;
+
+                riwayatPenilaian.forEach(p => {
+                    if(p.nilai_akhir && p.nilai_akhir[ins.id_kriteria] !== undefined) {
+                        let nilaiAspek = p.nilai_akhir[ins.id_kriteria];
+                        let persenAspek = (typeof nilaiAspek === 'object' && nilaiAspek !== null) ? nilaiAspek.persen : nilaiAspek;
+
+                        akumulasiNilaiAspek += persenAspek;
+                        jumlahSiswaDitemukan++;
+                    }
+                });
+                return jumlahSiswaDitemukan > 0 ? Math.round(akumulasiNilaiAspek / jumlahSiswaDitemukan) : 0;
+            });
+
+            progresChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labelAspekDinamis.length > 0 ? labelAspekDinamis : ['Belum Ada Instrumen'],
+                    datasets: [
+                    {
+                        label: 'Rata-rata Capaian Siswa (%)',
+                        data: dataRataRataDinamis.length > 0 ? dataRataRataDinamis : [0],
+                        backgroundColor: '#1E56A0',
+                        borderRadius: 4
+                    },
+                    {
+                        label: 'Target Ideal Capaian (100%)',
+                        data: labelAspekDinamis.length > 0 ? labelAspekDinamis.map(() => 100) : [100],
+                        backgroundColor: '#E74C3C',
+                        borderRadius: 4,
+                        opacity: 0.5
+                    }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: { y: { min: 0, max: 100 } }
                 }
             });
-
-            $('#tabel-riwayat-penilaian').DataTable({
-                "language": { "url": "//cdn.datatables.net/plug-ins/1.13.7/i18n/id.json" }
-            });
-
-            document.getElementById('view-assesment-list').classList.add('hidden');
-            document.getElementById('view-assesment-detail').classList.remove('hidden');
         }
 
-        function tutupDetailAssesment() {
-            document.getElementById('view-assesment-detail').classList.add('hidden');
-            document.getElementById('view-assesment-list').classList.remove('hidden');
-        }
-
-        // Jalankan saat pertama kali dibuka
+        // ==========================================
+        // WINDOW ONLOAD LAUNCHER
+        // ==========================================
         window.onload = () => {
             initDB();
             renderBeranda(); 
