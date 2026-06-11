@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Siswa - Asesmen PJOK SD</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>    
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+    
+    <style>
+        /* --- FONT CERIA & VARIABLES --- */
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Nunito', sans-serif; }
+
+        :root { 
+            /* Palet Tema Biru/Teal (Permintaan User) */
+            --primary: #FF6B6B;     /* Aksen ceria */
+            --secondary: #4ECDC4;   /* Warna dasar utama */
+            --secondary-dark: #2A9D8F; /* Gradasi tua */
+            --secondary-light: #A8E6CF; /* Gradasi muda */
+            
+            --success: #2ed573;     
+            --warning: #ffa502;     
+            --danger: #ff4757;      
+            --text-dark: #2f3542; 
+            --text-light: #747d8c; 
+            
+            /* Glassmorphism settings */
+            --glass-bg: rgba(255, 255, 255, 0.85);
+            --glass-border: rgba(255, 255, 255, 0.5);
+        }
+
+        /* --- ANIMATED GRADIENT BACKGROUND --- */
+        body { 
+            color: var(--text-dark); 
+            line-height: 1.6; 
+            min-height: 100vh;
+            background: linear-gradient(-45deg, var(--secondary-dark), var(--secondary), var(--secondary-light), #6DD5FA);
+            background-size: 400% 400%;
+            animation: gradientBG 12s ease infinite;
+            background-attachment: fixed;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .hidden { display: none !important; }
+
+        /* --- LAYOUT & NAVBAR JOYFUL --- */
+        .app-container { display: flex; flex-direction: column; min-height: 100vh; }
+
+        .navbar { 
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            color: var(--secondary-dark); 
+            padding: 15px 30px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            position: sticky; top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            border-bottom: 2px solid var(--glass-border);
+        }
+        .nav-brand { font-size: 1.5rem; font-weight: 900; letter-spacing: 1px; display: flex; align-items: center; gap: 10px; }
+        .nav-brand::before { content: '🏃‍♂️'; font-size: 1.8rem; }
+
+        .nav-desktop { display: flex; align-items: center; width: 100%; justify-content: space-between; margin-left: 30px; }
+        .nav-menu { display: flex; gap: 15px; list-style: none; align-items: center; }
+        .nav-menu > li { cursor: pointer; padding: 10px 20px; border-radius: 50px; font-weight: 700; transition: all 0.3s; color: var(--text-light); }
+        .nav-menu > li:hover, .nav-menu > li.active { 
+            background-color: var(--secondary-light); 
+            color: var(--secondary-dark);
+            transform: translateY(-2px); 
+        }
+
+        .btn-logout { 
+            background-color: var(--danger); 
+            border: none; color: white; 
+            font-weight: 800; padding: 10px 25px; 
+            border-radius: 50px; cursor: pointer; 
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55); 
+            box-shadow: 0 4px 10px rgba(255, 71, 87, 0.3);
+        }
+        .btn-logout:hover { transform: scale(1.05) translateY(-2px); background-color: #ff6b81; box-shadow: 0 6px 15px rgba(255, 71, 87, 0.4); }
+
+        /* --- HALAMAN CONTENT & KARTU GLASSMORPHISM --- */
+        .page-content { padding: 40px 20px; max-width: 900px; margin: 0 auto; width: 100%; flex: 1; }
+        
+        .card { 
+            background: var(--glass-bg); 
+            backdrop-filter: blur(15px);
+            padding: 35px; 
+            border-radius: 25px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08); 
+            margin-bottom: 25px; 
+            border: 2px solid var(--glass-border); 
+            transition: transform 0.3s; 
+        }
+        .page-title { margin-bottom: 25px; color: var(--secondary-dark); font-weight: 900; font-size: 1.8rem; text-align: center;}
+
+        /* --- FORM --- */
+        .form-group { margin-bottom: 20px; text-align: left; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 800; font-size: 1rem; color: var(--secondary-dark); }
+        .form-control { 
+            width: 100%; padding: 15px; 
+            border: 2px solid #e1e8ed; 
+            border-radius: 15px; font-size: 1rem; 
+            transition: all 0.3s; 
+            background: rgba(255, 255, 255, 0.9); 
+            font-weight: 600;
+        }
+        .form-control:focus { 
+            border-color: var(--secondary); 
+            outline: none; background: #fff; 
+            box-shadow: 0 0 0 4px rgba(78, 205, 196, 0.3); 
+        }
+
+        /* --- TOMBOL (BOUNCY) --- */
+        .btn { 
+            border: none; padding: 12px 25px; 
+            border-radius: 50px; color: white; 
+            cursor: pointer; font-weight: 800; font-size: 1.1rem;
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55); 
+            display: inline-flex; align-items: center; justify-content: center; 
+            text-transform: uppercase; letter-spacing: 1px;
+        }
+        .btn:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
+        .btn:active { transform: translateY(0); }
+        
+        .btn-primary { background-color: var(--secondary); box-shadow: 0 4px 0 var(--secondary-dark); margin-bottom: 4px; } 
+        .btn-primary:hover { box-shadow: 0 6px 0 var(--secondary-dark); }
+        
+        .btn-success { background-color: var(--success); box-shadow: 0 4px 0 #21a858; margin-bottom: 4px;} 
+        .btn-success:hover { box-shadow: 0 6px 0 #21a858; }
+        
+        .btn-warning { background-color: var(--warning); color: #fff; box-shadow: 0 4px 0 #d38902; margin-bottom: 4px;}
+        .btn-warning:hover { box-shadow: 0 6px 0 #d38902; }
+        
+        .btn-outline { background: white; border: 3px solid var(--secondary); color: var(--secondary-dark); box-shadow: none; margin-bottom: 0;}
+
+        /* --- GAMIFIKASI KUIS SISWA --- */
+        .token-box { 
+            background: rgba(255,255,255, 0.9);
+            padding: 40px; border-radius: 30px; 
+            text-align: center; color: var(--secondary-dark); 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1); 
+            margin-bottom: 30px; 
+            border: 3px dashed var(--secondary);
+        }
+        .token-input { 
+            font-size: 2.2rem; padding: 20px; 
+            text-align: center; border-radius: 20px; 
+            border: 3px solid var(--secondary-light); 
+            width: 100%; max-width: 450px; 
+            font-weight: 900; letter-spacing: 4px; 
+            color: var(--secondary-dark); 
+            text-transform: uppercase; margin: 25px auto; 
+            display: block; outline: none; 
+            box-shadow: inset 0 4px 8px rgba(0,0,0,0.05); 
+            background: #f8fcfb;
+            transition: all 0.3s;
+        }
+        .token-input:focus { border-color: var(--secondary); box-shadow: 0 0 15px rgba(78, 205, 196, 0.5); transform: scale(1.02); }
+        .token-input::placeholder { color: #cbd5e1; font-weight: 700; font-size: 1.3rem; letter-spacing: normal; }
+
+        .quiz-card { border-top: none; }
+        .quiz-question { font-size: 1.3rem; font-weight: 800; color: var(--text-dark); margin-bottom: 20px; line-height: 1.6; }
+
+        .gamified-options { display: flex; gap: 20px; margin-top: 20px; }
+        .gamified-options label { flex: 1; text-align: center; }
+        .gamified-options input[type="radio"] { display: none; }
+        .btn-ya, .btn-tidak { 
+            display: block; padding: 20px 15px; 
+            border-radius: 20px; font-weight: 900; 
+            font-size: 1.3rem; cursor: pointer; 
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55); 
+            border: 4px solid #e2e8f0; 
+            background: white; color: var(--text-light); 
+        }
+        
+        .gamified-options label:hover .btn-ya { border-color: var(--success); color: var(--success); transform: translateY(-3px); }
+        .gamified-options label:hover .btn-tidak { border-color: var(--danger); color: var(--danger); transform: translateY(-3px); }
+
+        .gamified-options input[value="1"]:checked + .btn-ya { 
+            background: var(--success); color: white; 
+            border-color: #21a858; transform: scale(1.05); 
+            box-shadow: 0 10px 20px rgba(46, 213, 115, 0.4); 
+        }
+        .gamified-options input[value="0"]:checked + .btn-tidak { 
+            background: var(--danger); color: white; 
+            border-color: #d63031; transform: scale(1.05); 
+            box-shadow: 0 10px 20px rgba(255, 71, 87, 0.4); 
+        }
+
+        .textarea-quiz { 
+            width: 100%; padding: 20px; 
+            border: 3px solid #e2e8f0; 
+            border-radius: 20px; font-size: 1.1rem; 
+            resize: vertical; background: white; 
+            font-family: 'Nunito', sans-serif; transition: 0.3s; 
+        }
+        .textarea-quiz:focus { border-color: var(--secondary); outline: none; box-shadow: 0 0 0 5px rgba(78, 205, 196, 0.2); }
+
+        @media (max-width: 768px) {
+            .nav-desktop { flex-direction: column; gap: 15px; margin-left: 0; padding-top: 15px; }
+            .gamified-options { flex-direction: column; }
+            .token-input { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="main-app" class="app-container">
+        <nav class="navbar hidden" id="main-navbar">
+            <div class="nav-brand">Modul PJOK SD</div>
+            <div class="nav-desktop">
+                <ul class="nav-menu">
+                    <li id="nav-beranda-siswa" class="active" onclick="navigasiKe('beranda-siswa')">🏠 Lobby Siswa</li>
+                    <li id="nav-profil-siswa" onclick="navigasiKe('profil-siswa')">👤 Profil Saya</li>
+                </ul>
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <span style="font-weight: 800; font-size: 1.1rem;">Halo, <b id="nav-siswa-name" style="color: var(--secondary-dark);">...</b>! 👋</span>
+                    <button class="btn-logout" onclick="prosesLogout()">Keluar</button>
+                </div>
+            </div>
+        </nav>
+
+        <div id="page-login-siswa" class="page-content" style="display: flex; justify-content: center; align-items: center;">
+            <div class="card" style="width: 100%; max-width: 450px; text-align: center;">
+                <div style="font-size: 4rem; margin-bottom: 10px;">🎒</div>
+                <h2 style="color: var(--secondary-dark); margin-bottom: 10px; font-weight: 900; font-size: 2rem;">Portal Siswa</h2>
+                <p style="color: var(--text-light); margin-bottom: 30px; font-size: 1.1rem;">Halo teman-teman! Yuk masuk pakai username dan password dari gurumu.</p>
+                <form onsubmit="prosesLoginSiswa(event)">
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input type="text" id="login-username" class="form-control" required placeholder="Ketik username kamu...">
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="login-password" class="form-control" required placeholder="Ketik password rahasiamu...">
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 20px; padding: 15px; font-size: 1.2rem;">Masuk Sekarang 🚀</button>
+                </form>
+                <!-- <p style="margin-top: 25px;">
+                    <a href="index.html" style="color: var(--secondary-dark); text-decoration: none; font-weight: 800;">← Kembali ke Portal Guru</a>
+                </p> -->
+            </div>
+        </div>
+
+        <div id="page-beranda-siswa" class="page-content hidden">
+            <div class="token-box">
+                <h2 style="font-size: 2.2rem; font-weight: 900;">Misi Olahraga Hari Ini 🏆</h2>
+                <p style="font-size: 1.2rem; margin-top: 10px;">Punya kode token dari gurumu? Masukkan di bawah ini ya!</p>
+                <input type="text" id="input-token-siswa" class="token-input" placeholder="KETIK TOKEN DI SINI">
+                <button class="btn btn-warning" onclick="validasiTokenSiswa()" style="font-size: 1.3rem; padding: 15px 40px;">Mulai Misi! ✨</button>
+            </div>
+            
+            <div class="card">
+                <h3 style="color: var(--secondary-dark); margin-bottom: 20px; text-align: center; font-size: 1.6rem; font-weight: 900;">Pencapaian Terbaru Saya 🌟</h3>
+                <div style="position: relative; height: 350px; width: 100%; max-width: 500px; margin: 0 auto; background: rgba(255,255,255,0.5); border-radius: 20px; padding: 20px;">
+                    <canvas id="raporSpiderChart"></canvas>
+                </div>
+                <div id="rapor-empty-state" style="text-align: center; color: var(--text-light); margin-top: 20px; font-style: italic; font-weight: 600;"></div>
+                <div id="catatan-guru-terakhir" style="margin-top: 25px; padding: 20px; background: rgba(78, 205, 196, 0.15); border-radius: 20px; border: 2px solid var(--secondary-light); display: none; color: var(--secondary-dark); font-size: 1.1rem;"></div>
+            </div>
+        </div>
+
+        <div id="page-kerjakan-asesmen" class="page-content hidden">
+            <div class="card" style="background: rgba(255,255,255,0.9); text-align: center; border: 3px dashed var(--secondary);">
+                <h2 id="quiz-title-display" style="font-size: 2rem; margin-bottom: 10px; color: var(--secondary-dark); font-weight: 900;">Judul Asesmen</h2>
+                <p id="quiz-desc-display" style="font-size: 1.2rem; color: var(--text-light); font-weight: 600;">Keterangan</p>
+            </div>
+            
+            <form id="form-quiz-siswa" onsubmit="submitAsesmenSiswa(event)">
+                <div id="container-quiz-cards"></div>
+                <div id="quiz-navigation" style="display: flex; justify-content: space-between; align-items: center; margin-top: 40px; margin-bottom: 50px;">
+                    <button type="button" id="btn-prev-quiz" class="btn btn-outline" style="padding: 15px 30px;" onclick="navigasiKuis(-1)">⬅️ Kembali</button>
+                    <button type="button" id="btn-next-quiz" class="btn btn-primary" style="padding: 15px 40px;" onclick="navigasiKuis(1)">Lanjut ➡️</button>
+                    <button type="submit" id="btn-submit-quiz" class="btn btn-success hidden" style="padding: 15px 40px;">Kirim Tugas ✈️</button>
+                </div>
+            </form>
+        </div>
+
+        <div id="page-profil-siswa" class="page-content hidden">
+            <div class="card" style="max-width: 800px; margin: 0 auto;">
+                <h2 class="page-title">Profil Saya 👤</h2>
+                <form onsubmit="updateProfilSiswa(event)">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div class="form-group"><label>NISN</label><input type="number" id="profil-nisn" class="form-control" required></div>
+                        <div class="form-group"><label>NIS</label><input type="number" id="profil-nis" class="form-control" required></div>
+                    </div>
+                    <div class="form-group"><label>Nama Lengkap</label><input type="text" id="profil-nama" class="form-control" required></div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px;">
+                        <div class="form-group"><label>No Absen</label><input type="number" id="profil-absen" class="form-control" required></div>
+                        <div class="form-group">
+                            <label>Jenis Kelamin</label>
+                            <select id="profil-jk" class="form-control" required>
+                                <option value="L">Laki-laki</option>
+                                <option value="P">Perempuan</option>
+                            </select>
+                        </div>
+                        <div class="form-group"><label>Kelas</label><input type="text" id="profil-kelas" class="form-control" required></div>
+                    </div>
+                    <div class="form-group"><label>Sekolah</label><input type="text" id="profil-sekolah" class="form-control" required></div>
+
+                    <hr style="margin: 30px 0; border: 0; border-top: 3px dashed rgba(42, 157, 143, 0.2);">
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div class="form-group"><label>Username (Buat Login)</label><input type="text" id="profil-username" class="form-control" required></div>
+                        <div class="form-group"><label>Password (Buat Login)</label><input type="text" id="profil-password" class="form-control" required></div>
+                    </div>
+                    <button type="submit" class="btn btn-warning" style="width:100%; margin-top:20px; padding: 15px; font-size: 1.2rem;">Simpan Perubahan 💾</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="dbKey.js"></script> 
+    
+    <script>
+        // ==========================================
+        // 0. UTILITAS DATABASE LOKAL
+        // ==========================================
+        function getDB(key) { return JSON.parse(localStorage.getItem(key)) || []; }
+        function updateDB(key, data) { localStorage.setItem(key, JSON.stringify(data)); }
+        function generateId() { return Math.random().toString(36).substr(2, 9); }
+
+        let tokenSesiAktif = null; 
+
+        // ==========================================
+        // 1. SISTEM AUTENTIKASI SISWA
+        // ==========================================
+        function cekSesiSiswa() {
+            const sesiSiswa = JSON.parse(sessionStorage.getItem('siswaAktif'));
+            
+            if (sesiSiswa) {
+                document.getElementById('main-navbar').classList.remove('hidden');
+                document.getElementById('page-login-siswa').classList.add('hidden');
+                document.getElementById('nav-siswa-name').innerText = sesiSiswa.nama;
+                navigasiKe('beranda-siswa');
+            } else {
+                document.getElementById('main-navbar').classList.add('hidden');
+                document.querySelectorAll('.page-content').forEach(el => el.classList.add('hidden'));
+                document.getElementById('page-login-siswa').classList.remove('hidden');
+            }
+        }
+
+        function prosesLoginSiswa(e) {
+            e.preventDefault();
+            const usr = document.getElementById('login-username').value.trim();
+            const pwd = document.getElementById('login-password').value.trim();
+            
+            const validSiswa = getDB(KEY_SISWA).find(s => s.username === usr && s.password === pwd);
+            
+            if (validSiswa) {
+                sessionStorage.setItem('siswaAktif', JSON.stringify(validSiswa));
+                document.getElementById('login-username').value = '';
+                document.getElementById('login-password').value = '';
+                cekSesiSiswa();
+            } else {
+                alert("Username atau Password salah! Coba ingat-ingat lagi ya.");
+            }
+        }
+
+        function prosesLogout() {
+            if(confirm("Yakin ingin keluar dari aplikasi?")) {
+                sessionStorage.removeItem('siswaAktif');
+                cekSesiSiswa();
+            }
+        }
+
+        // ==========================================
+        // 2. NAVIGASI SPA SISWA
+        // ==========================================
+        function navigasiKe(idHalaman) {
+            document.querySelectorAll('.page-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById('page-' + idHalaman).classList.remove('hidden');
+            
+            document.querySelectorAll('.nav-menu > li').forEach(el => el.classList.remove('active'));
+            if(document.getElementById('nav-' + idHalaman)) {
+                document.getElementById('nav-' + idHalaman).classList.add('active');
+            }
+
+            if(idHalaman === 'beranda-siswa') renderRaporSiswa();
+            if(idHalaman === 'profil-siswa') renderProfilSiswa();
+        }
+
+        // ==========================================
+        // 3. LOGIKA LOBBY & TOKEN
+        // ==========================================
+        function validasiTokenSiswa() {
+            const tokenInput = document.getElementById('input-token-siswa').value.trim().toUpperCase();
+            if (!tokenInput) {
+                alert("Ketik tokennya dulu ya!");
+                return;
+            }
+
+            const dbAsm = getDB(KEY_ASSESMENT);
+            const asmValid = dbAsm.find(a => a.token === tokenInput && a.status === 'aktif');
+            
+            if (asmValid) {
+                tokenSesiAktif = asmValid;
+                renderArenaKuis();
+                navigasiKe('kerjakan-asesmen');
+            } else {
+                alert("Token tidak ditemukan atau sesi sudah ditutup oleh guru.");
+            }
+        }
+
+        // ==========================================
+        // 4. GRAFIK LABA-LABA (RAPOR SISWA)
+        // ==========================================
+        let raporChartInstance = null;
+
+        function renderRaporSiswa() {
+            const siswaAktif = JSON.parse(sessionStorage.getItem('siswaAktif'));
+            const dbRiwayat = getDB(KEY_RIWAYAT);
+            const listSemuaInstrumen = getDB(KEY_KRITERIA);
+            
+            const riwayatSiswa = dbRiwayat.filter(r => r.id_siswa === siswaAktif.id_siswa);
+            const latestRiwayat = riwayatSiswa.length > 0 ? riwayatSiswa[riwayatSiswa.length - 1] : null;
+
+            const ctx = document.getElementById('raporSpiderChart');
+            const emptyState = document.getElementById('rapor-empty-state');
+            const boxCatatan = document.getElementById('catatan-guru-terakhir');
+
+            if (!latestRiwayat) {
+                ctx.style.display = 'none';
+                emptyState.innerText = "Kamu belum menyelesaikan misi apapun. Yuk ketik token misimu di atas!";
+                boxCatatan.style.display = 'none';
+                return;
+            }
+
+            ctx.style.display = 'block';
+            emptyState.innerText = "";
+            
+            if(latestRiwayat.catatan_guru) {
+                boxCatatan.style.display = 'block';
+                boxCatatan.innerHTML = `<b>Pesan dari Guru:</b><br>"${latestRiwayat.catatan_guru}"`;
+            } else {
+                boxCatatan.style.display = 'none';
+            }
+
+            const labels = [];
+            const dataSkala10 = [];
+
+            listSemuaInstrumen.forEach(ins => {
+                labels.push(ins.judul);
+                let nilaiPersen = 0;
+                if(latestRiwayat.nilai_akhir && latestRiwayat.nilai_akhir[ins.id_kriteria]) {
+                    nilaiPersen = latestRiwayat.nilai_akhir[ins.id_kriteria].persen || 0;
+                }
+                dataSkala10.push(Math.round((nilaiPersen / 100) * 10 * 10) / 10); 
+            });
+
+            if (raporChartInstance) raporChartInstance.destroy();
+
+            raporChartInstance = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Nilai Skala 10',
+                        data: dataSkala10,
+                        backgroundColor: 'rgba(42, 157, 143, 0.4)',
+                        borderColor: '#2A9D8F',
+                        pointBackgroundColor: '#FF6B6B',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: '#FF6B6B',
+                        borderWidth: 3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            angleLines: { color: 'rgba(0, 0, 0, 0.1)' },
+                            grid: { color: 'rgba(0, 0, 0, 0.1)' },
+                            pointLabels: { font: { family: 'Nunito', size: 12, weight: 'bold' }, color: '#2A9D8F' },
+                            ticks: { min: 0, max: 10, stepSize: 2, display: false }
+                        }
+                    },
+                    plugins: { legend: { display: false } }
+                }
+            });
+        }
+
+        // ==========================================
+        // 5. ARENA KUIS PER HALAMAN
+        // ==========================================
+        let currentKuisIndex = 0;
+        let totalKuisSteps = 0;
+
+        function renderArenaKuis() {
+            document.getElementById('quiz-title-display').innerText = tokenSesiAktif.nama_materi;
+            document.getElementById('quiz-desc-display').innerText = tokenSesiAktif.keterangan || "Kerjakan dengan santai dan jujur ya!";
+            
+            const container = document.getElementById('container-quiz-cards');
+            container.innerHTML = '';
+            
+            const semuaInstrumen = getDB(KEY_KRITERIA); 
+            const siswaAktif = JSON.parse(sessionStorage.getItem('siswaAktif'));
+            const nilaiLama = getDB(KEY_RIWAYAT).find(r => r.id_assesment === tokenSesiAktif.id_assesment && r.id_siswa === siswaAktif.id_siswa);
+            
+            let instrumenPilihan = semuaInstrumen;
+            if (tokenSesiAktif.instrumen_terpilih && tokenSesiAktif.instrumen_terpilih.length > 0) {
+                instrumenPilihan = semuaInstrumen.filter(ins => tokenSesiAktif.instrumen_terpilih.includes(ins.id_kriteria));
+            }
+
+            totalKuisSteps = instrumenPilihan.length;
+            currentKuisIndex = 0;
+
+            instrumenPilihan.forEach((ins, stepIndex) => {
+                let isHidden = stepIndex === 0 ? '' : 'hidden'; 
+                let cardHtml = `<div id="step-kuis-${stepIndex}" class="quiz-card card step-container ${isHidden}">
+                <h3 style="color:var(--secondary-dark); margin-bottom:20px; border-bottom:3px dashed rgba(78, 205, 196, 0.3); padding-bottom:15px; font-size:1.5rem; font-weight:900;">Bagian ${stepIndex + 1}: ${ins.judul}</h3>`;
+                
+                ins.normatif.forEach((butir, idx) => {
+                    let inputName = `score_${ins.id_kriteria}_${idx}`;
+                    let uraianName = `uraian_${ins.id_kriteria}_${idx}`;
+                    
+                    if(idx === 4) { 
+                        let textVal = nilaiLama && nilaiLama.detail_skor_mentah ? (nilaiLama.detail_skor_mentah[uraianName] || '') : '';
+                        cardHtml += `
+                        <div style="margin-top:30px;">
+                        <div class="quiz-question">📝 ${butir}</div>
+                        <textarea name="${uraianName}" class="textarea-quiz" rows="4" placeholder="Yuk, ceritakan di sini...">${textVal}</textarea>
+                        </div>`;
+                    } else { 
+                        let valChecked = nilaiLama && nilaiLama.detail_skor_mentah ? nilaiLama.detail_skor_mentah[inputName] : null;
+                        cardHtml += `
+                        <div style="margin-bottom:35px;" class="question-block">
+                        <div class="quiz-question">${idx+1}. ${butir}</div>
+                        <div class="gamified-options">
+                        <label>
+                        <input type="radio" name="${inputName}" data-id-ins="${ins.id_kriteria}" value="1" required ${valChecked === 1 ? 'checked':''}>
+                        <span class="btn-ya">😊 TENTU SAJA YA</span>
+                        </label>
+                        <label>
+                        <input type="radio" name="${inputName}" data-id-ins="${ins.id_kriteria}" value="0" required ${valChecked === 0 ? 'checked':''}>
+                        <span class="btn-tidak">🤔 HMM.. TIDAK</span>
+                        </label>
+                        </div>
+                        </div>`;
+                    }
+                });
+                cardHtml += `</div>`;
+                container.innerHTML += cardHtml;
+            });
+
+            perbaruiTombolNavigasi();
+        }
+
+        function validasiLangkahSaatIni() {
+            const stepDiv = document.getElementById(`step-kuis-${currentKuisIndex}`);
+            const radioNames = new Set();
+            
+            stepDiv.querySelectorAll('input[type="radio"]').forEach(r => radioNames.add(r.name));
+            
+            for (let name of radioNames) {
+                if (!stepDiv.querySelector(`input[name="${name}"]:checked`)) {
+                    alert("Eh tunggu! Ada pilihan YA/TIDAK yang belum kamu jawab. Cek lagi ya 😊");
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        function navigasiKuis(arah) {
+            if (arah === 1 && !validasiLangkahSaatIni()) return;
+
+            document.getElementById(`step-kuis-${currentKuisIndex}`).classList.add('hidden');
+            currentKuisIndex += arah;
+            document.getElementById(`step-kuis-${currentKuisIndex}`).classList.remove('hidden');
+            
+            perbaruiTombolNavigasi();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function perbaruiTombolNavigasi() {
+            const btnPrev = document.getElementById('btn-prev-quiz');
+            const btnNext = document.getElementById('btn-next-quiz');
+            const btnSubmit = document.getElementById('btn-submit-quiz');
+
+            btnPrev.style.visibility = currentKuisIndex === 0 ? 'hidden' : 'visible';
+
+            if (currentKuisIndex === totalKuisSteps - 1) {
+                btnNext.classList.add('hidden');
+                btnSubmit.classList.remove('hidden');
+            } else {
+                btnNext.classList.remove('hidden');
+                btnSubmit.classList.add('hidden');
+            }
+        }
+
+        function submitAsesmenSiswa(e) {
+            e.preventDefault();
+            const siswaAktif = JSON.parse(sessionStorage.getItem('siswaAktif'));
+            
+            const semuaInstrumen = getDB(KEY_KRITERIA);
+            let listInstrumen = semuaInstrumen;
+            if (tokenSesiAktif.instrumen_terpilih && tokenSesiAktif.instrumen_terpilih.length > 0) {
+                listInstrumen = semuaInstrumen.filter(ins => tokenSesiAktif.instrumen_terpilih.includes(ins.id_kriteria));
+            }
+            
+            const detailSkorMentah = {};
+            const rekapInstrumen = {};
+            let totalSkorKumulatif = 0;
+            let totalButirKumulatif = 0;
+            
+            const checkedRadios = document.querySelectorAll('#container-quiz-cards input[type="radio"]:checked');
+            checkedRadios.forEach(radio => {
+                const idIns = radio.getAttribute('data-id-ins');
+                const nameInput = radio.getAttribute('name');
+                const nilai = parseInt(radio.value);
+                
+                detailSkorMentah[nameInput] = nilai;
+                
+                if (!rekapInstrumen[idIns]) { rekapInstrumen[idIns] = { skorTotal: 0, jumlahButir: 0 }; }
+                rekapInstrumen[idIns].skorTotal += nilai;
+                rekapInstrumen[idIns].jumlahButir++;
+                totalSkorKumulatif += nilai;
+                totalButirKumulatif++;
+            });
+            
+            const textareas = document.querySelectorAll('#container-quiz-cards textarea');
+            textareas.forEach(ta => {
+                detailSkorMentah[ta.getAttribute('name')] = ta.value.trim();
+            });
+
+            const formatNilai = (skor, jumlahButir) => {
+                if (jumlahButir === 0) return { skor: 0, max: 0, persen: 0, teks: "0/0" };
+                return { skor: skor, max: jumlahButir, persen: Math.round((skor / jumlahButir) * 100), teks: `${skor}/${jumlahButir}` };
+            };
+
+            const objNilaiAkhir = { total: formatNilai(totalSkorKumulatif, totalButirKumulatif) };
+            listInstrumen.forEach(ins => {
+                if(rekapInstrumen[ins.id_kriteria]) {
+                    objNilaiAkhir[ins.id_kriteria] = formatNilai(rekapInstrumen[ins.id_kriteria].skorTotal, rekapInstrumen[ins.id_kriteria].jumlahButir);
+                } else {
+                    objNilaiAkhir[ins.id_kriteria] = { skor: 0, max: 0, persen: 0, teks: "0/0" }; 
+                }
+            });
+            
+            const riwayatBaru = {
+                id_penilaian: 'pen_' + generateId(),
+                id_assesment: tokenSesiAktif.id_assesment,
+                id_siswa: siswaAktif.id_siswa,
+                nama_siswa: siswaAktif.nama,
+                nilai_akhir: objNilaiAkhir, 
+                detail_skor_mentah: detailSkorMentah,
+                catatan_guru: "" 
+            };
+
+            let dbRiwayat = getDB(KEY_RIWAYAT);
+            let idx = dbRiwayat.findIndex(r => r.id_assesment === tokenSesiAktif.id_assesment && r.id_siswa === siswaAktif.id_siswa);
+            
+            if(idx !== -1) {
+                riwayatBaru.id_penilaian = dbRiwayat[idx].id_penilaian; 
+                riwayatBaru.catatan_guru = dbRiwayat[idx].catatan_guru; 
+                dbRiwayat[idx] = riwayatBaru;
+            } else {
+                dbRiwayat.push(riwayatBaru);
+            }
+            
+            updateDB(KEY_RIWAYAT, dbRiwayat);
+            
+            alert("Hebat! Jawaban misimu berhasil dikirim ke guru! 🌟");
+            document.getElementById('input-token-siswa').value = '';
+            navigasiKe('beranda-siswa');
+        }
+
+        // ==========================================
+        // 6. UPDATE PROFIL LENGKAP SISWA
+        // ==========================================
+        function renderProfilSiswa() {
+            const s = JSON.parse(sessionStorage.getItem('siswaAktif'));
+            if(!s) return;
+            
+            document.getElementById('profil-nisn').value = s.nisn || '';
+            document.getElementById('profil-nis').value = s.nis || '';
+            document.getElementById('profil-nama').value = s.nama;
+            document.getElementById('profil-absen').value = s.absen || '';
+            document.getElementById('profil-jk').value = s.jk || 'L';
+            document.getElementById('profil-kelas').value = s.kelas || '';
+            document.getElementById('profil-sekolah').value = s.sekolah || '';
+            document.getElementById('profil-username').value = s.username;
+            document.getElementById('profil-password').value = s.password;
+        }
+
+        function updateProfilSiswa(e) {
+            e.preventDefault();
+            const siswaAktif = JSON.parse(sessionStorage.getItem('siswaAktif'));
+            let dbSiswa = getDB(KEY_SISWA);
+            let idx = dbSiswa.findIndex(s => s.id_siswa === siswaAktif.id_siswa);
+            
+            if(idx !== -1) {
+                dbSiswa[idx].nisn = document.getElementById('profil-nisn').value;
+                dbSiswa[idx].nis = document.getElementById('profil-nis').value;
+                dbSiswa[idx].nama = document.getElementById('profil-nama').value;
+                dbSiswa[idx].absen = document.getElementById('profil-absen').value;
+                dbSiswa[idx].jk = document.getElementById('profil-jk').value;
+                dbSiswa[idx].kelas = document.getElementById('profil-kelas').value;
+                dbSiswa[idx].sekolah = document.getElementById('profil-sekolah').value;
+                dbSiswa[idx].username = document.getElementById('profil-username').value;
+                dbSiswa[idx].password = document.getElementById('profil-password').value;
+                
+                updateDB(KEY_SISWA, dbSiswa);
+                sessionStorage.setItem('siswaAktif', JSON.stringify(dbSiswa[idx])); 
+                
+                alert("Profil kamu berhasil diperbarui! 👍");
+                document.getElementById('nav-siswa-name').innerText = dbSiswa[idx].nama;
+                window.scrollTo({ top:0, behavior:'smooth' });
+            }
+        }
+
+        // ==========================================
+        // 7. WINDOW ONLOAD
+        // ==========================================
+        window.onload = () => {
+            cekSesiSiswa();
+        };
+    </script>
+</body>
+</html>
