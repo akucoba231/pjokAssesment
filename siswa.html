@@ -419,8 +419,8 @@
             }
         }
 
-        // ==========================================
-        // 4. GRAFIK LABA-LABA (RAPOR SISWA)
+       // ==========================================
+        // 4. GRAFIK PIE (RAPOR SISWA)
         // ==========================================
         let raporChartInstance = null;
 
@@ -432,7 +432,8 @@
             const riwayatSiswa = dbRiwayat.filter(r => r.id_siswa === siswaAktif.id_siswa);
             const latestRiwayat = riwayatSiswa.length > 0 ? riwayatSiswa[riwayatSiswa.length - 1] : null;
 
-            const ctx = document.getElementById('raporSpiderChart');
+            // Kita tetap menggunakan ID canvas yang lama agar tidak perlu repot mengubah HTML-nya
+            const ctx = document.getElementById('raporSpiderChart'); 
             const emptyState = document.getElementById('rapor-empty-state');
             const boxCatatan = document.getElementById('catatan-guru-terakhir');
 
@@ -454,51 +455,54 @@
             }
 
             const labels = [];
-            const dataSkala10 = [];
+            const dataNilai = [];
+            
+            // Menggunakan palet warna yang sama persis dengan halaman rincian guru
+            const pieColors = ['#FF6B6B', '#4ECDC4', '#fed330', '#26de81', '#4a69bd', '#e15f41', '#f8a5c2']; 
 
+            // Ekstraksi nilai kembali ke format persentase (%)
             listSemuaInstrumen.forEach(ins => {
                 labels.push(ins.judul);
                 let nilaiPersen = 0;
                 if(latestRiwayat.nilai_akhir && latestRiwayat.nilai_akhir[ins.id_kriteria]) {
                     nilaiPersen = latestRiwayat.nilai_akhir[ins.id_kriteria].persen || 0;
                 }
-                dataSkala10.push(Math.round((nilaiPersen / 100) * 10 * 10) / 10); 
+                dataNilai.push(nilaiPersen); 
             });
 
             if (raporChartInstance) raporChartInstance.destroy();
 
+            // Render menjadi Pie Chart
             raporChartInstance = new Chart(ctx, {
-                type: 'radar',
+                type: 'pie',
                 data: {
                     labels: labels,
                     datasets: [{
-                        label: 'Nilai Skala 10',
-                        data: dataSkala10,
-                        backgroundColor: 'rgba(42, 157, 143, 0.4)',
-                        borderColor: '#2A9D8F',
-                        pointBackgroundColor: '#FF6B6B',
-                        pointBorderColor: '#fff',
-                        pointHoverBackgroundColor: '#fff',
-                        pointHoverBorderColor: '#FF6B6B',
-                        borderWidth: 3
+                        data: dataNilai,
+                        backgroundColor: pieColors.slice(0, dataNilai.length), // Menyesuaikan jumlah warna dengan jumlah instrumen
+                        borderWidth: 2, 
+                        borderColor: '#ffffff'
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    scales: {
-                        r: {
-                            angleLines: { color: 'rgba(0, 0, 0, 0.1)' },
-                            grid: { color: 'rgba(0, 0, 0, 0.1)' },
-                            pointLabels: { font: { family: 'Nunito', size: 12, weight: 'bold' }, color: '#2A9D8F' },
-                            ticks: { min: 0, max: 10, stepSize: 2, display: false }
+                    plugins: {
+                        legend: { 
+                            position: 'right', 
+                            labels: { font: { family: 'Nunito', size: 12 } } 
+                        },
+                        tooltip: { 
+                            callbacks: { 
+                                label: function(context) { 
+                                    return ` ${context.label}: ${context.raw}%`; 
+                                } 
+                            } 
                         }
-                    },
-                    plugins: { legend: { display: false } }
+                    }
                 }
             });
         }
-
         // ==========================================
         // 5. ARENA KUIS PER HALAMAN
         // ==========================================
