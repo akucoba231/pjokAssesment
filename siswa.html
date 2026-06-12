@@ -28,7 +28,7 @@
             --text-light: #747d8c; 
             
             /* Glassmorphism settings */
-            --glass-bg: rgba(255, 255, 255, 0.85);
+            --glass-bg: rgba(255, 255, 255, 0.7);
             --glass-border: rgba(255, 255, 255, 0.5);
         }
 
@@ -37,8 +37,13 @@
             color: var(--text-dark); 
             line-height: 1.6; 
             min-height: 100vh;
-            background: linear-gradient(-45deg, var(--secondary-dark), var(--secondary), var(--secondary-light), #6DD5FA);
+            /*background: linear-gradient(-45deg, var(--secondary-dark), var(--secondary), var(--secondary-light), #6DD5FA);
             background-size: 400% 400%;
+            */
+
+            background: url('assets/bg.webp') no-repeat center center;
+            background-size: cover;
+            background-attachment: fixed;
             animation: gradientBG 12s ease infinite;
             background-attachment: fixed;
         }
@@ -55,7 +60,7 @@
         .app-container { display: flex; flex-direction: column; min-height: 100vh; }
 
         .navbar { 
-            background: rgba(255, 255, 255, 0.95);
+            background: var(--glass-bg);
             backdrop-filter: blur(10px);
             color: var(--secondary-dark); 
             padding: 15px 30px; 
@@ -146,7 +151,7 @@
 
         /* --- GAMIFIKASI KUIS SISWA --- */
         .token-box { 
-            background: rgba(255,255,255, 0.9);
+            background: rgba(255,255,255, 0.7);
             padding: 40px; border-radius: 30px; 
             text-align: center; color: var(--secondary-dark); 
             box-shadow: 0 15px 35px rgba(0,0,0,0.1); 
