@@ -202,6 +202,47 @@
             </div>
         </nav>
 
+        <div id="page-profil-guru" class="page-content hidden">
+                <div class="card" style="margin: 0 auto; border-top: 6px solid var(--secondary);">
+                    <h2 class="page-title" style="margin-bottom: 20px; border: none; padding: 0;">Pengaturan Profil Guru</h2>
+                    <p style="margin-bottom: 25px; color: var(--text-light);">Perbarui data identitas dan kredensial login Anda di bawah ini.</p>
+
+                    <form id="form-profil-guru" onsubmit="updateProfilGuru(event)">
+                        <h4 style="color: var(--primary); margin-bottom: 15px; border-bottom: 2px solid #eee; padding-bottom: 8px;">Identitas Diri</h4>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                            <div class="form-group">
+                                <label>Nama Lengkap (beserta Gelar)</label>
+                                <input type="text" id="profil-nama" required>
+                            </div>
+                            <div class="form-group">
+                                <label>NIP (Nomor Induk Pegawai)</label>
+                                <input type="number" id="profil-nip">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Asal Sekolah Tugas</label>
+                            <input type="text" id="profil-sekolah" required>
+                        </div>
+
+                        <h4 style="color: var(--primary); margin-bottom: 15px; margin-top: 25px; border-bottom: 2px solid #eee; padding-bottom: 8px;">Kredensial Login</h4>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                            <div class="form-group">
+                                <label>Username</label>
+                                <input type="text" id="profil-username" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Password</label>
+                                <input type="text" id="profil-password" required>
+                            </div>
+                        </div>
+
+                        <div style="margin-top: 30px; text-align: right;">
+                            <button type="submit" class="btn btn-success" style="padding: 12px 30px; font-size: 1.05rem;">Perbaharui Data</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
         <div id="page-hasil-evaluasi" class="page-content hidden">
             <div class="card">
                 <div class="flex-between">
@@ -507,56 +548,113 @@
                     </div>
                 </div>
             </div>
+        </div>
 
-            <div id="page-panduan" class="page-content hidden">
-                <h2 class="page-title" style="border: none; padding-bottom: 0;">Panduan Penggunaan Aplikasi</h2>
-                <div class="guide-grid">
-                    <div class="guide-card card-beranda"><div class="guide-icon">🏠</div><h3>1. Beranda</h3><p>Review singkat hasil dan progress asesmen.</p></div>
-                    <div class="guide-card card-siswa"><div class="guide-icon">👥</div><h3>2. Manajemen Siswa</h3><p>Input dan kelola data siswa sebelum asesmen.</p></div>
-                    <div class="guide-card card-asesmen"><div class="guide-icon">📝</div><h3>3. Instrumen Penilaian</h3><p>Input daftar instrumen dan butir indikator yang dinilai.</p></div>
-                    <div class="guide-card card-panduan"><div class="guide-icon">⭐</div><h3>4. Halaman Asesmen</h3><p>Tempat guru mengeksekusi penilaian siswa.</p></div>
-                </div>
+        <div id="page-panduan" class="page-content hidden">
+            <div style="text-align: center; margin-bottom: 35px;">
+                <h2 class="page-title" style="font-size: 2.2rem; border: none; padding: 0; margin-bottom: 10px;">📖 Buku Panduan Digital</h2>
+                <p style="color: var(--text-light); font-size: 1.1rem;">Pelajari cara menggunakan setiap fitur di Portal Guru Modul Asesmen PJOK SD.</p>
             </div>
 
-            <div id="page-profil-guru" class="page-content hidden">
-                <div class="card" style="margin: 0 auto; border-top: 6px solid var(--secondary);">
-                    <h2 class="page-title" style="margin-bottom: 20px; border: none; padding: 0;">Pengaturan Profil Guru</h2>
-                    <p style="margin-bottom: 25px; color: var(--text-light);">Perbarui data identitas dan kredensial login Anda di bawah ini.</p>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px;">
 
-                    <form id="form-profil-guru" onsubmit="updateProfilGuru(event)">
-                        <h4 style="color: var(--primary); margin-bottom: 15px; border-bottom: 2px solid #eee; padding-bottom: 8px;">Identitas Diri</h4>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                            <div class="form-group">
-                                <label>Nama Lengkap (beserta Gelar)</label>
-                                <input type="text" id="profil-nama" required>
-                            </div>
-                            <div class="form-group">
-                                <label>NIP (Nomor Induk Pegawai)</label>
-                                <input type="number" id="profil-nip">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label>Asal Sekolah Tugas</label>
-                            <input type="text" id="profil-sekolah" required>
-                        </div>
-
-                        <h4 style="color: var(--primary); margin-bottom: 15px; margin-top: 25px; border-bottom: 2px solid #eee; padding-bottom: 8px;">Kredensial Login</h4>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                            <div class="form-group">
-                                <label>Username</label>
-                                <input type="text" id="profil-username" required>
-                            </div>
-                            <div class="form-group">
-                                <label>Password</label>
-                                <input type="text" id="profil-password" required>
-                            </div>
-                        </div>
-
-                        <div style="margin-top: 30px; text-align: right;">
-                            <button type="submit" class="btn btn-success" style="padding: 12px 30px; font-size: 1.05rem;">Perbaharui Data</button>
-                        </div>
-                    </form>
+                <div class="card" style="border-top: 5px solid var(--primary); padding: 25px;">
+                    <h3 style="color: var(--text-dark); margin-bottom: 15px; font-size: 1.3rem;">
+                        <span style="background: #ffe0e0; padding: 8px; border-radius: 10px; margin-right: 10px;">🏠</span>
+                        Beranda Guru
+                    </h3>
+                    <p style="color: var(--text-light); line-height: 1.7;">
+                        Pusat informasi (*Dashboard*) dari aplikasi Anda.
+                    </p>
+                    <ul style="margin-top: 10px; margin-left: 20px; color: var(--text-dark); line-height: 1.7;">
+                        <li>Menampilkan ringkasan status aplikasi secara cepat.</li>
+                        <li>Melihat daftar <b>Asesmen yang Sedang Aktif</b> agar Anda bisa langsung memantau sesi yang sedang berjalan.</li>
+                    </ul>
                 </div>
+
+                <div class="card" style="border-top: 5px solid var(--secondary); padding: 25px;">
+                    <h3 style="color: var(--text-dark); margin-bottom: 15px; font-size: 1.3rem;">
+                        <span style="background: #e0f7f4; padding: 8px; border-radius: 10px; margin-right: 10px;">👥</span>
+                        Manajemen Siswa
+                    </h3>
+                    <p style="color: var(--text-light); line-height: 1.7;">
+                        Ruang kendali untuk mengatur data peserta didik Anda.
+                    </p>
+                    <ul style="margin-top: 10px; margin-left: 20px; color: var(--text-dark); line-height: 1.7;">
+                        <li><b>Input Data Manual:</b> Mendaftarkan siswa satu per satu lengkap dengan NIS, Kelas, dan Absen.</li>
+                        <li><b>Import Excel:</b> Memasukkan puluhan data siswa sekaligus secara instan menggunakan format Excel.</li>
+                        <li><b>Akun Login:</b> Mengatur <i>Username</i> dan <i>Password</i> yang akan digunakan siswa untuk masuk ke <b>Portal Siswa</b>.</li>
+                    </ul>
+                </div>
+
+                <div class="card" style="border-top: 5px solid var(--warning); padding: 25px;">
+                    <h3 style="color: var(--text-dark); margin-bottom: 15px; font-size: 1.3rem;">
+                        <span style="background: #fff9db; padding: 8px; border-radius: 10px; margin-right: 10px;">📋</span>
+                        Instrumen Penilaian
+                    </h3>
+                    <p style="color: var(--text-light); line-height: 1.7;">
+                        Pabrik pembuatan soal dan kriteria (rubrik) asesmen.
+                    </p>
+                    <ul style="margin-top: 10px; margin-left: 20px; color: var(--text-dark); line-height: 1.7;">
+                        <li>Menambahkan blok kriteria baru (Contoh: "Sikap Awal", "Gerakan Inti").</li>
+                        <li>Setiap kriteria terdiri dari <b>4 butir pernyataan Ya/Tidak</b> (pilihan ganda) dan <b>1 butir pertanyaan uraian</b>.</li>
+                        <li>Instrumen yang dibuat di sini akan disimpan sebagai bank soal.</li>
+                    </ul>
+                </div>
+
+                <div class="card" style="border-top: 5px solid var(--success); padding: 25px;">
+                    <h3 style="color: var(--text-dark); margin-bottom: 15px; font-size: 1.3rem;">
+                        <span style="background: #e3fbee; padding: 8px; border-radius: 10px; margin-right: 10px;">🚀</span>
+                        Halaman Asesmen
+                    </h3>
+                    <p style="color: var(--text-light); line-height: 1.7;">
+                        Pusat distribusi ujian dan evaluasi kelas.
+                    </p>
+                    <ul style="margin-top: 10px; margin-left: 20px; color: var(--text-dark); line-height: 1.7;">
+                        <li><b>Rilis Asesmen:</b> Membuat sesi ujian baru, menyaring kriteria apa saja yang mau diujikan, dan mencetak <b>Token</b> (kode masuk).</li>
+                        <li><b>Monitor Responder:</b> Melihat secara <i>real-time</i> siapa saja siswa yang sudah mengumpulkan jawaban beserta nilainya.</li>
+                        <li><b>Evaluasi & Umpan Balik:</b> Memberikan catatan/komentar evaluasi pada kolom jawaban uraian siswa.</li>
+                        <li><b>Export Excel:</b> Mengunduh rekap nilai satu kelas penuh.</li>
+                    </ul>
+                </div>
+
+                <div class="card" style="border-top: 5px solid #9b59b6; padding: 25px;">
+                    <h3 style="color: var(--text-dark); margin-bottom: 15px; font-size: 1.3rem;">
+                        <span style="background: #f4e9f7; padding: 8px; border-radius: 10px; margin-right: 10px;">📈</span>
+                        Hasil Evaluasi Siswa
+                    </h3>
+                    <p style="color: var(--text-light); line-height: 1.7;">
+                        Buku Rapor Digital dan Dasbor Capaian Individu.
+                    </p>
+                    <ul style="margin-top: 10px; margin-left: 20px; color: var(--text-dark); line-height: 1.7;">
+                        <li>Menampilkan riwayat seluruh siswa secara personal.</li>
+                        <li><b>Grafik Laba-laba (Radar):</b> Visualisasi pemetaan kekuatan dan kelemahan siswa per kriteria ujian.</li>
+                        <li>Melihat riwayat umpan balik guru yang pernah diberikan sebelumnya.</li>
+                        <li>Mencetak rapor (riwayat) nilai individu ke format Excel.</li>
+                    </ul>
+                </div>
+
+                <div class="card" style="border-top: 5px solid #34495e; padding: 25px;">
+                    <h3 style="color: var(--text-dark); margin-bottom: 15px; font-size: 1.3rem;">
+                        <span style="background: #ecf0f1; padding: 8px; border-radius: 10px; margin-right: 10px;">👤</span>
+                        Profil Guru
+                    </h3>
+                    <p style="color: var(--text-light); line-height: 1.7;">
+                        Pengaturan akun dan identitas sekolah.
+                    </p>
+                    <ul style="margin-top: 10px; margin-left: 20px; color: var(--text-dark); line-height: 1.7;">
+                        <li>Memperbarui nama lengkap, NIP, dan nama Instansi/Sekolah (data ini akan tercetak otomatis sebagai *Header* saat Anda mengunduh Excel).</li>
+                        <li>Mengubah <i>Username</i> dan <i>Password</i> untuk mengamankan Portal Guru Anda.</li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <div class="card" style="margin-top: 25px; background: linear-gradient(135deg, #eef5fc, #e0f7f4); border: none;">
+                <h4 style="color: var(--secondary); margin-bottom: 10px;">💡 Catatan Penting:</h4>
+                <p style="color: var(--text-dark); font-size: 1rem; line-height: 1.6;">
+                    Aplikasi ini menggunakan teknologi <b>Local Storage</b>. Seluruh data Anda (Siswa, Kriteria, dan Nilai) disimpan dengan aman di dalam <i>browser</i> perangkat Anda tanpa memerlukan akses internet. Pastikan Anda <b>tidak menghapus <i>history/cache browser</i></b> secara total agar data tidak hilang, dan biasakan untuk sering-sering mengunduh data menggunakan tombol <b>Export Excel</b> sebagai cadangan (<i>backup</i>).
+                </p>
             </div>
         </div>
 
