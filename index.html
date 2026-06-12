@@ -160,13 +160,16 @@
             .stats-grid { grid-template-columns: 1fr; }
             .modal-content { padding: 20px; border-radius: 16px; }
         }
+        .logo-app {
+            width: clamp(50px,80px,100px);
+        }
     </style>
 
 </head>
 <body>
 
     <div id="main-app" class="app-container">
-        <nav class="navbar hidden" id="main-navbar">
+        <!-- <nav class="navbar hidden" id="main-navbar">
             <div class="nav-brand">Modul PJOK SD</div>
             <div class="menu-toggle" onclick="toggleMobileMenu(event)">☰</div>
             <div class="nav-desktop">
@@ -204,6 +207,63 @@
                         </ul>
                     </li>
                     <li onclick="navigasiKe('panduan')">Panduan</li>
+                    <li onclick="navigasiKe('profil-guru', true)">Profil Guru</li>
+                    <li><button class="btn-logout" onclick="prosesLogout()" style="width: 100%; margin-top: 10px;">Keluar</button></li>
+                </ul>
+            </div>
+        </nav> -->
+
+        <nav class="navbar hidden" id="main-navbar" style="display: block; padding: 0;">
+            
+            <div style="text-align: center; padding: 20px 15px 15px 15px; border-bottom: 1px solid rgba(255,255,255,0.2);">
+                <h1 style="font-size: clamp(1.1rem, 3vw, 1.5rem); font-weight: 800; margin: 0; line-height: 1.4; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                    <img class="logo-app" src="assets/dindik.webp" alt="logo-app" /> Pengembangan Assesment Prinsip Deep Learning dalam Pembelajaran PJOK
+                </h1>
+                <p style="margin: 5px 0 0 0; font-size: clamp(0.9rem, 2vw, 1.1rem); font-weight: 600; opacity: 0.9;">
+                    Sistem Asesmen Berbasis Web
+                </p>
+            </div>
+            
+            <div style="padding: 10px 30px; display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                
+                <div class="menu-toggle" onclick="toggleMobileMenu(event)" style="font-weight: 800; font-size: 1.1rem; border: 2px solid rgba(255,255,255,0.5); padding: 5px 15px; border-radius: 8px;">☰ Menu</div>
+                
+                <div class="nav-desktop" style="width: 100%; margin-left: 0;">
+                    <ul class="nav-menu">
+                        <li id="nav-beranda" class="nav-item active" onclick="navigasiKe('beranda')">Beranda</li>
+                        <li id="nav-manajemen-siswa" class="nav-item" onclick="navigasiKe('manajemen-siswa')">Manajemen Siswa</li>
+                        <li id="nav-asesmen" class="nav-item dropdown">
+                            Manajemen Asesmen ▾
+                            <ul class="dropdown-content">
+                                <li onclick="navigasiKe('kriteria')">Instrumen Penilaian</li>
+                                <li onclick="navigasiKe('halaman-assesment')">Halaman Assesment</li>
+                                <li onclick="navigasiKe('hasil-evaluasi')">Hasil Evaluasi Siswa</li>
+                            </ul>
+                        </li>
+                        <li id="nav-panduan" class="nav-item" onclick="navigasiKe('panduan')">Panduan</li>
+                        <li id="nav-profil-guru" class="nav-item" onclick="navigasiKe('profil-guru')">Profil Guru</li>
+                    </ul>
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <span style="font-weight: 600;">Guru: <b id="nav-guru-name">...</b></span>
+                        <button class="btn-logout" onclick="prosesLogout()">Keluar</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="mobile-menu" class="mobile-menu">
+                <div class="mobile-user-info">Guru: <b id="mob-guru-name">...</b></div>
+                <ul class="mobile-nav-list">
+                    <li onclick="navigasiKe('beranda', true)">Beranda</li>
+                    <li onclick="navigasiKe('manajemen-siswa', true)">Manajemen Siswa</li>
+                    <li onclick="toggleMobDropdown(event)">
+                        Manajemen Asesmen ▾
+                        <ul id="mob-asesmen-content" class="mob-dropdown-content hidden">
+                            <li onclick="navigasiKe('kriteria', true)">Instrumen Penilaian</li>
+                            <li onclick="navigasiKe('halaman-assesment', true)">Halaman Assesment</li>
+                            <li onclick="navigasiKe('hasil-evaluasi', true)">Hasil Evaluasi Siswa</li>
+                        </ul>
+                    </li>
+                    <li onclick="navigasiKe('panduan', true)">Panduan</li>
                     <li onclick="navigasiKe('profil-guru', true)">Profil Guru</li>
                     <li><button class="btn-logout" onclick="prosesLogout()" style="width: 100%; margin-top: 10px;">Keluar</button></li>
                 </ul>
