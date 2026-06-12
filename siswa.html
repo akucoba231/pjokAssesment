@@ -44,8 +44,8 @@
             background: url('assets/bg.webp') no-repeat center center;
             background-size: cover;
             background-attachment: fixed;
-            animation: gradientBG 12s ease infinite;
-            background-attachment: fixed;
+            /*animation: gradientBG 12s ease infinite;
+            background-attachment: fixed;*/
         }
 
         @keyframes gradientBG {
@@ -67,6 +67,7 @@
             display: flex; 
             justify-content: space-between; 
             align-items: center; 
+            flex-direction: column;
             position: sticky; top: 0;
             z-index: 100;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
@@ -148,8 +149,7 @@
         .btn-warning:hover { box-shadow: 0 6px 0 #d38902; }
         
         .btn-outline { background: white; border: 3px solid var(--secondary); color: var(--secondary-dark); box-shadow: none; margin-bottom: 0;}
-
-        /* --- GAMIFIKASI KUIS SISWA --- */
+/* --- GAMIFIKASI KUIS SISWA --- */
         .token-box { 
             background: rgba(255,255,255, 0.7);
             padding: 40px; border-radius: 30px; 
@@ -181,12 +181,14 @@
         .gamified-options label { flex: 1; text-align: center; }
         .gamified-options input[type="radio"] { display: none; }
         .btn-ya, .btn-tidak { 
-            display: block; padding: 20px 15px; 
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            padding: 20px 15px; 
             border-radius: 20px; font-weight: 900; 
             font-size: 1.3rem; cursor: pointer; 
             transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55); 
             border: 4px solid #e2e8f0; 
             background: white; color: var(--text-light); 
+            height: 100%;
         }
         
         .gamified-options label:hover .btn-ya { border-color: var(--success); color: var(--success); transform: translateY(-3px); }
@@ -212,26 +214,87 @@
         }
         .textarea-quiz:focus { border-color: var(--secondary); outline: none; box-shadow: 0 0 0 5px rgba(78, 205, 196, 0.2); }
 
+        /* Tombol Menu Mobile */
+        .menu-toggle { display: none; font-weight: 900; cursor: pointer; color: var(--secondary-dark); font-size: 1.1rem; padding: 8px 15px; border: 2px solid var(--secondary); border-radius: 12px; background: rgba(255,255,255,0.5); transition: 0.3s;}
+        .menu-toggle:active { transform: scale(0.95); }
+
         @media (max-width: 768px) {
-            .nav-desktop { flex-direction: column; gap: 15px; margin-left: 0; padding-top: 15px; }
-            .gamified-options { flex-direction: column; }
+            .navbar { flex-wrap: wrap; }
+            .menu-toggle { display: block; }
+            .nav-desktop { 
+                display: none; /* Disembunyikan secara default di mobile */
+                flex-direction: column; 
+                width: 100%; 
+                gap: 10px; 
+                margin-left: 0; 
+                padding-top: 15px; 
+                margin-top: 15px;
+                border-top: 2px dashed var(--glass-border);
+            }
+            .nav-desktop.active { display: flex; animation: slideDown 0.3s ease-out; }
+            @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+            
+            .nav-menu { flex-direction: column; width: 100%; }
+            .nav-menu > li { width: 100%; text-align: center; background: rgba(255,255,255,0.5); border-radius: 12px; }
+            .nav-desktop > div { flex-direction: column; width: 100%; text-align: center; }
+            .btn-logout { width: 100%; }
+
+            /* Menjaga Tombol Kuis Tetap Berdampingan */
+            .gamified-options { flex-direction: row; gap: 10px; }
+            .btn-ya, .btn-tidak { font-size: 0.95rem; padding: 15px 5px; } /* Ukuran font dan padding disesuaikan agar tidak jebol */
             .token-input { font-size: 1.5rem; }
         }
+        .logo-app {
+            width: clamp(50px,80px,100px);
+        }
+    </style>
     </style>
 </head>
 <body>
 
     <div id="main-app" class="app-container">
-        <nav class="navbar hidden" id="main-navbar">
+       <!--  <nav class="navbar hidden" id="main-navbar">
             <div class="nav-brand">Modul PJOK SD</div>
-            <div class="nav-desktop">
+            
+            <div class="menu-toggle" onclick="toggleMobileMenuSiswa()">Menu ▾</div>
+            
+            <div class="nav-desktop" id="nav-desktop-siswa">
                 <ul class="nav-menu">
                     <li id="nav-beranda-siswa" class="active" onclick="navigasiKe('beranda-siswa')">🏠 Lobby Siswa</li>
                     <li id="nav-profil-siswa" onclick="navigasiKe('profil-siswa')">👤 Profil Saya</li>
                 </ul>
-                <div style="display: flex; align-items: center; gap: 15px;">
+                <div style="display: flex; align-items: center; gap: 15px; justify-content: center;">
                     <span style="font-weight: 800; font-size: 1.1rem;">Halo, <b id="nav-siswa-name" style="color: var(--secondary-dark);">...</b>! 👋</span>
                     <button class="btn-logout" onclick="prosesLogout()">Keluar</button>
+                </div>
+            </div>
+        </nav> -->
+
+        <nav class="navbar hidden" id="main-navbar">
+            
+            <div style="text-align: center; padding: 20px 15px 15px 15px; border-bottom: 2px solid var(--glass-border);">
+                <h1 style="color: var(--secondary-dark); font-size: clamp(1.1rem, 3vw, 1.5rem); font-weight: 900; margin: 0; line-height: 1.4; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                    <img class="logo-app" src="assets/dindik.webp" alt="logo-app" /> 
+                    Pengembangan Assesment Prinsip Deep Learning dalam Pembelajaran PJOK
+                </h1>
+                <p style="color: var(--text-dark); margin: 5px 0 0 0; font-size: clamp(0.9rem, 2vw, 1.1rem); font-weight: 700; opacity: 0.9;">
+                    Sistem Asesmen Berbasis Web - Portal Siswa
+                </p>
+            </div>
+            
+            <div style="padding: 10px 30px; display: flex; justify-content: space-between; align-items: center; width: 100%; flex-direction: column;">
+                
+                <div class="menu-toggle" onclick="toggleMobileMenuSiswa()">Menu ▾</div>
+                
+                <div class="nav-desktop" id="nav-desktop-siswa">
+                    <ul class="nav-menu">
+                        <li id="nav-beranda-siswa" class="active" onclick="navigasiKe('beranda-siswa')">🏠 Lobby Siswa</li>
+                        <li id="nav-profil-siswa" onclick="navigasiKe('profil-siswa')">👤 Profil Saya</li>
+                    </ul>
+                    <div style="display: flex; align-items: center; gap: 15px; justify-content: center;">
+                        <span style="font-weight: 800; font-size: 1.1rem; color: var(--text-dark);">Halo, <b id="nav-siswa-name" style="color: var(--secondary-dark);">...</b>! 👋</span>
+                        <button class="btn-logout" onclick="prosesLogout()">Keluar</button>
+                    </div>
                 </div>
             </div>
         </nav>
@@ -729,6 +792,34 @@
                 alert("Profil kamu berhasil diperbarui! 👍");
                 document.getElementById('nav-siswa-name').innerText = dbSiswa[idx].nama;
                 window.scrollTo({ top:0, behavior:'smooth' });
+            }
+        }
+
+        // ==========================================
+        // 2. NAVIGASI SPA SISWA & MOBILE MENU
+        // ==========================================
+        
+        // Fungsi untuk Buka/Tutup Accordion Mobile Menu
+        function toggleMobileMenuSiswa() {
+            document.getElementById('nav-desktop-siswa').classList.toggle('active');
+        }
+
+        function navigasiKe(idHalaman) {
+            document.querySelectorAll('.page-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById('page-' + idHalaman).classList.remove('hidden');
+            
+            document.querySelectorAll('.nav-menu > li').forEach(el => el.classList.remove('active'));
+            if(document.getElementById('nav-' + idHalaman)) {
+                document.getElementById('nav-' + idHalaman).classList.add('active');
+            }
+
+            if(idHalaman === 'beranda-siswa') renderRaporSiswa();
+            if(idHalaman === 'profil-siswa') renderProfilSiswa();
+
+            // Otomatis menutup Accordion Menu setelah diklik (di layar HP)
+            const navMobile = document.getElementById('nav-desktop-siswa');
+            if (navMobile) {
+                navMobile.classList.remove('active');
             }
         }
 
