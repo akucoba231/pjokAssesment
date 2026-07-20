@@ -150,109 +150,130 @@
         
         .btn-outline { background: white; border: 3px solid var(--secondary); color: var(--secondary-dark); box-shadow: none; margin-bottom: 0;}
 /* --- GAMIFIKASI KUIS SISWA --- */
-        .token-box { 
-            background: rgba(255,255,255, 0.7);
-            padding: 40px; border-radius: 30px; 
-            text-align: center; color: var(--secondary-dark); 
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1); 
-            margin-bottom: 30px; 
-            border: 3px dashed var(--secondary);
-        }
-        .token-input { 
-            font-size: 2.2rem; padding: 20px; 
-            text-align: center; border-radius: 20px; 
-            border: 3px solid var(--secondary-light); 
-            width: 100%; max-width: 450px; 
-            font-weight: 900; letter-spacing: 4px; 
-            color: var(--secondary-dark); 
-            text-transform: uppercase; margin: 25px auto; 
-            display: block; outline: none; 
-            box-shadow: inset 0 4px 8px rgba(0,0,0,0.05); 
-            background: #f8fcfb;
-            transition: all 0.3s;
-        }
-        .token-input:focus { border-color: var(--secondary); box-shadow: 0 0 15px rgba(78, 205, 196, 0.5); transform: scale(1.02); }
-        .token-input::placeholder { color: #cbd5e1; font-weight: 700; font-size: 1.3rem; letter-spacing: normal; }
+.token-box { 
+    background: rgba(255,255,255, 0.7);
+    padding: 40px; border-radius: 30px; 
+    text-align: center; color: var(--secondary-dark); 
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1); 
+    margin-bottom: 30px; 
+    border: 3px dashed var(--secondary);
+}
+.token-input { 
+    font-size: 2.2rem; padding: 20px; 
+    text-align: center; border-radius: 20px; 
+    border: 3px solid var(--secondary-light); 
+    width: 100%; max-width: 450px; 
+    font-weight: 900; letter-spacing: 4px; 
+    color: var(--secondary-dark); 
+    text-transform: uppercase; margin: 25px auto; 
+    display: block; outline: none; 
+    box-shadow: inset 0 4px 8px rgba(0,0,0,0.05); 
+    background: #f8fcfb;
+    transition: all 0.3s;
+}
+.token-input:focus { border-color: var(--secondary); box-shadow: 0 0 15px rgba(78, 205, 196, 0.5); transform: scale(1.02); }
+.token-input::placeholder { color: #cbd5e1; font-weight: 700; font-size: 1.3rem; letter-spacing: normal; }
 
-        .quiz-card { border-top: none; }
-        .quiz-question { font-size: 1.3rem; font-weight: 800; color: var(--text-dark); margin-bottom: 20px; line-height: 1.6; }
+.quiz-card { border-top: none; }
+.quiz-question { font-size: 1.3rem; font-weight: 800; color: var(--text-dark); margin-bottom: 20px; line-height: 1.6; }
 
-        .gamified-options { display: flex; gap: 20px; margin-top: 20px; }
-        .gamified-options label { flex: 1; text-align: center; }
-        .gamified-options input[type="radio"] { display: none; }
-        .btn-ya, .btn-tidak { 
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            padding: 20px 15px; 
-            border-radius: 20px; font-weight: 900; 
-            font-size: 1.3rem; cursor: pointer; 
-            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55); 
-            border: 4px solid #e2e8f0; 
-            background: white; color: var(--text-light); 
-            height: 100%;
-        }
-        
-        .gamified-options label:hover .btn-ya { border-color: var(--success); color: var(--success); transform: translateY(-3px); }
-        .gamified-options label:hover .btn-tidak { border-color: var(--danger); color: var(--danger); transform: translateY(-3px); }
+.gamified-options { display: flex; gap: 20px; margin-top: 20px; }
+.gamified-options label { flex: 1; text-align: center; }
+.gamified-options input[type="radio"] { display: none; }
+.btn-ya, .btn-tidak { 
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 20px 15px; 
+    border-radius: 20px; font-weight: 900; 
+    font-size: 1.3rem; cursor: pointer; 
+    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55); 
+    border: 4px solid #e2e8f0; 
+    background: white; color: var(--text-light); 
+    height: 100%;
+}
 
-        .gamified-options input[value="1"]:checked + .btn-ya { 
-            background: var(--success); color: white; 
-            border-color: #21a858; transform: scale(1.05); 
-            box-shadow: 0 10px 20px rgba(46, 213, 115, 0.4); 
-        }
-        .gamified-options input[value="0"]:checked + .btn-tidak { 
-            background: var(--danger); color: white; 
-            border-color: #d63031; transform: scale(1.05); 
-            box-shadow: 0 10px 20px rgba(255, 71, 87, 0.4); 
-        }
+.gamified-options label:hover .btn-ya { border-color: var(--success); color: var(--success); transform: translateY(-3px); }
+.gamified-options label:hover .btn-tidak { border-color: var(--danger); color: var(--danger); transform: translateY(-3px); }
 
-        .textarea-quiz { 
-            width: 100%; padding: 20px; 
-            border: 3px solid #e2e8f0; 
-            border-radius: 20px; font-size: 1.1rem; 
-            resize: vertical; background: white; 
-            font-family: 'Nunito', sans-serif; transition: 0.3s; 
-        }
-        .textarea-quiz:focus { border-color: var(--secondary); outline: none; box-shadow: 0 0 0 5px rgba(78, 205, 196, 0.2); }
+/*.gamified-options input[value="1"]:checked + .btn-ya { 
+    background: var(--success); color: white; 
+    border-color: #21a858; transform: scale(1.05); 
+    box-shadow: 0 10px 20px rgba(46, 213, 115, 0.4); 
+}
+.gamified-options input[value="0"]:checked + .btn-tidak { 
+    background: var(--danger); color: white; 
+    border-color: #d63031; transform: scale(1.05); 
+    box-shadow: 0 10px 20px rgba(255, 71, 87, 0.4); 
+}*/
 
-        /* Tombol Menu Mobile */
-        .menu-toggle { display: none; font-weight: 900; cursor: pointer; color: var(--secondary-dark); font-size: 1.1rem; padding: 8px 15px; border: 2px solid var(--secondary); border-radius: 12px; background: rgba(255,255,255,0.5); transition: 0.3s;}
-        .menu-toggle:active { transform: scale(0.95); }
+.gamified-options input[type="radio"]:checked + .btn-ya { 
+    background: var(--success); color: white; 
+    border-color: #21a858; transform: scale(1.05); 
+    box-shadow: 0 10px 20px rgba(46, 213, 115, 0.4); 
+}
+.gamified-options input[type="radio"]:checked + .btn-tidak { 
+    background: var(--danger); color: white; 
+    border-color: #d63031; transform: scale(1.05); 
+    box-shadow: 0 10px 20px rgba(255, 71, 87, 0.4); 
+}
 
-        @media (max-width: 768px) {
-            .navbar { flex-wrap: wrap; }
-            .menu-toggle { display: block; }
-            .nav-desktop { 
-                display: none; /* Disembunyikan secara default di mobile */
-                flex-direction: column; 
-                width: 100%; 
-                gap: 10px; 
-                margin-left: 0; 
-                padding-top: 15px; 
-                margin-top: 15px;
-                border-top: 2px dashed var(--glass-border);
-            }
-            .nav-desktop.active { display: flex; animation: slideDown 0.3s ease-out; }
-            @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-            
-            .nav-menu { flex-direction: column; width: 100%; }
-            .nav-menu > li { width: 100%; text-align: center; background: rgba(255,255,255,0.5); border-radius: 12px; }
-            .nav-desktop > div { flex-direction: column; width: 100%; text-align: center; }
-            .btn-logout { width: 100%; }
+.textarea-quiz { 
+    width: 100%; padding: 20px; 
+    border: 3px solid #e2e8f0; 
+    border-radius: 20px; font-size: 1.1rem; 
+    resize: vertical; background: white; 
+    font-family: 'Nunito', sans-serif; transition: 0.3s; 
+}
+.textarea-quiz:focus { border-color: var(--secondary); outline: none; box-shadow: 0 0 0 5px rgba(78, 205, 196, 0.2); }
 
-            /* Menjaga Tombol Kuis Tetap Berdampingan */
-            .gamified-options { flex-direction: row; gap: 10px; }
-            .btn-ya, .btn-tidak { font-size: 0.95rem; padding: 15px 5px; } /* Ukuran font dan padding disesuaikan agar tidak jebol */
-            .token-input { font-size: 1.5rem; }
-        }
-        .logo-app {
-            width: clamp(50px,80px,100px);
-        }
-    </style>
-    </style>
+/* Tombol Menu Mobile */
+.menu-toggle { display: none; font-weight: 900; cursor: pointer; color: var(--secondary-dark); font-size: 1.1rem; padding: 8px 15px; border: 2px solid var(--secondary); border-radius: 12px; background: rgba(255,255,255,0.5); transition: 0.3s;}
+.menu-toggle:active { transform: scale(0.95); }
+
+@media (max-width: 768px) {
+    .navbar { flex-wrap: wrap; }
+    .menu-toggle { display: block; }
+    .nav-desktop { 
+        display: none; /* Disembunyikan secara default di mobile */
+        flex-direction: column; 
+        width: 100%; 
+        gap: 10px; 
+        margin-left: 0; 
+        padding-top: 15px; 
+        margin-top: 15px;
+        border-top: 2px dashed var(--glass-border);
+    }
+    .nav-desktop.active { display: flex; animation: slideDown 0.3s ease-out; }
+    @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+
+    .nav-menu { flex-direction: column; width: 100%; }
+    .nav-menu > li { width: 100%; text-align: center; background: rgba(255,255,255,0.5); border-radius: 12px; }
+    .nav-desktop > div { flex-direction: column; width: 100%; text-align: center; }
+    .btn-logout { width: 100%; }
+
+    /* Menjaga Tombol Kuis Tetap Berdampingan */
+    .gamified-options { flex-direction: row; gap: 10px; }
+    .btn-ya, .btn-tidak { font-size: 0.95rem; padding: 15px 5px; } /* Ukuran font dan padding disesuaikan agar tidak jebol */
+    .token-input { font-size: 1.5rem; }
+}
+.logo-app {
+    width: clamp(50px,80px,100px);
+}
+</style>
+</style>
 </head>
 <body>
 
     <div id="main-app" class="app-container">
+
+        <div id="loader-overlay" class="hidden" style="position: fixed; top:0; left:0; width: 100vw; height: 100vh; background: rgba(255,255,255,0.8); z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+            <div style="border: 6px solid #f3f3f3; border-top: 6px solid var(--secondary); border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite;"></div>
+            <p style="margin-top: 15px; font-weight: 800; color: var(--secondary-dark);">Memuat data...</p>
+        </div>
+
+        <style>
+            @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        </style>
+
        <!--  <nav class="navbar hidden" id="main-navbar">
             <div class="nav-brand">Modul PJOK SD</div>
             
@@ -271,7 +292,7 @@
         </nav> -->
 
         <nav class="navbar hidden" id="main-navbar">
-            
+
             <div style="text-align: center; padding: 20px 15px 15px 15px; border-bottom: 2px solid var(--glass-border);">
                 <h1 style="color: var(--secondary-dark); font-size: clamp(1.1rem, 3vw, 1.5rem); font-weight: 900; margin: 0; line-height: 1.4; display: flex; align-items: center; justify-content: center; gap: 10px;">
                     <img class="logo-app" src="assets/dindik.webp" alt="logo-app" /> 
@@ -283,7 +304,7 @@
             </div>
             
             <div style="padding: 10px 30px; display: flex; justify-content: space-between; align-items: center; width: 100%; flex-direction: column;">
-                
+
                 <div class="menu-toggle" onclick="toggleMobileMenuSiswa()">Menu ▾</div>
                 
                 <div class="nav-desktop" id="nav-desktop-siswa">
@@ -299,7 +320,7 @@
             </div>
         </nav>
 
-        <div id="page-login-siswa" class="page-content" style="display: flex; justify-content: center; align-items: center;">
+        <div id="page-login-siswa" class="page-content hidden" style="display: flex; justify-content: center; align-items: center;">
             <div class="card" style="width: 100%; max-width: 450px; text-align: center;">
                 <div style="font-size: 4rem; margin-bottom: 10px;">🎒</div>
                 <h2 style="color: var(--secondary-dark); margin-bottom: 10px; font-weight: 900; font-size: 2rem;">Portal Siswa</h2>
@@ -390,445 +411,600 @@
     </div>
 
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-    <script src="dbKey.js"></script> 
-    
     <script>
-        // ==========================================
-        // 0. UTILITAS DATABASE LOKAL
-        // ==========================================
-        function getDB(key) { return JSON.parse(localStorage.getItem(key)) || []; }
-        function updateDB(key, data) { localStorage.setItem(key, JSON.stringify(data)); }
-        function generateId() { return Math.random().toString(36).substr(2, 9); }
-
-        let tokenSesiAktif = null; 
-
-        // ==========================================
-        // 1. SISTEM AUTENTIKASI SISWA
-        // ==========================================
-        function cekSesiSiswa() {
-            const sesiSiswa = JSON.parse(sessionStorage.getItem('siswaAktif'));
-            
-            if (sesiSiswa) {
-                document.getElementById('main-navbar').classList.remove('hidden');
-                document.getElementById('page-login-siswa').classList.add('hidden');
-                document.getElementById('nav-siswa-name').innerText = sesiSiswa.nama;
-                navigasiKe('beranda-siswa');
-            } else {
-                document.getElementById('main-navbar').classList.add('hidden');
-                document.querySelectorAll('.page-content').forEach(el => el.classList.add('hidden'));
-                document.getElementById('page-login-siswa').classList.remove('hidden');
-            }
-        }
-
-        function prosesLoginSiswa(e) {
-            e.preventDefault();
-            const usr = document.getElementById('login-username').value.trim();
-            const pwd = document.getElementById('login-password').value.trim();
-            
-            const validSiswa = getDB(KEY_SISWA).find(s => s.username === usr && s.password === pwd);
-            
-            if (validSiswa) {
-                sessionStorage.setItem('siswaAktif', JSON.stringify(validSiswa));
-                document.getElementById('login-username').value = '';
-                document.getElementById('login-password').value = '';
-                cekSesiSiswa();
-            } else {
-                alert("Username atau Password salah! Coba ingat-ingat lagi ya.");
-            }
-        }
-
-        function prosesLogout() {
-            if(confirm("Yakin ingin keluar dari aplikasi?")) {
-                sessionStorage.removeItem('siswaAktif');
-                cekSesiSiswa();
-            }
-        }
-
-        // ==========================================
-        // 2. NAVIGASI SPA SISWA
-        // ==========================================
-        function navigasiKe(idHalaman) {
-            document.querySelectorAll('.page-content').forEach(el => el.classList.add('hidden'));
-            document.getElementById('page-' + idHalaman).classList.remove('hidden');
-            
-            document.querySelectorAll('.nav-menu > li').forEach(el => el.classList.remove('active'));
-            if(document.getElementById('nav-' + idHalaman)) {
-                document.getElementById('nav-' + idHalaman).classList.add('active');
-            }
-
-            if(idHalaman === 'beranda-siswa') renderRaporSiswa();
-            if(idHalaman === 'profil-siswa') renderProfilSiswa();
-        }
-
-        // ==========================================
-        // 3. LOGIKA LOBBY & TOKEN
-        // ==========================================
-        function validasiTokenSiswa() {
-            const tokenInput = document.getElementById('input-token-siswa').value.trim().toUpperCase();
-            if (!tokenInput) {
-                alert("Ketik tokennya dulu ya!");
-                return;
-            }
-
-            const dbAsm = getDB(KEY_ASSESMENT);
-            const asmValid = dbAsm.find(a => a.token === tokenInput && a.status === 'aktif');
-            
-            if (asmValid) {
-                tokenSesiAktif = asmValid;
-                renderArenaKuis();
-                navigasiKe('kerjakan-asesmen');
-            } else {
-                alert("Token tidak ditemukan atau sesi sudah ditutup oleh guru.");
-            }
-        }
-
-       // ==========================================
-        // 4. GRAFIK PIE (RAPOR SISWA)
-        // ==========================================
-        let raporChartInstance = null;
-
-        function renderRaporSiswa() {
-            const siswaAktif = JSON.parse(sessionStorage.getItem('siswaAktif'));
-            const dbRiwayat = getDB(KEY_RIWAYAT);
-            const listSemuaInstrumen = getDB(KEY_KRITERIA);
-            
-            const riwayatSiswa = dbRiwayat.filter(r => r.id_siswa === siswaAktif.id_siswa);
-            const latestRiwayat = riwayatSiswa.length > 0 ? riwayatSiswa[riwayatSiswa.length - 1] : null;
-
-            // Kita tetap menggunakan ID canvas yang lama agar tidak perlu repot mengubah HTML-nya
-            const ctx = document.getElementById('raporSpiderChart'); 
-            const emptyState = document.getElementById('rapor-empty-state');
-            const boxCatatan = document.getElementById('catatan-guru-terakhir');
-
-            if (!latestRiwayat) {
-                ctx.style.display = 'none';
-                emptyState.innerText = "Kamu belum menyelesaikan misi apapun. Yuk ketik token misimu di atas!";
-                boxCatatan.style.display = 'none';
-                return;
-            }
-
-            ctx.style.display = 'block';
-            emptyState.innerText = "";
-            
-            if(latestRiwayat.catatan_guru) {
-                boxCatatan.style.display = 'block';
-                boxCatatan.innerHTML = `<b>Pesan dari Guru:</b><br>"${latestRiwayat.catatan_guru}"`;
-            } else {
-                boxCatatan.style.display = 'none';
-            }
-
-            const labels = [];
-            const dataNilai = [];
-            
-            // Menggunakan palet warna yang sama persis dengan halaman rincian guru
-            const pieColors = ['#FF6B6B', '#4ECDC4', '#fed330', '#26de81', '#4a69bd', '#e15f41', '#f8a5c2']; 
-
-            // Ekstraksi nilai kembali ke format persentase (%)
-            listSemuaInstrumen.forEach(ins => {
-                labels.push(ins.judul);
-                let nilaiPersen = 0;
-                if(latestRiwayat.nilai_akhir && latestRiwayat.nilai_akhir[ins.id_kriteria]) {
-                    nilaiPersen = latestRiwayat.nilai_akhir[ins.id_kriteria].persen || 0;
-                }
-                dataNilai.push(nilaiPersen); 
-            });
-
-            if (raporChartInstance) raporChartInstance.destroy();
-
-            // Render menjadi Pie Chart
-            raporChartInstance = new Chart(ctx, {
-                type: 'pie',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        data: dataNilai,
-                        backgroundColor: pieColors.slice(0, dataNilai.length), // Menyesuaikan jumlah warna dengan jumlah instrumen
-                        borderWidth: 2, 
-                        borderColor: '#ffffff'
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { 
-                            position: 'right', 
-                            labels: { font: { family: 'Nunito', size: 12 } } 
-                        },
-                        tooltip: { 
-                            callbacks: { 
-                                label: function(context) { 
-                                    return ` ${context.label}: ${context.raw}%`; 
-                                } 
-                            } 
-                        }
-                    }
-                }
-            });
-        }
-        // ==========================================
-        // 5. ARENA KUIS PER HALAMAN
-        // ==========================================
-        let currentKuisIndex = 0;
-        let totalKuisSteps = 0;
-
-        function renderArenaKuis() {
-            document.getElementById('quiz-title-display').innerText = tokenSesiAktif.nama_materi;
-            document.getElementById('quiz-desc-display').innerText = tokenSesiAktif.keterangan || "Kerjakan dengan santai dan jujur ya!";
-            
-            const container = document.getElementById('container-quiz-cards');
-            container.innerHTML = '';
-            
-            const semuaInstrumen = getDB(KEY_KRITERIA); 
-            const siswaAktif = JSON.parse(sessionStorage.getItem('siswaAktif'));
-            const nilaiLama = getDB(KEY_RIWAYAT).find(r => r.id_assesment === tokenSesiAktif.id_assesment && r.id_siswa === siswaAktif.id_siswa);
-            
-            let instrumenPilihan = semuaInstrumen;
-            if (tokenSesiAktif.instrumen_terpilih && tokenSesiAktif.instrumen_terpilih.length > 0) {
-                instrumenPilihan = semuaInstrumen.filter(ins => tokenSesiAktif.instrumen_terpilih.includes(ins.id_kriteria));
-            }
-
-            totalKuisSteps = instrumenPilihan.length;
-            currentKuisIndex = 0;
-
-            instrumenPilihan.forEach((ins, stepIndex) => {
-                let isHidden = stepIndex === 0 ? '' : 'hidden'; 
-                let cardHtml = `<div id="step-kuis-${stepIndex}" class="quiz-card card step-container ${isHidden}">
-                <h3 style="color:var(--secondary-dark); margin-bottom:20px; border-bottom:3px dashed rgba(78, 205, 196, 0.3); padding-bottom:15px; font-size:1.5rem; font-weight:900;">Bagian ${stepIndex + 1}: ${ins.judul}</h3>`;
-                
-                ins.normatif.forEach((butir, idx) => {
-                    let inputName = `score_${ins.id_kriteria}_${idx}`;
-                    let uraianName = `uraian_${ins.id_kriteria}_${idx}`;
-                    
-                    if(idx === 4) { 
-                        let textVal = nilaiLama && nilaiLama.detail_skor_mentah ? (nilaiLama.detail_skor_mentah[uraianName] || '') : '';
-                        cardHtml += `
-                        <div style="margin-top:30px;">
-                        <div class="quiz-question">📝 ${butir}</div>
-                        <textarea name="${uraianName}" class="textarea-quiz" rows="4" placeholder="Yuk, ceritakan di sini...">${textVal}</textarea>
-                        </div>`;
-                    } else { 
-                        let valChecked = nilaiLama && nilaiLama.detail_skor_mentah ? nilaiLama.detail_skor_mentah[inputName] : null;
-                        cardHtml += `
-                        <div style="margin-bottom:35px;" class="question-block">
-                        <div class="quiz-question">${idx+1}. ${butir}</div>
-                        <div class="gamified-options">
-                        <label>
-                        <input type="radio" name="${inputName}" data-id-ins="${ins.id_kriteria}" value="1" required ${valChecked === 1 ? 'checked':''}>
-                        <span class="btn-ya">😊 TENTU SAJA YA</span>
-                        </label>
-                        <label>
-                        <input type="radio" name="${inputName}" data-id-ins="${ins.id_kriteria}" value="0" required ${valChecked === 0 ? 'checked':''}>
-                        <span class="btn-tidak">🤔 HMM.. TIDAK</span>
-                        </label>
-                        </div>
-                        </div>`;
-                    }
-                });
-                cardHtml += `</div>`;
-                container.innerHTML += cardHtml;
-            });
-
-            perbaruiTombolNavigasi();
-        }
-
-        function validasiLangkahSaatIni() {
-            const stepDiv = document.getElementById(`step-kuis-${currentKuisIndex}`);
-            const radioNames = new Set();
-            
-            stepDiv.querySelectorAll('input[type="radio"]').forEach(r => radioNames.add(r.name));
-            
-            for (let name of radioNames) {
-                if (!stepDiv.querySelector(`input[name="${name}"]:checked`)) {
-                    alert("Eh tunggu! Ada pilihan YA/TIDAK yang belum kamu jawab. Cek lagi ya 😊");
-                    return false;
-                }
-            }
-            return true;
-        }
-
-        function navigasiKuis(arah) {
-            if (arah === 1 && !validasiLangkahSaatIni()) return;
-
-            document.getElementById(`step-kuis-${currentKuisIndex}`).classList.add('hidden');
-            currentKuisIndex += arah;
-            document.getElementById(`step-kuis-${currentKuisIndex}`).classList.remove('hidden');
-            
-            perbaruiTombolNavigasi();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        function perbaruiTombolNavigasi() {
-            const btnPrev = document.getElementById('btn-prev-quiz');
-            const btnNext = document.getElementById('btn-next-quiz');
-            const btnSubmit = document.getElementById('btn-submit-quiz');
-
-            btnPrev.style.visibility = currentKuisIndex === 0 ? 'hidden' : 'visible';
-
-            if (currentKuisIndex === totalKuisSteps - 1) {
-                btnNext.classList.add('hidden');
-                btnSubmit.classList.remove('hidden');
-            } else {
-                btnNext.classList.remove('hidden');
-                btnSubmit.classList.add('hidden');
-            }
-        }
-
-        function submitAsesmenSiswa(e) {
-            e.preventDefault();
-            const siswaAktif = JSON.parse(sessionStorage.getItem('siswaAktif'));
-            
-            const semuaInstrumen = getDB(KEY_KRITERIA);
-            let listInstrumen = semuaInstrumen;
-            if (tokenSesiAktif.instrumen_terpilih && tokenSesiAktif.instrumen_terpilih.length > 0) {
-                listInstrumen = semuaInstrumen.filter(ins => tokenSesiAktif.instrumen_terpilih.includes(ins.id_kriteria));
-            }
-            
-            const detailSkorMentah = {};
-            const rekapInstrumen = {};
-            let totalSkorKumulatif = 0;
-            let totalButirKumulatif = 0;
-            
-            const checkedRadios = document.querySelectorAll('#container-quiz-cards input[type="radio"]:checked');
-            checkedRadios.forEach(radio => {
-                const idIns = radio.getAttribute('data-id-ins');
-                const nameInput = radio.getAttribute('name');
-                const nilai = parseInt(radio.value);
-                
-                detailSkorMentah[nameInput] = nilai;
-                
-                if (!rekapInstrumen[idIns]) { rekapInstrumen[idIns] = { skorTotal: 0, jumlahButir: 0 }; }
-                rekapInstrumen[idIns].skorTotal += nilai;
-                rekapInstrumen[idIns].jumlahButir++;
-                totalSkorKumulatif += nilai;
-                totalButirKumulatif++;
-            });
-            
-            const textareas = document.querySelectorAll('#container-quiz-cards textarea');
-            textareas.forEach(ta => {
-                detailSkorMentah[ta.getAttribute('name')] = ta.value.trim();
-            });
-
-            const formatNilai = (skor, jumlahButir) => {
-                if (jumlahButir === 0) return { skor: 0, max: 0, persen: 0, teks: "0/0" };
-                return { skor: skor, max: jumlahButir, persen: Math.round((skor / jumlahButir) * 100), teks: `${skor}/${jumlahButir}` };
-            };
-
-            const objNilaiAkhir = { total: formatNilai(totalSkorKumulatif, totalButirKumulatif) };
-            listInstrumen.forEach(ins => {
-                if(rekapInstrumen[ins.id_kriteria]) {
-                    objNilaiAkhir[ins.id_kriteria] = formatNilai(rekapInstrumen[ins.id_kriteria].skorTotal, rekapInstrumen[ins.id_kriteria].jumlahButir);
-                } else {
-                    objNilaiAkhir[ins.id_kriteria] = { skor: 0, max: 0, persen: 0, teks: "0/0" }; 
-                }
-            });
-            
-            const riwayatBaru = {
-                id_penilaian: 'pen_' + generateId(),
-                id_assesment: tokenSesiAktif.id_assesment,
-                id_siswa: siswaAktif.id_siswa,
-                nama_siswa: siswaAktif.nama,
-                nilai_akhir: objNilaiAkhir, 
-                detail_skor_mentah: detailSkorMentah,
-                catatan_guru: "" 
-            };
-
-            let dbRiwayat = getDB(KEY_RIWAYAT);
-            let idx = dbRiwayat.findIndex(r => r.id_assesment === tokenSesiAktif.id_assesment && r.id_siswa === siswaAktif.id_siswa);
-            
-            if(idx !== -1) {
-                riwayatBaru.id_penilaian = dbRiwayat[idx].id_penilaian; 
-                riwayatBaru.catatan_guru = dbRiwayat[idx].catatan_guru; 
-                dbRiwayat[idx] = riwayatBaru;
-            } else {
-                dbRiwayat.push(riwayatBaru);
-            }
-            
-            updateDB(KEY_RIWAYAT, dbRiwayat);
-            
-            alert("Hebat! Jawaban misimu berhasil dikirim ke guru! 🌟");
-            document.getElementById('input-token-siswa').value = '';
-            navigasiKe('beranda-siswa');
-        }
-
-        // ==========================================
-        // 6. UPDATE PROFIL LENGKAP SISWA
-        // ==========================================
-        function renderProfilSiswa() {
-            const s = JSON.parse(sessionStorage.getItem('siswaAktif'));
-            if(!s) return;
-            
-            document.getElementById('profil-nisn').value = s.nisn || '';
-            document.getElementById('profil-nis').value = s.nis || '';
-            document.getElementById('profil-nama').value = s.nama;
-            document.getElementById('profil-absen').value = s.absen || '';
-            document.getElementById('profil-jk').value = s.jk || 'L';
-            document.getElementById('profil-kelas').value = s.kelas || '';
-            document.getElementById('profil-sekolah').value = s.sekolah || '';
-            document.getElementById('profil-username').value = s.username;
-            document.getElementById('profil-password').value = s.password;
-        }
-
-        function updateProfilSiswa(e) {
-            e.preventDefault();
-            const siswaAktif = JSON.parse(sessionStorage.getItem('siswaAktif'));
-            let dbSiswa = getDB(KEY_SISWA);
-            let idx = dbSiswa.findIndex(s => s.id_siswa === siswaAktif.id_siswa);
-            
-            if(idx !== -1) {
-                dbSiswa[idx].nisn = document.getElementById('profil-nisn').value;
-                dbSiswa[idx].nis = document.getElementById('profil-nis').value;
-                dbSiswa[idx].nama = document.getElementById('profil-nama').value;
-                dbSiswa[idx].absen = document.getElementById('profil-absen').value;
-                dbSiswa[idx].jk = document.getElementById('profil-jk').value;
-                dbSiswa[idx].kelas = document.getElementById('profil-kelas').value;
-                dbSiswa[idx].sekolah = document.getElementById('profil-sekolah').value;
-                dbSiswa[idx].username = document.getElementById('profil-username').value;
-                dbSiswa[idx].password = document.getElementById('profil-password').value;
-                
-                updateDB(KEY_SISWA, dbSiswa);
-                sessionStorage.setItem('siswaAktif', JSON.stringify(dbSiswa[idx])); 
-                
-                alert("Profil kamu berhasil diperbarui! 👍");
-                document.getElementById('nav-siswa-name').innerText = dbSiswa[idx].nama;
-                window.scrollTo({ top:0, behavior:'smooth' });
-            }
-        }
-
-        // ==========================================
-        // 2. NAVIGASI SPA SISWA & MOBILE MENU
-        // ==========================================
         
-        // Fungsi untuk Buka/Tutup Accordion Mobile Menu
-        function toggleMobileMenuSiswa() {
-            document.getElementById('nav-desktop-siswa').classList.toggle('active');
-        }
+const API_URL = "https://asesmen.pjokserver.my.id/api/";
+let tokenSesiAktif = null; 
 
-        function navigasiKe(idHalaman) {
-            document.querySelectorAll('.page-content').forEach(el => el.classList.add('hidden'));
-            document.getElementById('page-' + idHalaman).classList.remove('hidden');
-            
-            document.querySelectorAll('.nav-menu > li').forEach(el => el.classList.remove('active'));
-            if(document.getElementById('nav-' + idHalaman)) {
-                document.getElementById('nav-' + idHalaman).classList.add('active');
-            }
+// ==========================================
+// 1. SISTEM AUTENTIKASI SISWA
+// ==========================================
+function cekSesiSiswa() {
+    const sesiSiswa = JSON.parse(sessionStorage.getItem('siswaAktif'));
+    if (sesiSiswa) {
+        document.getElementById('main-navbar').classList.remove('hidden');
+        document.getElementById('page-login-siswa').classList.add('hidden');
+        document.getElementById('nav-siswa-name').innerText = sesiSiswa.nama;
+        navigasiKe('beranda-siswa');
+    } else {
+        document.getElementById('main-navbar').classList.add('hidden');
+        document.querySelectorAll('.page-content').forEach(el => el.classList.add('hidden'));
+        document.getElementById('page-login-siswa').classList.remove('hidden');
+    }
+}
 
-            if(idHalaman === 'beranda-siswa') renderRaporSiswa();
-            if(idHalaman === 'profil-siswa') renderProfilSiswa();
+async function prosesLoginSiswa(e) {
+    e.preventDefault();
 
-            // Otomatis menutup Accordion Menu setelah diklik (di layar HP)
-            const navMobile = document.getElementById('nav-desktop-siswa');
-            if (navMobile) {
-                navMobile.classList.remove('active');
-            }
-        }
+    showLoader();
 
-        // ==========================================
-        // 7. WINDOW ONLOAD
-        // ==========================================
-        window.onload = () => {
+    const usr = document.getElementById('login-username').value.trim();
+    const pwd = document.getElementById('login-password').value.trim();
+    
+    try {
+        const res = await fetch(`${API_URL}/auth/siswa/login`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username: usr, password: pwd })
+        });
+        const data = await res.json();
+        
+        if (res.ok && data.status === 'success') {
+            sessionStorage.setItem('siswaAktif', JSON.stringify(data.data));
+            document.getElementById('login-username').value = '';
+            document.getElementById('login-password').value = '';
             cekSesiSiswa();
+        } else {
+            alert(data.message || "Username atau Password salah!");
+        }
+    } catch (err) { alert("Gagal terhubung ke server."); }
+    finally {
+        // 2. Sembunyikan loader setelah selesai (baik sukses maupun gagal)
+        hideLoader(); 
+    }
+}
+
+function prosesLogout() {
+    if(confirm("Yakin ingin keluar dari aplikasi?")) {
+        sessionStorage.removeItem('siswaAktif');
+        cekSesiSiswa();
+    }
+}
+
+// ==========================================
+// 2. NAVIGASI SPA SISWA
+// ==========================================
+function toggleMobileMenuSiswa() {
+    document.getElementById('nav-desktop-siswa').classList.toggle('active');
+}
+
+function navigasiKe(idHalaman) {
+    document.querySelectorAll('.page-content').forEach(el => el.classList.add('hidden'));
+    document.getElementById('page-' + idHalaman).classList.remove('hidden');
+    
+    document.querySelectorAll('.nav-menu > li').forEach(el => el.classList.remove('active'));
+    if(document.getElementById('nav-' + idHalaman)) {
+        document.getElementById('nav-' + idHalaman).classList.add('active');
+    }
+
+    if(idHalaman === 'beranda-siswa') renderRaporSiswa();
+    if(idHalaman === 'profil-siswa') renderProfilSiswa();
+
+    const navMobile = document.getElementById('nav-desktop-siswa');
+    if (navMobile) navMobile.classList.remove('active');
+}
+
+// ==========================================
+// 3. LOBBY & KUIS
+// ==========================================
+// async function validasiTokenSiswa() {
+//     const tokenInput = document.getElementById('input-token-siswa').value.trim().toUpperCase();
+//     if (!tokenInput) { alert("Ketik tokennya dulu ya!"); return; }
+
+//     try {
+//         const res = await fetch(`${API_URL}/asesmen/token/${tokenInput}`);
+//         const responseData = await res.json();
+        
+//         if (res.ok && responseData.status === 'success') {
+//             tokenSesiAktif = responseData.data;
+//             renderArenaKuis();
+//             navigasiKe('kerjakan-asesmen');
+//         } else {
+//             alert("Token tidak ditemukan atau sesi sudah ditutup oleh guru.");
+//         }
+//     } catch (error) { alert("Gagal mengecek token ke server."); }
+// }
+
+async function validasiTokenSiswa() {
+    showLoader();
+    const tokenInput = document.getElementById('input-token-siswa').value.trim().toUpperCase();
+    if (!tokenInput) { alert("Ketik tokennya dulu ya!"); return; }
+
+    try {
+        const res = await fetch(`${API_URL}/asesmen/token/${tokenInput}`);
+        const responseData = await res.json();
+        
+        if (res.ok && responseData.status === 'success') {
+            tokenSesiAktif = responseData.data;
+            // Tambahkan "await" di sini agar pindah halaman hanya jika render sudah selesai 100%
+            await renderArenaKuis(); 
+            navigasiKe('kerjakan-asesmen');
+        } else {
+            alert("Token tidak ditemukan atau sesi sudah ditutup oleh guru.");
+        }
+    } catch (error) { alert("Gagal mengecek token ke server."); }
+    finally {
+        // 2. Sembunyikan loader setelah selesai (baik sukses maupun gagal)
+        hideLoader(); 
+    }
+}
+
+let raporChartInstance = null;
+
+async function renderRaporSiswa() {
+    showLoader();
+    const siswaAktif = JSON.parse(sessionStorage.getItem('siswaAktif'));
+    if(!siswaAktif) return;
+
+    try {
+        const resRiw = await fetch(`${API_URL}/riwayat/siswa/${siswaAktif.id_siswa}`);
+        const riwayatSiswa = await resRiw.json();
+        
+        const resKriteria = await fetch(`${API_URL}/kriteria`);
+        const listSemuaInstrumen = await resKriteria.json();
+        
+        const latestRiwayat = riwayatSiswa.length > 0 ? riwayatSiswa[riwayatSiswa.length - 1] : null;
+
+        const ctx = document.getElementById('raporSpiderChart'); 
+        const emptyState = document.getElementById('rapor-empty-state');
+        const boxCatatan = document.getElementById('catatan-guru-terakhir');
+
+        if (!latestRiwayat) {
+            ctx.style.display = 'none';
+            emptyState.innerText = "Kamu belum menyelesaikan misi apapun. Yuk ketik token misimu di atas!";
+            boxCatatan.style.display = 'none';
+            return;
+        }
+
+        ctx.style.display = 'block';
+        emptyState.innerText = "";
+        
+        if(latestRiwayat.catatan_guru) {
+            boxCatatan.style.display = 'block';
+            boxCatatan.innerHTML = `<b>Pesan dari Guru:</b><br>"${latestRiwayat.catatan_guru}"`;
+        } else { boxCatatan.style.display = 'none'; }
+
+        const labels = [];
+        const dataNilai = [];
+        const pieColors = ['#FF6B6B', '#4ECDC4', '#fed330', '#26de81', '#4a69bd', '#e15f41', '#f8a5c2']; 
+
+        listSemuaInstrumen.forEach(ins => {
+            labels.push(ins.judul);
+            let nilaiPersen = 0;
+            if(latestRiwayat.nilai_akhir && latestRiwayat.nilai_akhir[ins.id_kriteria]) {
+                nilaiPersen = latestRiwayat.nilai_akhir[ins.id_kriteria].persen || 0;
+            }
+            dataNilai.push(nilaiPersen); 
+        });
+
+        if (raporChartInstance) raporChartInstance.destroy();
+        raporChartInstance = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: dataNilai,
+                    backgroundColor: pieColors.slice(0, dataNilai.length),
+                    borderWidth: 2, borderColor: '#ffffff'
+                }]
+            },
+            options: {
+                responsive: true, maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'right', labels: { font: { family: 'Nunito', size: 12 } } },
+                    tooltip: { callbacks: { label: function(context) { return ` ${context.label}: ${context.raw}%`; } } }
+                }
+            }
+        });
+    } catch(err) { console.error("Gagal load rapor", err); }
+    finally {
+        // 2. Sembunyikan loader setelah selesai (baik sukses maupun gagal)
+        hideLoader(); 
+    }
+}
+
+let currentKuisIndex = 0;
+let totalKuisSteps = 0;
+
+// async function renderArenaKuis() {
+//     document.getElementById('quiz-title-display').innerText = tokenSesiAktif.nama_materi;
+//     document.getElementById('quiz-desc-display').innerText = tokenSesiAktif.keterangan || "Kerjakan dengan santai dan jujur ya!";
+    
+//     const container = document.getElementById('container-quiz-cards');
+//     container.innerHTML = '';
+    
+//     try {
+//         const resKriteria = await fetch(`${API_URL}/kriteria`);
+//         const semuaInstrumen = await resKriteria.json();
+        
+//         const siswaAktif = JSON.parse(sessionStorage.getItem('siswaAktif'));
+//         const resRiw = await fetch(`${API_URL}/riwayat/siswa/${siswaAktif.id_siswa}`);
+//         const riwayatList = await resRiw.json();
+//         const nilaiLama = riwayatList.find(r => r.id_assesment === tokenSesiAktif.id_assesment);
+        
+//         let instrumenPilihan = semuaInstrumen;
+//         if (tokenSesiAktif.instrumen_terpilih && tokenSesiAktif.instrumen_terpilih.length > 0) {
+//             instrumenPilihan = semuaInstrumen.filter(ins => tokenSesiAktif.instrumen_terpilih.includes(ins.id_kriteria));
+//         }
+
+//         totalKuisSteps = instrumenPilihan.length;
+//         currentKuisIndex = 0;
+
+//         instrumenPilihan.forEach((ins, stepIndex) => {
+//             let isHidden = stepIndex === 0 ? '' : 'hidden'; 
+//             let cardHtml = `<div id="step-kuis-${stepIndex}" class="quiz-card card step-container ${isHidden}">
+//             <h3 style="color:var(--secondary-dark); margin-bottom:20px; border-bottom:3px dashed rgba(78, 205, 196, 0.3); padding-bottom:15px; font-size:1.5rem; font-weight:900;">Bagian ${stepIndex + 1}: ${ins.judul}</h3>`;
+            
+//             // ins.normatif.forEach((butir, idx) => {
+//             //     let inputName = `score_${ins.id_kriteria}_${idx}`;
+//             //     let uraianName = `uraian_${ins.id_kriteria}_${idx}`;
+                
+//             //     if(idx === 4) { 
+//             //         let textVal = nilaiLama && nilaiLama.detail_skor_mentah ? (nilaiLama.detail_skor_mentah[uraianName] || '') : '';
+//             //         cardHtml += `
+//             //         <div style="margin-top:30px;">
+//             //         <div class="quiz-question">📝 ${butir}</div>
+//             //         <textarea name="${uraianName}" class="textarea-quiz" rows="4" placeholder="Yuk, ceritakan di sini...">${textVal}</textarea>
+//             //         </div>`;
+//             //     } else { 
+//             //         let valChecked = nilaiLama && nilaiLama.detail_skor_mentah ? nilaiLama.detail_skor_mentah[inputName] : null;
+//             //         cardHtml += `
+//             //         <div style="margin-bottom:35px;" class="question-block">
+//             //         <div class="quiz-question">${idx+1}. ${butir}</div>
+//             //         <div class="gamified-options">
+//             //         <label>
+//             //             <input type="radio" name="${inputName}" data-id-ins="${ins.id_kriteria}" value="1" required ${valChecked === 1 ? 'checked':''}>
+//             //             <span class="btn-ya">😊 TENTU SAJA YA</span>
+//             //         </label>
+//             //         <label>
+//             //             <input type="radio" name="${inputName}" data-id-ins="${ins.id_kriteria}" value="0" required ${valChecked === 0 ? 'checked':''}>
+//             //             <span class="btn-tidak">🤔 HMM.. TIDAK</span>
+//             //         </label>
+//             //         </div>
+//             //         </div>`;
+//             //     }
+//             // });
+//             ins.normatif.forEach((butir, idx) => {
+//             let inputName = `score_${ins.id_kriteria}_${idx}`;
+//             let uraianName = `uraian_${ins.id_kriteria}_${idx}`;
+            
+//             // Ekstraksi data: menangani JSON lama (string) maupun JSON baru (object)
+//             let teksButir = typeof butir === 'string' ? butir : butir.teks;
+//             let tipeButir = typeof butir === 'string' ? 'positif' : butir.tipe;
+
+//             if(idx === 4) { 
+//                 let textVal = nilaiLama && nilaiLama.detail_skor_mentah ? (nilaiLama.detail_skor_mentah[uraianName] || '') : '';
+//                 cardHtml += `
+//                 <div style="margin-top:30px;">
+//                 <div class="quiz-question">📝 ${teksButir}</div>
+//                 <textarea name="${uraianName}" class="textarea-quiz" rows="4" placeholder="Yuk, ceritakan di sini...">${textVal}</textarea>
+//                 </div>`;
+//             } else { 
+//                 let valChecked = nilaiLama && nilaiLama.detail_skor_mentah ? nilaiLama.detail_skor_mentah[inputName] : null;
+                
+//                 // --- LOGIKA INTI PENILAIAN ---
+//                 // Jika Positif: Ya = 1, Tidak = 0
+//                 // Jika Negatif: Ya = 0, Tidak = 1
+//                 let skorYa = (tipeButir === 'negatif') ? 0 : 1;
+//                 let skorTidak = (tipeButir === 'negatif') ? 1 : 0;
+
+//                 cardHtml += `
+//                 <div style="margin-bottom:35px;" class="question-block">
+//                 <div class="quiz-question">${idx+1}. ${teksButir}</div>
+//                 <div class="gamified-options">
+//                 <label>
+//                     <input type="radio" name="${inputName}" data-id-ins="${ins.id_kriteria}" value="${skorYa}" required ${valChecked === skorYa ? 'checked':''}>
+//                     <span class="btn-ya">😊 TENTU SAJA YA</span>
+//                 </label>
+//                 <label>
+//                     <input type="radio" name="${inputName}" data-id-ins="${ins.id_kriteria}" value="${skorTidak}" required ${valChecked === skorTidak ? 'checked':''}>
+//                     <span class="btn-tidak">🤔 HMM.. TIDAK</span>
+//                 </label>
+//                 </div>
+//                 </div>`;
+//             }
+//         });
+
+//             cardHtml += `</div>`;
+//             container.innerHTML += cardHtml;
+//         });
+
+//         perbaruiTombolNavigasi();
+//     } catch(err) { alert("Terjadi kesalahan meload soal kuis."); }
+// }
+
+async function renderArenaKuis() {
+    showLoader();
+    document.getElementById('quiz-title-display').innerText = tokenSesiAktif.nama_materi;
+    document.getElementById('quiz-desc-display').innerText = tokenSesiAktif.keterangan || "Kerjakan dengan santai dan jujur ya!";
+    
+    try {
+        const resKriteria = await fetch(`${API_URL}/kriteria`);
+        const semuaInstrumen = await resKriteria.json();
+        
+        const siswaAktif = JSON.parse(sessionStorage.getItem('siswaAktif'));
+        const resRiw = await fetch(`${API_URL}/riwayat/siswa/${siswaAktif.id_siswa}`);
+        const riwayatList = await resRiw.json();
+        const nilaiLama = riwayatList.find(r => r.id_assesment === tokenSesiAktif.id_assesment);
+        
+        // PINDAHKAN KODE INI KE SINI: Kosongkan layar SETELAH proses 'await fetch' selesai
+        const container = document.getElementById('container-quiz-cards');
+        container.innerHTML = '';
+        
+        let instrumenPilihan = semuaInstrumen;
+        if (tokenSesiAktif.instrumen_terpilih && tokenSesiAktif.instrumen_terpilih.length > 0) {
+            instrumenPilihan = semuaInstrumen.filter(ins => tokenSesiAktif.instrumen_terpilih.includes(ins.id_kriteria));
+        }
+
+        totalKuisSteps = instrumenPilihan.length;
+        currentKuisIndex = 0;
+
+        instrumenPilihan.forEach((ins, stepIndex) => {
+            let isHidden = stepIndex === 0 ? '' : 'hidden'; 
+            let cardHtml = `<div id="step-kuis-${stepIndex}" class="quiz-card card step-container ${isHidden}">
+            <h3 style="color:var(--secondary-dark); margin-bottom:20px; border-bottom:3px dashed rgba(78, 205, 196, 0.3); padding-bottom:15px; font-size:1.5rem; font-weight:900;">Bagian ${stepIndex + 1}: ${ins.judul}</h3>`;
+            
+            ins.normatif.forEach((butir, idx) => {
+                let inputName = `score_${ins.id_kriteria}_${idx}`;
+                let uraianName = `uraian_${ins.id_kriteria}_${idx}`;
+                
+                let teksButir = typeof butir === 'string' ? butir : butir.teks;
+                let tipeButir = typeof butir === 'string' ? 'positif' : butir.tipe;
+
+                if(idx === 4) { 
+                    let textVal = nilaiLama && nilaiLama.detail_skor_mentah ? (nilaiLama.detail_skor_mentah[uraianName] || '') : '';
+                    cardHtml += `
+                    <div style="margin-top:30px;">
+                    <div class="quiz-question">📝 ${teksButir}</div>
+                    <textarea name="${uraianName}" class="textarea-quiz" rows="4" placeholder="Yuk, ceritakan di sini...">${textVal}</textarea>
+                    </div>`;
+                } else { 
+                    let valChecked = nilaiLama && nilaiLama.detail_skor_mentah ? nilaiLama.detail_skor_mentah[inputName] : null;
+                    
+                    let skorYa = (tipeButir === 'negatif') ? 0 : 1;
+                    let skorTidak = (tipeButir === 'negatif') ? 1 : 0;
+
+                    cardHtml += `
+                    <div style="margin-bottom:35px;" class="question-block">
+                    <div class="quiz-question">${idx+1}. ${teksButir}</div>
+                    <div class="gamified-options">
+                    <label>
+                        <input type="radio" name="${inputName}" data-id-ins="${ins.id_kriteria}" value="${skorYa}" required ${valChecked === skorYa ? 'checked':''}>
+                        <span class="btn-ya">😊 TENTU SAJA YA</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="${inputName}" data-id-ins="${ins.id_kriteria}" value="${skorTidak}" required ${valChecked === skorTidak ? 'checked':''}>
+                        <span class="btn-tidak">🤔 HMM.. TIDAK</span>
+                    </label>
+                    </div>
+                    </div>`;
+                }
+            });
+            
+            cardHtml += `</div>`;
+            container.innerHTML += cardHtml;
+        });
+
+        perbaruiTombolNavigasi();
+    } catch(err) { alert("Terjadi kesalahan meload soal kuis."); }
+    finally {
+        // 2. Sembunyikan loader setelah selesai (baik sukses maupun gagal)
+        hideLoader(); 
+    }
+}
+
+function validasiLangkahSaatIni() {
+    const stepDiv = document.getElementById(`step-kuis-${currentKuisIndex}`);
+    const radioNames = new Set();
+    
+    stepDiv.querySelectorAll('input[type="radio"]').forEach(r => radioNames.add(r.name));
+    
+    for (let name of radioNames) {
+        if (!stepDiv.querySelector(`input[name="${name}"]:checked`)) {
+            alert("Eh tunggu! Ada pilihan YA/TIDAK yang belum kamu jawab. Cek lagi ya 😊");
+            return false;
+        }
+    }
+    return true;
+}
+
+function navigasiKuis(arah) {
+    if (arah === 1 && !validasiLangkahSaatIni()) return;
+    document.getElementById(`step-kuis-${currentKuisIndex}`).classList.add('hidden');
+    currentKuisIndex += arah;
+    document.getElementById(`step-kuis-${currentKuisIndex}`).classList.remove('hidden');
+    perbaruiTombolNavigasi();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function perbaruiTombolNavigasi() {
+    const btnPrev = document.getElementById('btn-prev-quiz');
+    const btnNext = document.getElementById('btn-next-quiz');
+    const btnSubmit = document.getElementById('btn-submit-quiz');
+
+    btnPrev.style.visibility = currentKuisIndex === 0 ? 'hidden' : 'visible';
+
+    if (currentKuisIndex === totalKuisSteps - 1) {
+        btnNext.classList.add('hidden');
+        btnSubmit.classList.remove('hidden');
+    } else {
+        btnNext.classList.remove('hidden');
+        btnSubmit.classList.add('hidden');
+    }
+}
+
+async function submitAsesmenSiswa(e) {
+    e.preventDefault();
+    showLoader();
+    const siswaAktif = JSON.parse(sessionStorage.getItem('siswaAktif'));
+    
+    try {
+        const resKriteria = await fetch(`${API_URL}/kriteria`);
+        const semuaInstrumen = await resKriteria.json();
+        
+        let listInstrumen = semuaInstrumen;
+        if (tokenSesiAktif.instrumen_terpilih && tokenSesiAktif.instrumen_terpilih.length > 0) {
+            listInstrumen = semuaInstrumen.filter(ins => tokenSesiAktif.instrumen_terpilih.includes(ins.id_kriteria));
+        }
+        
+        const detailSkorMentah = {};
+        const rekapInstrumen = {};
+        let totalSkorKumulatif = 0;
+        let totalButirKumulatif = 0;
+        
+        const checkedRadios = document.querySelectorAll('#container-quiz-cards input[type="radio"]:checked');
+        checkedRadios.forEach(radio => {
+            const idIns = radio.getAttribute('data-id-ins');
+            const nameInput = radio.getAttribute('name');
+            const nilai = parseInt(radio.value);
+            
+            detailSkorMentah[nameInput] = nilai;
+            
+            if (!rekapInstrumen[idIns]) { rekapInstrumen[idIns] = { skorTotal: 0, jumlahButir: 0 }; }
+            rekapInstrumen[idIns].skorTotal += nilai;
+            rekapInstrumen[idIns].jumlahButir++;
+            totalSkorKumulatif += nilai;
+            totalButirKumulatif++;
+        });
+        
+        const textareas = document.querySelectorAll('#container-quiz-cards textarea');
+        textareas.forEach(ta => { detailSkorMentah[ta.getAttribute('name')] = ta.value.trim(); });
+
+        const formatNilai = (skor, jumlahButir) => {
+            if (jumlahButir === 0) return { skor: 0, max: 0, persen: 0, teks: "0/0" };
+            return { skor: skor, max: jumlahButir, persen: Math.round((skor / jumlahButir) * 100), teks: `${skor}/${jumlahButir}` };
         };
-    </script>
+
+        const objNilaiAkhir = { total: formatNilai(totalSkorKumulatif, totalButirKumulatif) };
+        listInstrumen.forEach(ins => {
+            if(rekapInstrumen[ins.id_kriteria]) {
+                objNilaiAkhir[ins.id_kriteria] = formatNilai(rekapInstrumen[ins.id_kriteria].skorTotal, rekapInstrumen[ins.id_kriteria].jumlahButir);
+            } else {
+                objNilaiAkhir[ins.id_kriteria] = { skor: 0, max: 0, persen: 0, teks: "0/0" }; 
+            }
+        });
+        
+        const payload = {
+            id_assesment: tokenSesiAktif.id_assesment,
+            id_siswa: siswaAktif.id_siswa,
+            nama_siswa: siswaAktif.nama,
+            nilai_akhir: objNilaiAkhir, 
+            detail_skor_mentah: detailSkorMentah
+        };
+
+        await fetch(`${API_URL}/riwayat`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        
+        alert("Hebat! Jawaban misimu berhasil dikirim ke guru! 🌟");
+        document.getElementById('input-token-siswa').value = '';
+        navigasiKe('beranda-siswa');
+    } catch(err) { alert("Gagal mengirim tugas. Pastikan internetmu aktif ya!"); }
+    finally {
+        // 2. Sembunyikan loader setelah selesai (baik sukses maupun gagal)
+        hideLoader(); 
+    }
+}
+
+function renderProfilSiswa() {
+    const s = JSON.parse(sessionStorage.getItem('siswaAktif'));
+    if(!s) return;
+    
+    document.getElementById('profil-nisn').value = s.nisn || '';
+    document.getElementById('profil-nis').value = s.nis || '';
+    document.getElementById('profil-nama').value = s.nama;
+    document.getElementById('profil-absen').value = s.absen || '';
+    document.getElementById('profil-jk').value = s.jk || 'L';
+    document.getElementById('profil-kelas').value = s.kelas || '';
+    document.getElementById('profil-sekolah').value = s.sekolah || '';
+    document.getElementById('profil-username').value = s.username;
+    document.getElementById('profil-password').value = '';
+}
+
+// async function updateProfilSiswa(e) {
+//     e.preventDefault();
+//     showLoader();
+//     if(confirm("Fitur Update Profil belum memiliki EndPoint di server. Kode akan dipersiapkan untuk penyesuaian mendatang.")) {
+//         // Implementasi PUT /siswa/{id} di sini ketika sudah siap
+//     }
+// }
+
+async function updateProfilSiswa(e) {
+    e.preventDefault();
+    showLoader();
+
+    const sesiSiswa = sessionStorage.getItem('siswaAktif');
+    if (!sesiSiswa) {
+        hideLoader();
+        alert("Sesi siswa tidak ditemukan. Silakan login kembali.");
+        return;
+    }
+
+    const siswa = JSON.parse(sesiSiswa);
+    const idSiswa = siswa.id_siswa; // Sesuaikan dengan field primary key dari API Anda
+
+    // Sesuaikan ID elemen di bawah ini dengan ID input form pada siswa.html
+    const payload = {
+        nama: document.getElementById('profil-nama').value.trim(),
+        nisn: document.getElementById('profil-nisn').value.trim(),
+        nis: document.getElementById('profil-nis').value.trim(),
+        username: document.getElementById('profil-username').value.trim(),
+        password: document.getElementById('profil-password').value.trim()
+    };
+
+    try {
+        const res = await fetch(`${API_URL}/siswa/${idSiswa}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+            // Perbarui session storage dengan data baru
+            sessionStorage.setItem('siswaAktif', JSON.stringify({ ...siswa, ...payload }));
+            alert("Profil siswa berhasil diperbarui!");
+
+            window.scrollTo({top:0,behavior:'smooth'});
+            // Opsional: jalankan fungsi untuk merender ulang nama siswa di header/navbar
+            navigasiKe('beranda-siswa');
+        } else {
+            alert("Gagal memperbarui profil siswa: " + (data.message || "Terjadi kesalahan pada server."));
+        }
+    } catch (err) {
+        console.error("Error saat update profil siswa:", err);
+        alert("Gagal menyimpan, username mungkin sudah terpakai, coba username lain.");
+    } finally {
+        hideLoader();
+    }
+}
+
+function showLoader() {
+    document.getElementById('loader-overlay').classList.remove('hidden');
+}
+
+function hideLoader() {
+    document.getElementById('loader-overlay').classList.add('hidden');
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    //cekSesi(); // Untuk index.html
+    cekSesiSiswa(); // <-- Gunakan ini untuk siswa.html
+});
+</script>
+    
 </body>
 </html>
