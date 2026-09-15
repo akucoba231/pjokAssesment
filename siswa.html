@@ -26,6 +26,8 @@
             --danger: #ff4757;      
             --text-dark: #2f3542; 
             --text-light: #747d8c; 
+
+            --positif : #198754; // warna hijau success bootstrap
             
             /* Glassmorphism settings */
             --glass-bg: rgba(255, 255, 255, 0.7);
@@ -258,6 +260,13 @@
 .logo-app {
     width: clamp(50px,80px,100px);
 }
+.tandai-negatif {
+    color: var(--danger);
+    text-shadow: 0px 0px 7px #fff, 0px 0px 10px var(--danger);
+}
+.tandai-positif {
+    color: inherit;
+}
 </style>
 </style>
 </head>
@@ -352,11 +361,13 @@
             
             <div class="card">
                 <h3 style="color: var(--secondary-dark); margin-bottom: 20px; text-align: center; font-size: 1.6rem; font-weight: 900;">Pencapaian Terbaru Saya 🌟</h3>
+                <h4 style="color: var(--secondary-dark); margin-bottom: 20px; text-align: center; font-size: 1.6rem; font-weight: 700;" id="nama_asesmen">Pencapaian Terbaru Saya 🌟</h4>
+                
                 <div style="position: relative; height: 350px; width: 100%; max-width: 500px; margin: 0 auto; background: rgba(255,255,255,0.5); border-radius: 20px; padding: 20px;">
                     <canvas id="raporSpiderChart"></canvas>
                 </div>
                 <div id="rapor-empty-state" style="text-align: center; color: var(--text-light); margin-top: 20px; font-style: italic; font-weight: 600;"></div>
-                <div id="catatan-guru-terakhir" style="margin-top: 25px; padding: 20px; background: rgba(78, 205, 196, 0.15); border-radius: 20px; border: 2px solid var(--secondary-light); display: none; color: var(--secondary-dark); font-size: 1.1rem;"></div>
+                <div id="catatan-guru-terakhir" style="margin-top: 25px; padding: 20px; background: rgba(78, 205, 196, 0.15); border-radius: 20px; border: 2px solid var(--secondary-light); display: none; color: #000; font-size: 1.1rem;"></div>
             </div>
         </div>
 
@@ -412,9 +423,9 @@
 
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <script>
-        
-const API_URL = "https://asesmen.pjokserver.my.id/api";
-let tokenSesiAktif = null; 
+
+        const API_URL = "https://asesmen.pjokserver.my.id/api";
+        let tokenSesiAktif = null; 
 
 // ==========================================
 // 1. SISTEM AUTENTIKASI SISWA
@@ -504,7 +515,7 @@ function navigasiKe(idHalaman) {
 //     try {
 //         const res = await fetch(`${API_URL}/asesmen/token/${tokenInput}`);
 //         const responseData = await res.json();
-        
+
 //         if (res.ok && responseData.status === 'success') {
 //             tokenSesiAktif = responseData.data;
 //             renderArenaKuis();
@@ -515,9 +526,14 @@ function navigasiKe(idHalaman) {
 //     } catch (error) { alert("Gagal mengecek token ke server."); }
 // }
 
+let saveToken = "";
+let namaAsesmen = "";
+let namaToken = "";
+
 async function validasiTokenSiswa() {
     showLoader();
     const tokenInput = document.getElementById('input-token-siswa').value.trim().toUpperCase();
+    
     if (!tokenInput) { alert("Ketik tokennya dulu ya!"); return; }
 
     try {
@@ -526,6 +542,9 @@ async function validasiTokenSiswa() {
         
         if (res.ok && responseData.status === 'success') {
             tokenSesiAktif = responseData.data;
+            saveToken = tokenSesiAktif.id_assesment;
+            namaToken = tokenSesiAktif.token;
+            namaAsesmen = tokenSesiAktif.nama_materi;
             // Tambahkan "await" di sini agar pindah halaman hanya jika render sudah selesai 100%
             await renderArenaKuis(); 
             navigasiKe('kerjakan-asesmen');
@@ -552,8 +571,24 @@ async function renderRaporSiswa() {
         
         const resKriteria = await fetch(`${API_URL}/kriteria`);
         const listSemuaInstrumen = await resKriteria.json();
+
+        //const latestRiwayat = riwayatSiswa.length > 0 ? riwayatSiswa[riwayatSiswa.length - 1] : null;
         
-        const latestRiwayat = riwayatSiswa.length > 0 ? riwayatSiswa[riwayatSiswa.length - 1] : null;
+        let latestRiwayat = null
+        if(saveToken === ""){
+            console.log('oke')
+            latestRiwayat = riwayatSiswa.length > 0 ? riwayatSiswa[riwayatSiswa.length - 1] : null;
+        }
+        else {
+            latestRiwayat = riwayatSiswa.length > 0 ? riwayatSiswa.filter(item => item.id_assesment === saveToken) : null;
+            latestRiwayat = latestRiwayat[0];
+        }
+
+        console.log(latestRiwayat)
+
+        let nama_asesmen = document.getElementById('nama_asesmen');
+        nama_asesmen.textContent = namaAsesmen;
+        
 
         const ctx = document.getElementById('raporSpiderChart'); 
         const emptyState = document.getElementById('rapor-empty-state');
@@ -619,19 +654,19 @@ let totalKuisSteps = 0;
 // async function renderArenaKuis() {
 //     document.getElementById('quiz-title-display').innerText = tokenSesiAktif.nama_materi;
 //     document.getElementById('quiz-desc-display').innerText = tokenSesiAktif.keterangan || "Kerjakan dengan santai dan jujur ya!";
-    
+
 //     const container = document.getElementById('container-quiz-cards');
 //     container.innerHTML = '';
-    
+
 //     try {
 //         const resKriteria = await fetch(`${API_URL}/kriteria`);
 //         const semuaInstrumen = await resKriteria.json();
-        
+
 //         const siswaAktif = JSON.parse(sessionStorage.getItem('siswaAktif'));
 //         const resRiw = await fetch(`${API_URL}/riwayat/siswa/${siswaAktif.id_siswa}`);
 //         const riwayatList = await resRiw.json();
 //         const nilaiLama = riwayatList.find(r => r.id_assesment === tokenSesiAktif.id_assesment);
-        
+
 //         let instrumenPilihan = semuaInstrumen;
 //         if (tokenSesiAktif.instrumen_terpilih && tokenSesiAktif.instrumen_terpilih.length > 0) {
 //             instrumenPilihan = semuaInstrumen.filter(ins => tokenSesiAktif.instrumen_terpilih.includes(ins.id_kriteria));
@@ -644,11 +679,11 @@ let totalKuisSteps = 0;
 //             let isHidden = stepIndex === 0 ? '' : 'hidden'; 
 //             let cardHtml = `<div id="step-kuis-${stepIndex}" class="quiz-card card step-container ${isHidden}">
 //             <h3 style="color:var(--secondary-dark); margin-bottom:20px; border-bottom:3px dashed rgba(78, 205, 196, 0.3); padding-bottom:15px; font-size:1.5rem; font-weight:900;">Bagian ${stepIndex + 1}: ${ins.judul}</h3>`;
-            
+
 //             // ins.normatif.forEach((butir, idx) => {
 //             //     let inputName = `score_${ins.id_kriteria}_${idx}`;
 //             //     let uraianName = `uraian_${ins.id_kriteria}_${idx}`;
-                
+
 //             //     if(idx === 4) { 
 //             //         let textVal = nilaiLama && nilaiLama.detail_skor_mentah ? (nilaiLama.detail_skor_mentah[uraianName] || '') : '';
 //             //         cardHtml += `
@@ -677,7 +712,7 @@ let totalKuisSteps = 0;
 //             ins.normatif.forEach((butir, idx) => {
 //             let inputName = `score_${ins.id_kriteria}_${idx}`;
 //             let uraianName = `uraian_${ins.id_kriteria}_${idx}`;
-            
+
 //             // Ekstraksi data: menangani JSON lama (string) maupun JSON baru (object)
 //             let teksButir = typeof butir === 'string' ? butir : butir.teks;
 //             let tipeButir = typeof butir === 'string' ? 'positif' : butir.tipe;
@@ -691,7 +726,7 @@ let totalKuisSteps = 0;
 //                 </div>`;
 //             } else { 
 //                 let valChecked = nilaiLama && nilaiLama.detail_skor_mentah ? nilaiLama.detail_skor_mentah[inputName] : null;
-                
+
 //                 // --- LOGIKA INTI PENILAIAN ---
 //                 // Jika Positif: Ya = 1, Tidak = 0
 //                 // Jika Negatif: Ya = 0, Tidak = 1
@@ -776,15 +811,15 @@ async function renderArenaKuis() {
 
                     cardHtml += `
                     <div style="margin-bottom:35px;" class="question-block">
-                    <div class="quiz-question">${idx+1}. ${teksButir}</div>
+                    <div class="quiz-question tandai-${tipeButir}">${idx+1}. ${teksButir}</div>
                     <div class="gamified-options">
                     <label>
-                        <input type="radio" name="${inputName}" data-id-ins="${ins.id_kriteria}" value="${skorYa}" required ${valChecked === skorYa ? 'checked':''}>
-                        <span class="btn-ya">😊 TENTU SAJA YA</span>
+                    <input type="radio" name="${inputName}" data-id-ins="${ins.id_kriteria}" value="${skorYa}" required ${valChecked === skorYa ? 'checked':''}>
+                    <span class="btn-ya">😊 TENTU SAJA YA</span>
                     </label>
                     <label>
-                        <input type="radio" name="${inputName}" data-id-ins="${ins.id_kriteria}" value="${skorTidak}" required ${valChecked === skorTidak ? 'checked':''}>
-                        <span class="btn-tidak">🤔 HMM.. TIDAK</span>
+                    <input type="radio" name="${inputName}" data-id-ins="${ins.id_kriteria}" value="${skorTidak}" required ${valChecked === skorTidak ? 'checked':''}>
+                    <span class="btn-tidak">🤔 HMM.. TIDAK</span>
                     </label>
                     </div>
                     </div>`;
@@ -1005,6 +1040,6 @@ document.addEventListener("DOMContentLoaded", () => {
     cekSesiSiswa(); // <-- Gunakan ini untuk siswa.html
 });
 </script>
-    
+
 </body>
 </html>
