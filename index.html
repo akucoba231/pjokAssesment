@@ -16,7 +16,7 @@
         :root { 
             --primary: #FF6B6B;     /* Joyful Coral (Ceria & Semangat) */
             --secondary: #4ECDC4;   /* Mindful Teal (Tenang & Fokus) */
-            --success: #26de81;     /* Fresh Green */
+            --success: #26de81;     /* Fresh Green - 198754 */ 
             --warning: #fed330;     /* Cheerful Yellow */
             --danger: #eb3b5a;      
             --bg-color: #F0F4F8;    /* Latar belakang lembut */
@@ -24,6 +24,7 @@
             --text-light: #636e72; 
             --custom-color: linear-gradient(to right, #6DD5FA, #2980B9);
             --light-transparent : rgba(255,255,255,.7);
+            --positif : #198754; // warna hijau success bootstrap
         }
 
         body { 
@@ -95,6 +96,9 @@
         .form-group { margin-bottom: 15px; text-align: left; }
         .form-group label { display: block; margin-bottom: 6px; font-weight: 700; font-size: 0.95rem; color: var(--text-dark); }
         .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px 15px; border: 2px solid #e1e8ed; border-radius: 12px; font-size: 0.95rem; transition: 0.3s; background: #fdfdfd; }
+        .form-group select {
+            border-color:  initial;
+        }
         .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--secondary); outline: none; background: #fff; box-shadow: 0 0 0 3px rgba(78, 205, 196, 0.2); }
         .form-control { width: 100%; padding: 10px; border: 2px solid #e1e8ed; border-radius: 10px; }
 
@@ -162,6 +166,47 @@
         }
         .logo-app {
             width: clamp(50px,80px,100px);
+        }
+        .no-display {
+            display: none;
+        }
+
+        .tandai-negatif {
+            border:  2px solid var(--danger);
+            color: var(--danger);
+        }
+        .tandai-positif {
+            border:  2px solid var(--positif);
+            color: var(--positif);
+        }
+        .dropdown-custom {
+            position: relative;
+            display: inline-block;
+        }
+        .dropdown-list {
+            position: absolute;
+            top: 110%;
+            right: 0;
+            background-color: white;
+            min-width: 160px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            z-index: 100;
+            padding: 5px 0;
+            list-style: none;
+            margin: 0;
+            border: 1px solid #eee;
+        }
+        .dropdown-list li {
+            padding: 10px 16px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            font-size: 0.95rem;
+            color: var(--text-dark);
+        }
+        .dropdown-list li:hover {
+            background-color: #f1f2f6;
+            color: var(--primary);
         }
     </style>
 
@@ -309,7 +354,7 @@
                         </div>
                         <div class="form-group">
                             <label>Password</label>
-                            <input type="text" id="profil-password" required>
+                            <input type="password" id="profil-password" required>
                         </div>
                     </div>
 
@@ -321,30 +366,36 @@
         </div>
 
         <div id="page-hasil-evaluasi" class="page-content hidden">
-            <div class="card">
+            <!-- VIEW PILIH SEKOLAH -->
+            <div id="view-eval-sekolah" class="card">
+                <h2 class="page-title" style="margin-bottom: 0;">Pilih Sekolah</h2>
+                <p style="color: var(--text-light); margin-top: 10px; margin-bottom: 20px;">Silakan pilih sekolah untuk melihat daftar evaluasi siswa.</p>
+                <div id="grid-eval-sekolah" class="guide-grid">
+                    <!-- Dinamis via JS -->
+                </div>
+            </div>
+
+            <!-- VIEW PILIH KELAS -->
+            <div id="view-eval-kelas" class="card hidden">
+                <div class="flex-between">
+                    <h2 class="page-title" style="margin-bottom: 0;">Pilih Kelas</h2>
+                    <button class="btn btn-outline" onclick="kembaliKePilihEvalSekolah()">⬅ Kembali</button>
+                </div>
+                <p style="color: var(--text-light); margin-bottom: 20px;">Silakan pilih kelas dari sekolah yang telah dipilih.</p>
+                <div id="grid-eval-kelas" class="guide-grid">
+                    <!-- Dinamis via JS -->
+                </div>
+            </div>
+
+            <!-- VIEW DATA EVALUASI UTAMA (DATATABLE) -->
+            <div id="view-eval-data" class="card hidden">
                 <div class="flex-between">
                     <h2 class="page-title" style="margin-bottom: 0; border: none; padding: 0;">Hasil Evaluasi Siswa</h2>
                     <div>
-                        <!-- <select id="filter-eval-sekolah" class="form-control" style="width: auto; display: inline-block; margin-right: 10px;" onchange="filterDataEvaluasi()">
-                            <option value="">Semua Sekolah</option>
-                            <option value="SDN 1 Karawang">SDN 1 Karawang</option>
-                            <option value="SDN 2 Karawang">SDN 2 Karawang</option>
-                        </select>
-                        <select id="filter-eval-kelas" class="form-control" style="width: auto; display: inline-block; margin-right: 10px;" onchange="filterDataEvaluasi()">
-                            <option value="">Semua Kelas</option>
-                            <option value="4A">Kelas 4A</option>
-                            <option value="4B">Kelas 4B</option>
-                            <option value="5A">Kelas 5A</option>
-                            <option value="5B">Kelas 5B</option>
-                        </select> -->
-                        <select id="filter-eval-sekolah" class="form-control" style="width: auto; display: inline-block; margin-right: 10px;" onchange="filterDataEvaluasi()">
-                            <option value="">Semua Sekolah</option>
-                            <!-- Akan diisi otomatis oleh JavaScript -->
-                        </select>
-                        <select id="filter-eval-kelas" class="form-control" style="width: auto; display: inline-block; margin-right: 10px;" onchange="filterDataEvaluasi()">
-                            <option value="">Semua Kelas</option>
-                            <!-- Akan diisi otomatis oleh JavaScript -->
-                        </select>
+                        <button class="btn btn-outline" onclick="kembaliKePilihEvalKelas()">⬅ Kembali</button>
+                        <!-- Select disembunyikan agar filter JS DataTable tetap bekerja -->
+                        <select id="filter-eval-sekolah" class="form-control" style="display: none;" onchange="filterDataEvaluasi()"></select>
+                        <select id="filter-eval-kelas" class="form-control" style="display: none;" onchange="filterDataEvaluasi()"></select>
                     </div>
                 </div>
 
@@ -383,8 +434,41 @@
                 </div>
             </div>
 
-            <div class="card" style="border-top: 6px solid var(--warning);">
-                <h3 style="color: var(--text-dark); margin-bottom: 20px;">Rincian Capaian: <span id="eval-judul-asesmen-terpilih" style="color: var(--primary);">Pilih asesmen di tabel bawah</span></h3>
+            <!-- VIEW 1: DAFTAR ASESMEN (Tabel) -->
+            <div id="view-daftar-asesmen-siswa">
+                <div class="card" style="border-top: 6px solid var(--secondary);">
+                    <div class="flex-between">
+                        <h3 style="color: var(--text-dark); margin-bottom: 0;">Daftar Asesmen yang Diikuti</h3>
+                        <button class="btn btn-success" onclick="exportRiwayatIndividuKeExcel()">📥 Export Excel</button>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table id="tabel-riwayat-individu" class="display" style="min-width: 100%; white-space: nowrap;">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Tanggal</th>
+                                    <th>Kode Asesmen</th>
+                                    <th>Judul Asesmen</th>
+                                    <th>Rata-rata</th>
+                                    <th>Opsi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabel-riwayat-individu-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VIEW 2: RINCIAN CAPAIAN (Dashboard) -->
+            <div id="card-rincian-capaian" class="card hidden" style="border-top: 6px solid var(--warning);">
+                <div class="flex-between" style="margin-bottom: 20px;">
+                    <h3 style="color: var(--text-dark); margin: 0;">Rincian Capaian: <span id="eval-judul-asesmen-terpilih" style="color: var(--primary);">-</span></h3>
+                    <div style="display: flex; gap: 10px;">
+                        <button id="btn-export-rincian-xlsx" class="btn btn-success" style="display: none;">📥 Export Rincian XLSX</button>
+                        <button class="btn btn-outline" onclick="kembaliKeDaftarAsesmenSiswa()">⬅ Kembali ke Tabel</button>
+                    </div>
+                </div>
 
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; align-items: center;">
                     <div style="position: relative; height: 300px; width: 100%;">
@@ -402,27 +486,9 @@
                 </div>
             </div>
 
-            <div class="card" style="border-top: 6px solid var(--secondary);">
-                <div class="flex-between">
-                    <h3 style="color: var(--text-dark); margin-bottom: 0;">Daftar Asesmen yang Diikuti</h3>
-                    <button class="btn btn-success" onclick="exportRiwayatIndividuKeExcel()">📥 Export Excel</button>
-                </div>
-
-                <div class="table-responsive">
-                    <table id="tabel-riwayat-individu" class="display" style="min-width: 100%; white-space: nowrap;">
-                        <thead>
-                            <tr>
-                                <th>No</th>
-                                <th>Tanggal</th>
-                                <th>Kode Asesmen</th>
-                                <th>Judul Asesmen</th>
-                                <th>Rata-rata</th>
-                                <th>Opsi</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tabel-riwayat-individu-body"></tbody>
-                    </table>
-                </div>
+            <!-- VIEW 2 (Lanjutan): RINCIAN JAWABAN SISWA -->
+            <div id="card-detail-jawaban" class="card hidden" style="border-top: 6px solid var(--info);">
+                <!-- Akan diisi secara dinamis melalui JavaScript -->
             </div>
         </div>
 
@@ -473,37 +539,73 @@
             </div>
 
             <div class="card">
-                <h3 style="margin-bottom: 20px; color: var(--text-dark);">Grafik Progres Capaian per Aspek Instrumen</h3>
-                <div class="chart-container">
-                    <canvas id="progresChart"></canvas>
+                <div class="flex-between" style="margin-bottom: 20px;">
+                    <h3 id="chart-drilldown-title" style="color: var(--text-dark); margin: 0;">Rata-rata Capaian Semua Sekolah</h3>
+                    <div style="display: flex; gap: 10px;">
+                        <div class="dropdown-custom">
+                            <button id="btn-filter-sekolah" class="btn btn-outline" onclick="toggleCustomDropdown('list-filter-sekolah', event)">🏢 Pilih Sekolah ▾</button>
+                            <ul id="list-filter-sekolah" class="dropdown-list hidden">
+                                <li onclick="terapkanFilterGrafik('Semua', 'Semua')">Tampilkan Semua Sekolah</li>
+                                <!-- Injected via JS -->
+                            </ul>
+                        </div>
+                        <div class="dropdown-custom" id="container-filter-kelas" style="display: none;">
+                            <button id="btn-filter-kelas" class="btn btn-outline" onclick="toggleCustomDropdown('list-filter-kelas', event)">🚪 Pilih Kelas ▾</button>
+                            <ul id="list-filter-kelas" class="dropdown-list hidden">
+                                <li onclick="terapkanFilterGrafik(sekolahTerpilihGrafik, 'Semua')">Tampilkan Semua Kelas</li>
+                                <!-- Injected via JS -->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div style="width: 100%; overflow-x: auto; overflow-y: hidden; padding-bottom: 15px;">
+                    <div id="progresChartBox" class="chart-container" style="min-width: 100%;">
+                        <canvas id="progresChart"></canvas>
+                    </div>
                 </div>
             </div>
         </div>
         <div id="page-manajemen-siswa" class="page-content hidden">
-            <div class="card">
+            <!-- VIEW PILIH SEKOLAH -->
+            <div id="view-pilih-sekolah" class="card">
+                <div class="flex-between">
+                    <h2 class="page-title" style="margin-bottom: 0;">Pilih Sekolah</h2>
+                    <div class="no-display">
+                        <button class="btn btn-primary" onclick="bukaModalImport()">Import Siswa</button>
+                        <button class="btn btn-success" onclick="bukaModalSiswa()">+ Tambah Siswa</button>
+                    </div>
+                </div>
+                <p style="color: var(--text-light); margin-bottom: 20px;">Silakan pilih sekolah untuk menampilkan data siswa.</p>
+                <div id="grid-pilih-sekolah" class="guide-grid">
+                    <!-- Dinamis via JS -->
+                </div>
+            </div>
+
+            <!-- VIEW PILIH KELAS -->
+            <div id="view-pilih-kelas" class="card hidden">
+                <div class="flex-between">
+                    <h2 class="page-title" style="margin-bottom: 0;">Pilih Kelas</h2>
+                    <div>
+                        <button class="btn btn-outline" onclick="kembaliKePilihSekolah()">⬅ Kembali</button>
+                        <button class="btn btn-primary no-display" onclick="bukaModalImport()">Import Siswa</button>
+                        <button class="btn btn-success no-display" onclick="bukaModalSiswa()">+ Tambah Siswa</button>
+                    </div>
+                </div>
+                <p style="color: var(--text-light); margin-bottom: 20px;">Silakan pilih kelas dari sekolah yang telah dipilih.</p>
+                <div id="grid-pilih-kelas" class="guide-grid">
+                    <!-- Dinamis via JS -->
+                </div>
+            </div>
+
+            <!-- VIEW DATA SISWA UTAMA (DATATABLE) -->
+            <div id="view-data-siswa" class="card hidden">
                 <div class="flex-between">
                     <h2 class="page-title" style="margin-bottom: 0; border: none; padding: 0;">Daftar Siswa</h2>
                     <div>
-                        <!-- <select id="filter-sekolah" class="form-control" style="width: auto; display: inline-block; margin-right: 10px;" onchange="filterDataSiswa()">
-                            <option value="">Semua Sekolah</option>
-                            <option value="SDN 1 Karawang">SDN 1 Karawang</option>
-                            <option value="SDN 2 Karawang">SDN 2 Karawang</option>
-                        </select>
-                        <select id="filter-kelas" class="form-control" style="width: auto; display: inline-block; margin-right: 10px;" onchange="filterDataSiswa()">
-                            <option value="">Semua Kelas</option>
-                            <option value="4A">Kelas 4A</option>
-                            <option value="4B">Kelas 4B</option>
-                            <option value="5A">Kelas 5A</option>
-                            <option value="5B">Kelas 5B</option>
-                        </select> -->
-                        <select id="filter-sekolah" class="form-control" style="width: auto; display: inline-block; margin-right: 10px;" onchange="filterDataSiswa()">
-                            <option value="">Semua Sekolah</option>
-                            <!-- Akan diisi otomatis oleh JavaScript -->
-                        </select>
-                        <select id="filter-kelas" class="form-control" style="width: auto; display: inline-block; margin-right: 10px;" onchange="filterDataSiswa()">
-                            <option value="">Semua Kelas</option>
-                            <!-- Akan diisi otomatis oleh JavaScript -->
-                        </select>
+                        <button class="btn btn-outline" onclick="kembaliKePilihKelas()">⬅ Kembali</button>
+                        <!-- Select disembunyikan agar filter JS DataTable lama tetap bekerja -->
+                        <select id="filter-sekolah" class="form-control" style="display: none;" onchange="filterDataSiswa()"></select>
+                        <select id="filter-kelas" class="form-control" style="display: none;" onchange="filterDataSiswa()"></select>
                         <button class="btn btn-primary" onclick="bukaModalImport()">Import Siswa</button>
                         <button class="btn btn-success" onclick="bukaModalSiswa()">+ Tambah Siswa</button>
                     </div>
@@ -829,7 +931,7 @@
 
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                         <div class="form-group"><label>Username</label><input type="text" id="siswa-username" required></div>
-                        <div class="form-group"><label>Password</label><input type="text" id="siswa-password" required></div>
+                        <div class="form-group"><label>Password</label><input type="password" id="siswa-password" required></div>
                     </div>
 
                     <div class="modal-footer"><button type="button" class="btn btn-outline" onclick="tutupModal('modal-siswa')">Batal</button><button type="submit" class="btn btn-success">Simpan</button></div>
@@ -955,6 +1057,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
         <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
         <script type="text/javascript">
             
 const API_URL = 'https://asesmen.pjokserver.my.id/api';
@@ -1026,11 +1129,11 @@ function navigasiKe(idHalaman, fromMobile = false) {
         document.getElementById('nav-' + idHalaman).classList.add('active');
     }
 
-    if(idHalaman === 'manajemen-siswa') renderSiswa();
+    if(idHalaman === 'manajemen-siswa') renderSiswa(true);
     if(idHalaman === 'kriteria') renderKriteria();
     if(idHalaman === 'beranda') renderBeranda();
     if(idHalaman === 'profil-guru') renderProfilGuru(); 
-    if(idHalaman === 'hasil-evaluasi') renderHasilEvaluasi(); 
+    if(idHalaman === 'hasil-evaluasi') renderHasilEvaluasi(true); 
     
     if(idHalaman === 'halaman-assesment') {
         document.getElementById('view-assesment-detail').classList.add('hidden'); 
@@ -1103,7 +1206,7 @@ let dataTableSiswa = null;
 //     } catch (err) { console.error("Error memuat siswa:", err); }
 // }
 
-async function renderSiswa() {
+async function renderSiswa(resetView = false) {
     showLoader();
     try {
         const res = await fetch(`${API_URL}/siswa`);
@@ -1146,14 +1249,13 @@ async function renderSiswa() {
         const uniqueSekolah = [...new Set(list.map(s => s.sekolah).filter(Boolean))].sort();
         const uniqueKelas = [...new Set(list.map(s => s.kelas).filter(Boolean))].sort();
 
+        // 1. Simpan opsi di hidden select (supaya filterDataSiswa tetap berfungsi)
         const selectSekolah = document.getElementById('filter-sekolah');
         const selectKelas = document.getElementById('filter-kelas');
         
-        // Simpan state pilihan filter sebelumnya (jika ada) agar tidak reset saat refresh
         const prevSekolah = selectSekolah.value;
         const prevKelas = selectKelas.value;
 
-        // Reset isi select lalu isi dengan opsi dinamis
         selectSekolah.innerHTML = '<option value="">Semua Sekolah</option>';
         uniqueSekolah.forEach(s => selectSekolah.innerHTML += `<option value="${s}">${s}</option>`);
         selectSekolah.value = prevSekolah;
@@ -1163,10 +1265,118 @@ async function renderSiswa() {
         selectKelas.value = prevKelas;
 
         filterDataSiswa();
+
+        // 2. Render UI Sub-Menu (Grid Cards)
+        const viewSekolah = document.getElementById('view-pilih-sekolah');
+        const viewKelas = document.getElementById('view-pilih-kelas');
+        const viewData = document.getElementById('view-data-siswa');
+        
+        if (list.length === 0) {
+            // Bypass langsung ke tabel jika kosong
+            viewSekolah.classList.add('hidden');
+            viewKelas.classList.add('hidden');
+            viewData.classList.remove('hidden');
+        } else {
+            // Render grid sekolah
+            const gridSekolah = document.getElementById('grid-pilih-sekolah');
+            gridSekolah.innerHTML = `
+                <div class="guide-card" style="cursor:pointer; border-top-color: var(--secondary);" onclick="pilihSekolahMenu('')">
+                    <div class="guide-icon">🏫</div>
+                    <h3>Semua Sekolah</h3>
+                    <p style="color:var(--text-light); font-size:0.9rem;">Tampilkan semua data</p>
+                </div>
+            `;
+            uniqueSekolah.forEach(s => {
+                gridSekolah.innerHTML += `
+                    <div class="guide-card" style="cursor:pointer; border-top-color: var(--primary);" onclick="pilihSekolahMenu('${s}')">
+                        <div class="guide-icon">🏫</div>
+                        <h3>${s}</h3>
+                        <p style="color:var(--text-light); font-size:0.9rem;">Pilih sekolah ini</p>
+                    </div>
+                `;
+            });
+
+            // Setel tampilan awal (Pilih Sekolah)
+            if (resetView) {
+                viewSekolah.classList.remove('hidden');
+                viewKelas.classList.add('hidden');
+                viewData.classList.add('hidden');
+            }
+            
+            // Simpan data unik kelas ke window agar bisa diakses untuk step kelas
+            window.availableKelasSiswa = list;
+        }
+
     } catch (err) { console.error("Error memuat siswa:", err); }
     finally {
-        // untuk menutup loader
         hideLoader(); 
+    }
+}
+
+function pilihSekolahMenu(sekolah) {
+    document.getElementById('filter-sekolah').value = sekolah;
+    
+    // Jika Semua Sekolah dipilih, langsung bypass pemilihan kelas menuju tabel
+    if (sekolah === "") {
+        pilihKelasMenu("");
+        return;
+    }
+
+    const viewSekolah = document.getElementById('view-pilih-sekolah');
+    const viewKelas = document.getElementById('view-pilih-kelas');
+    const gridKelas = document.getElementById('grid-pilih-kelas');
+
+    const filteredList = window.availableKelasSiswa.filter(s => s.sekolah === sekolah);
+    const kelasDitemukan = [...new Set(filteredList.map(s => s.kelas).filter(Boolean))].sort();
+
+    gridKelas.innerHTML = `
+        <div class="guide-card" style="cursor:pointer; border-top-color: var(--warning);" onclick="pilihKelasMenu('')">
+            <div class="guide-icon">🚪</div>
+            <h3>Semua Kelas</h3>
+            <p style="color:var(--text-light); font-size:0.9rem;">${sekolah}</p>
+        </div>
+    `;
+
+    kelasDitemukan.forEach(k => {
+        gridKelas.innerHTML += `
+            <div class="guide-card" style="cursor:pointer; border-top-color: var(--success);" onclick="pilihKelasMenu('${k}')">
+                <div class="guide-icon">📚</div>
+                <h3>Kelas ${k}</h3>
+                <p style="color:var(--text-light); font-size:0.9rem;">${sekolah}</p>
+            </div>
+        `;
+    });
+
+    viewSekolah.classList.add('hidden');
+    viewKelas.classList.remove('hidden');
+}
+
+function pilihKelasMenu(kelas) {
+    document.getElementById('filter-kelas').value = kelas;
+    filterDataSiswa();
+
+    document.getElementById('view-pilih-sekolah').classList.add('hidden');
+    document.getElementById('view-pilih-kelas').classList.add('hidden');
+    document.getElementById('view-data-siswa').classList.remove('hidden');
+    
+    // Perbaikan Bug Tabel Hidden: Paksa penyesuaian lebar kolom setelah elemen tampil
+    if (typeof dataTableSiswa !== 'undefined' && dataTableSiswa) {
+        dataTableSiswa.columns.adjust().draw();
+    }
+}
+
+function kembaliKePilihSekolah() {
+    document.getElementById('view-pilih-kelas').classList.add('hidden');
+    document.getElementById('view-pilih-sekolah').classList.remove('hidden');
+}
+
+function kembaliKePilihKelas() {
+    document.getElementById('view-data-siswa').classList.add('hidden');
+    // Jika sebelumnya bypass (semua sekolah), kembali langsung ke menu sekolah
+    if (document.getElementById('filter-sekolah').value === "") {
+        document.getElementById('view-pilih-sekolah').classList.remove('hidden');
+    } else {
+        document.getElementById('view-pilih-kelas').classList.remove('hidden');
     }
 }
 
@@ -1507,7 +1717,7 @@ function tambahInputNormatif(item = null) {
     div.innerHTML = `
     <div style="flex:1; display:flex; gap:10px; margin-right:8px;">
         <input type="text" class="input-normatif-item form-control" style="flex:1; padding:8px; font-size:0.95rem;" value="${valTeks}" required placeholder="Tulis butir indikator penilaian...">
-        <select class="input-normatif-tipe form-control" style="width:180px; padding:8px; font-size:0.95rem;">
+        <select class="input-normatif-tipe form-control tandai-${valTipe}" style="width:180px; padding:8px; font-size:0.95rem;" onchange="markNegative(this)">
             <option value="positif" ${valTipe === 'positif' ? 'selected' : ''}>Pernyataan Positif</option>
             <option value="negatif" ${valTipe === 'negatif' ? 'selected' : ''}>Pernyataan Negatif</option>
         </select>
@@ -1516,6 +1726,25 @@ function tambahInputNormatif(item = null) {
     `;
     container.appendChild(div);
 }
+
+let test = "";
+function markNegative(e){
+    //console.log(e);
+    if(e.value == "positif"){
+        if(e.classList.contains('tandai-negatif')){
+            e.classList.remove('tandai-negatif');
+        }
+        e.classList.add('tandai-positif');
+    }
+    else {
+        if(e.classList.contains('tandai-positif')){
+            e.classList.remove('tandai-positif');
+        }
+        e.classList.add('tandai-negatif');
+    }
+
+}
+
 
 async function simpanKriteria(e) {
     e.preventDefault();
@@ -1944,62 +2173,167 @@ let dataTableEvaluasi = null;
 //     filterDataEvaluasi(); 
 // }
 
-async function renderHasilEvaluasi() {
+async function renderHasilEvaluasi(resetView = false) {
     showLoader();
     try {
-    const res = await fetch(`${API_URL}/siswa`);
-    const listSiswa = await res.json();
-    const tbody = document.getElementById('tabel-evaluasi-body');
-    if(!tbody) return;
+        const res = await fetch(`${API_URL}/siswa`);
+        const listSiswa = await res.json();
+        const tbody = document.getElementById('tabel-evaluasi-body');
+        if(!tbody) return;
 
-    if ($.fn.DataTable.isDataTable('#tabel-data-evaluasi')) { 
-        $('#tabel-data-evaluasi').DataTable().destroy(); 
-    }
-    
-    tbody.innerHTML = '';
-    listSiswa.forEach((item) => {
-        let sekolahHidden = `<span style="display:none;">${item.sekolah}</span>`;
-        tbody.innerHTML += `
-        <tr>
-            <td>${item.absen}</td>
-            <td><b>${item.nama}</b> ${sekolahHidden}</td>
-            <td>${item.kelas}</td>
-            <td style="text-align: center;">
-                <button class="btn btn-primary btn-sm" onclick="lihatRincianEvaluasi('${item.id_siswa}')">Lihat Rincian</button>
-            </td>
-        </tr>`;
-    });
+        if ($.fn.DataTable.isDataTable('#tabel-data-evaluasi')) { 
+            $('#tabel-data-evaluasi').DataTable().destroy(); 
+        }
+        
+        tbody.innerHTML = '';
+        listSiswa.forEach((item) => {
+            let sekolahHidden = `<span style="display:none;">${item.sekolah}</span>`;
+            tbody.innerHTML += `
+            <tr>
+                <td>${item.absen}</td>
+                <td><b>${item.nama}</b> ${sekolahHidden}</td>
+                <td>${item.kelas}</td>
+                <td style="text-align: center;">
+                    <button class="btn btn-primary btn-sm" onclick="lihatRincianEvaluasi('${item.id_siswa}')">Lihat Rincian</button>
+                </td>
+            </tr>`;
+        });
 
-    dataTableEvaluasi = $('#tabel-data-evaluasi').DataTable({ 
-        "language": { "url": "//cdn.datatables.net/plug-ins/1.13.7/i18n/id.json" },
-        "autoWidth": true, "scrollX": true
-    });
+        dataTableEvaluasi = $('#tabel-data-evaluasi').DataTable({ 
+            "language": { "url": "//cdn.datatables.net/plug-ins/1.13.7/i18n/id.json" },
+            "autoWidth": true, "scrollX": true
+        });
 
-    // ---------------------------------------------------------
-    // LOGIKA FILTER DINAMIS UNTUK HALAMAN EVALUASI
-    // ---------------------------------------------------------
-    const uniqueEvalSekolah = [...new Set(listSiswa.map(s => s.sekolah).filter(Boolean))].sort();
-    const uniqueEvalKelas = [...new Set(listSiswa.map(s => s.kelas).filter(Boolean))].sort();
+        // ---------------------------------------------------------
+        // LOGIKA FILTER DINAMIS UNTUK HALAMAN EVALUASI
+        // ---------------------------------------------------------
+        const uniqueEvalSekolah = [...new Set(listSiswa.map(s => s.sekolah).filter(Boolean))].sort();
+        const uniqueEvalKelas = [...new Set(listSiswa.map(s => s.kelas).filter(Boolean))].sort();
 
-    const selectEvalSekolah = document.getElementById('filter-eval-sekolah');
-    const selectEvalKelas = document.getElementById('filter-eval-kelas');
-    
-    const prevEvalSekolah = selectEvalSekolah.value;
-    const prevEvalKelas = selectEvalKelas.value;
+        const selectEvalSekolah = document.getElementById('filter-eval-sekolah');
+        const selectEvalKelas = document.getElementById('filter-eval-kelas');
+        
+        const prevEvalSekolah = selectEvalSekolah.value;
+        const prevEvalKelas = selectEvalKelas.value;
 
-    selectEvalSekolah.innerHTML = '<option value="">Semua Sekolah</option>';
-    uniqueEvalSekolah.forEach(s => selectEvalSekolah.innerHTML += `<option value="${s}">${s}</option>`);
-    selectEvalSekolah.value = prevEvalSekolah;
+        selectEvalSekolah.innerHTML = '<option value="">Semua Sekolah</option>';
+        uniqueEvalSekolah.forEach(s => selectEvalSekolah.innerHTML += `<option value="${s}">${s}</option>`);
+        selectEvalSekolah.value = prevEvalSekolah;
 
-    selectEvalKelas.innerHTML = '<option value="">Semua Kelas</option>';
-    uniqueEvalKelas.forEach(k => selectEvalKelas.innerHTML += `<option value="${k}">Kelas ${k}</option>`);
-    selectEvalKelas.value = prevEvalKelas;
+        selectEvalKelas.innerHTML = '<option value="">Semua Kelas</option>';
+        uniqueEvalKelas.forEach(k => selectEvalKelas.innerHTML += `<option value="${k}">Kelas ${k}</option>`);
+        selectEvalKelas.value = prevEvalKelas;
 
-    filterDataEvaluasi(); 
+        filterDataEvaluasi(); 
+
+        // 2. Render UI Sub-Menu (Grid Cards) Evaluasi
+        const viewEvalSekolah = document.getElementById('view-eval-sekolah');
+        const viewEvalKelas = document.getElementById('view-eval-kelas');
+        const viewEvalData = document.getElementById('view-eval-data');
+        
+        if (listSiswa.length === 0) {
+            viewEvalSekolah.classList.add('hidden');
+            viewEvalKelas.classList.add('hidden');
+            viewEvalData.classList.remove('hidden');
+        } else {
+            const gridEvalSekolah = document.getElementById('grid-eval-sekolah');
+            gridEvalSekolah.innerHTML = `
+                <div class="guide-card" style="cursor:pointer; border-top-color: var(--secondary);" onclick="pilihEvalSekolahMenu('')">
+                    <div class="guide-icon">🏫</div>
+                    <h3>Semua Sekolah</h3>
+                    <p style="color:var(--text-light); font-size:0.9rem;">Tampilkan semua data</p>
+                </div>
+            `;
+            uniqueEvalSekolah.forEach(s => {
+                gridEvalSekolah.innerHTML += `
+                    <div class="guide-card" style="cursor:pointer; border-top-color: var(--primary);" onclick="pilihEvalSekolahMenu('${s}')">
+                        <div class="guide-icon">🏫</div>
+                        <h3>${s}</h3>
+                        <p style="color:var(--text-light); font-size:0.9rem;">Pilih sekolah ini</p>
+                    </div>
+                `;
+            });
+
+            if (resetView) {
+                viewEvalSekolah.classList.remove('hidden');
+                viewEvalKelas.classList.add('hidden');
+                viewEvalData.classList.add('hidden');
+            }
+            
+            window.availableEvalKelasSiswa = listSiswa;
+        }
+
     } catch (err) {
-            console.error("Error import excel:", err);
+        console.error("Error muat data evaluasi:", err);
     } finally {
-            hideLoader();
+        hideLoader();
+    }
+}
+
+function pilihEvalSekolahMenu(sekolah) {
+    document.getElementById('filter-eval-sekolah').value = sekolah;
+    
+    // Jika Semua Sekolah dipilih, langsung bypass pemilihan kelas menuju tabel
+    if (sekolah === "") {
+        pilihEvalKelasMenu("");
+        return;
+    }
+
+    const viewEvalSekolah = document.getElementById('view-eval-sekolah');
+    const viewEvalKelas = document.getElementById('view-eval-kelas');
+    const gridEvalKelas = document.getElementById('grid-eval-kelas');
+
+    const filteredList = window.availableEvalKelasSiswa.filter(s => s.sekolah === sekolah);
+    const kelasDitemukan = [...new Set(filteredList.map(s => s.kelas).filter(Boolean))].sort();
+
+    gridEvalKelas.innerHTML = `
+        <div class="guide-card" style="cursor:pointer; border-top-color: var(--warning);" onclick="pilihEvalKelasMenu('')">
+            <div class="guide-icon">🚪</div>
+            <h3>Semua Kelas</h3>
+            <p style="color:var(--text-light); font-size:0.9rem;">${sekolah}</p>
+        </div>
+    `;
+
+    kelasDitemukan.forEach(k => {
+        gridEvalKelas.innerHTML += `
+            <div class="guide-card" style="cursor:pointer; border-top-color: var(--success);" onclick="pilihEvalKelasMenu('${k}')">
+                <div class="guide-icon">📚</div>
+                <h3>Kelas ${k}</h3>
+                <p style="color:var(--text-light); font-size:0.9rem;">${sekolah}</p>
+            </div>
+        `;
+    });
+
+    viewEvalSekolah.classList.add('hidden');
+    viewEvalKelas.classList.remove('hidden');
+}
+
+function pilihEvalKelasMenu(kelas) {
+    document.getElementById('filter-eval-kelas').value = kelas;
+    filterDataEvaluasi();
+
+    document.getElementById('view-eval-sekolah').classList.add('hidden');
+    document.getElementById('view-eval-kelas').classList.add('hidden');
+    document.getElementById('view-eval-data').classList.remove('hidden');
+    
+    // Perbaikan Bug Tabel Hidden: Paksa penyesuaian lebar kolom setelah elemen tampil
+    if (typeof dataTableEvaluasi !== 'undefined' && dataTableEvaluasi) {
+        dataTableEvaluasi.columns.adjust().draw();
+    }
+}
+
+function kembaliKePilihEvalSekolah() {
+    document.getElementById('view-eval-kelas').classList.add('hidden');
+    document.getElementById('view-eval-sekolah').classList.remove('hidden');
+}
+
+function kembaliKePilihEvalKelas() {
+    document.getElementById('view-eval-data').classList.add('hidden');
+    // Jika sebelumnya bypass (semua sekolah), kembali langsung ke menu sekolah
+    if (document.getElementById('filter-eval-sekolah').value === "") {
+        document.getElementById('view-eval-sekolah').classList.remove('hidden');
+    } else {
+        document.getElementById('view-eval-kelas').classList.remove('hidden');
     }
 }
 
@@ -2017,6 +2351,8 @@ let currentSiswaEvaluasiId = null;
 let currentRiwayatAll = [];
 let evalPieChartInstance = null;
 
+let siswaIni = null;
+
 async function lihatRincianEvaluasi(idSiswa) {
     showLoader();
 
@@ -2027,6 +2363,8 @@ async function lihatRincianEvaluasi(idSiswa) {
     const listSiswa = await resSiswa.json();
     const siswa = listSiswa.find(s => s.id_siswa === idSiswa);
     if(!siswa) return;
+
+    siswaIni = siswa;
 
     document.querySelectorAll('.page-content').forEach(el => el.classList.add('hidden'));
     document.getElementById('page-detail-evaluasi').classList.remove('hidden');
@@ -2076,87 +2414,275 @@ async function lihatRincianEvaluasi(idSiswa) {
             hideLoader();
     }
 
-    if(currentRiwayatAll.length > 0) {
-        renderCard2Evaluasi(currentRiwayatAll[currentRiwayatAll.length - 1].id_penilaian);
-    } else {
-        document.getElementById('eval-judul-asesmen-terpilih').innerText = "Belum ada riwayat";
-        document.getElementById('eval-teks-catatan').innerHTML = "<i style='color:#aaa;'>Belum ada data.</i>";
-        document.getElementById('btn-eval-profil').style.display = 'none'; 
-        if(evalPieChartInstance) evalPieChartInstance.destroy();
-        document.getElementById('eval-pie-empty').style.display = 'block';
+    document.getElementById('view-daftar-asesmen-siswa').classList.remove('hidden');
+    document.getElementById('card-rincian-capaian').classList.add('hidden');
+    document.getElementById('card-detail-jawaban').classList.add('hidden');
+    
+    // Perbaikan Bug Tabel Hidden: Paksa penyesuaian lebar kolom setelah elemen tampil
+    if ($.fn.DataTable.isDataTable('#tabel-riwayat-individu')) {
+        $('#tabel-riwayat-individu').DataTable().columns.adjust().draw();
     }
 }
 
 async function renderCard2Evaluasi(idPenilaian) {
-    //showLoader();
-    const rwt = currentRiwayatAll.find(r => r.id_penilaian === idPenilaian);
-    
-    const resAsm = await fetch(`${API_URL}/asesmen`);
-    const dbAsm = await resAsm.json();
-    const infoAsm = dbAsm.find(a => a.id_assesment === rwt.id_assesment) || {};
-    
-    const resKriteria = await fetch(`${API_URL}/kriteria`);
-    const semuaInstrumen = await resKriteria.json();
-
-    document.getElementById('eval-judul-asesmen-terpilih').innerText = infoAsm.nama_materi || '-';
-    document.getElementById('eval-teks-catatan').innerHTML = rwt.catatan_guru ? `<i>"${rwt.catatan_guru}"</i>` : "<i style='color:#aaa;'>Belum ada umpan balik dari guru untuk sesi ini.</i>";
-
-    const btnEval = document.getElementById('btn-eval-profil');
-    btnEval.style.display = 'inline-block';
-    btnEval.onclick = function() {
-        bukaModalEvaluasi(idPenilaian, rwt.nama_siswa, rwt.catatan_guru, true);
-    };
-
-    const labels = [];
-    const dataNilai = [];
-    const pieColors = ['#FF6B6B', '#4ECDC4', '#fed330', '#26de81', '#4a69bd', '#e15f41', '#f8a5c2']; 
-
-    let instrumenAktif = semuaInstrumen;
-    if (infoAsm.instrumen_terpilih && infoAsm.instrumen_terpilih.length > 0) {
-        instrumenAktif = semuaInstrumen.filter(ins => infoAsm.instrumen_terpilih.includes(ins.id_kriteria));
-    }
-
-    instrumenAktif.forEach(ins => {
-        labels.push(ins.judul);
-        let nilaiPersen = 0;
-        if(rwt.nilai_akhir && rwt.nilai_akhir[ins.id_kriteria]) {
-            nilaiPersen = rwt.nilai_akhir[ins.id_kriteria].persen || 0;
+    showLoader();
+    try {
+        const rwt = currentRiwayatAll.find(r => r.id_penilaian === idPenilaian);
+        
+        if (!rwt) {
+            console.error("Riwayat tidak ditemukan untuk id:", idPenilaian);
+            alert("Data riwayat tidak ditemukan! Silakan muat ulang halaman.");
+            return;
         }
-        dataNilai.push(nilaiPersen);
-    });
 
-    const ctx = document.getElementById('evalPieChart');
-    const emptyState = document.getElementById('eval-pie-empty');
+        // Transisi View (Halaman Baru Rincian Capaian)
+        document.getElementById('view-daftar-asesmen-siswa').classList.add('hidden');
+        document.getElementById('card-rincian-capaian').classList.remove('hidden');
 
-    if(dataNilai.length === 0) {
-        ctx.style.display = 'none';
-        emptyState.style.display = 'block';
-        if(evalPieChartInstance) evalPieChartInstance.destroy();
-        return;
-    }
+        const resAsm = await fetch(`${API_URL}/asesmen`);
+        const dbAsm = await resAsm.json();
+        const infoAsm = dbAsm.find(a => a.id_assesment === rwt.id_assesment) || {};
+        
+        const resKriteria = await fetch(`${API_URL}/kriteria`);
+        const semuaInstrumen = await resKriteria.json();
 
-    ctx.style.display = 'block';
-    emptyState.style.display = 'none';
-    if (evalPieChartInstance) evalPieChartInstance.destroy();
+        document.getElementById('eval-judul-asesmen-terpilih').innerText = infoAsm.nama_materi || '-';
+        document.getElementById('eval-teks-catatan').innerHTML = rwt.catatan_guru ? `<i>"${rwt.catatan_guru}"</i>` : "<i style='color:#aaa;'>Belum ada umpan balik dari guru untuk sesi ini.</i>";
 
-    evalPieChartInstance = new Chart(ctx, {
-        type: 'pie',
-        data: {
-            labels: labels,
-            datasets: [{
-                data: dataNilai,
-                backgroundColor: pieColors.slice(0, dataNilai.length),
-                borderWidth: 2, borderColor: '#ffffff'
-            }]
-        },
-        options: {
-            responsive: true, maintainAspectRatio: false,
-            plugins: {
-                legend: { position: 'right', labels: { font: { family: 'Nunito', size: 12 } } },
-                tooltip: { callbacks: { label: function(context) { return ` ${context.label}: ${context.raw}%`; } } }
+        const btnEval = document.getElementById('btn-eval-profil');
+        btnEval.style.display = 'inline-block';
+        btnEval.onclick = function() {
+            // Gunakan elemen nama_siswa dari UI agar aman meskipun rwt tidak punya atribut tersebut
+            const namaSiswaUI = document.getElementById('eval-nama-siswa').innerText;
+            bukaModalEvaluasi(idPenilaian, namaSiswaUI, rwt.catatan_guru, true);
+        };
+
+        const labels = [];
+        const dataNilai = [];
+        const pieColors = ['#FF6B6B', '#4ECDC4', '#fed330', '#26de81', '#4a69bd', '#e15f41', '#f8a5c2']; 
+
+        let instrumenAktif = semuaInstrumen;
+        
+        // Proteksi parsing JSON untuk instrumen_terpilih jika berbentuk string
+        let terpilih = infoAsm.instrumen_terpilih;
+        if (typeof terpilih === 'string') {
+            try { terpilih = JSON.parse(terpilih); } catch(e) { terpilih = []; }
+        }
+
+        if (terpilih && Array.isArray(terpilih) && terpilih.length > 0) {
+            instrumenAktif = semuaInstrumen.filter(ins => terpilih.includes(ins.id_kriteria));
+        }
+
+        // Proteksi parsing JSON untuk nilai_akhir
+        let nilaiAkhirObj = rwt.nilai_akhir;
+        if (typeof nilaiAkhirObj === 'string') {
+            try { nilaiAkhirObj = JSON.parse(nilaiAkhirObj); } catch(e) { nilaiAkhirObj = {}; }
+        }
+
+        instrumenAktif.forEach(ins => {
+            labels.push(ins.judul);
+            let nilaiPersen = 0;
+            if(nilaiAkhirObj && nilaiAkhirObj[ins.id_kriteria]) {
+                nilaiPersen = nilaiAkhirObj[ins.id_kriteria].persen || 0;
             }
+            dataNilai.push(nilaiPersen);
+        });
+
+        const ctx = document.getElementById('evalPieChart');
+        const emptyState = document.getElementById('eval-pie-empty');
+
+        if(dataNilai.length === 0) {
+            ctx.style.display = 'none';
+            emptyState.style.display = 'block';
+            if(evalPieChartInstance) evalPieChartInstance.destroy();
+            return;
         }
-    });
+
+        ctx.style.display = 'block';
+        emptyState.style.display = 'none';
+        if (evalPieChartInstance) evalPieChartInstance.destroy();
+
+        evalPieChartInstance = new Chart(ctx, {
+            type: 'pie',
+            plugins: [ChartDataLabels],
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: dataNilai,
+                    backgroundColor: pieColors.slice(0, dataNilai.length),
+                    borderWidth: 2, borderColor: '#ffffff'
+                }]
+            },
+            options: {
+                responsive: true, maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'right', labels: { font: { family: 'Nunito', size: 12 } } },
+                    tooltip: { callbacks: { label: function(context) { return ` ${context.label}: ${context.raw}%`; } } },
+                    datalabels: {
+                        color: '#fff',
+                        font: { weight: 'bold', size: 14 },
+                        formatter: function(value, context) {
+                            return value > 0 ? value + '%' : '';
+                        }
+                    }
+                }
+            }
+        });
+
+        // Setup Tombol Export Excel
+        const btnExport = document.getElementById('btn-export-rincian-xlsx');
+        btnExport.style.display = 'inline-block';
+        btnExport.onclick = function() {
+            exportRincianAsesmenKeExcel(rwt, infoAsm, instrumenAktif);
+        };
+
+        // Render Tabel Detail Jawaban
+        const containerJawaban = document.getElementById('card-detail-jawaban');
+        let htmlDetailJawaban = '<h3 style="color: var(--text-dark); margin-bottom: 20px;">Rincian Jawaban Siswa</h3>';
+        
+        let skorMentah = rwt.detail_skor_mentah || {};
+        
+        instrumenAktif.forEach(ins => {
+            htmlDetailJawaban += `<h4 style="color: var(--secondary); margin-top: 25px; margin-bottom: 10px;">${ins.judul}</h4>`;
+            htmlDetailJawaban += `
+                <div style="overflow-x: auto; margin-bottom: 20px;">
+                    <table style="width: 100%; border-collapse: collapse; min-width: 600px;">
+                        <thead>
+                            <tr style="background-color: #f8f9fa; text-align: left;">
+                                <th style="padding: 12px; border: 1px solid #dee2e6;">Pertanyaan</th>
+                                <th style="padding: 12px; border: 1px solid #dee2e6; width: 100px;">Tipe</th>
+                                <th style="padding: 12px; border: 1px solid #dee2e6; width: 250px;">Jawaban</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+            
+            if(ins.normatif && Array.isArray(ins.normatif)) {
+                ins.normatif.forEach((item, index) => {
+                    let tipe = item.tipe || '-';
+                    let warnaTipe = tipe.toLowerCase() === 'positif' ? 'var(--positif)' : (tipe.toLowerCase() === 'negatif' ? 'var(--danger)' : 'inherit');
+                    
+                    let jawaban = '-';
+                    if (index === 4) { // Soal uraian selalu indeks ke-4 di format ini
+                        jawaban = skorMentah[`uraian_${ins.id_kriteria}_4`] || '-';
+                    } else { // Soal pilihan ganda
+                        let score = skorMentah[`score_${ins.id_kriteria}_${index}`];
+                        if (score !== undefined) {
+                            if (tipe.toLowerCase() === 'positif') {
+                                jawaban = (score == 1) ? 'Ya' : 'Tidak';
+                            } else if (tipe.toLowerCase() === 'negatif') {
+                                jawaban = (score == 1) ? 'Tidak' : 'Ya';
+                            } else {
+                                jawaban = score; // fallback 
+                            }
+                        }
+                    }
+                    
+                    htmlDetailJawaban += `
+                        <tr>
+                            <td style="padding: 12px; border: 1px solid #dee2e6; white-space: normal; line-height: 1.5;">${item.teks || '-'}</td>
+                            <td style="padding: 12px; border: 1px solid #dee2e6; color: ${warnaTipe}; font-weight: bold; text-transform: capitalize;">${tipe}</td>
+                            <td style="padding: 12px; border: 1px solid #dee2e6; font-weight: 500; white-space: pre-wrap;">${jawaban}</td>
+                        </tr>
+                    `;
+                });
+            }
+            
+            htmlDetailJawaban += `</tbody></table></div>`;
+        });
+        
+        containerJawaban.innerHTML = htmlDetailJawaban;
+        containerJawaban.classList.remove('hidden');
+    } catch (e) {
+        console.error("Terjadi kesalahan di renderCard2Evaluasi:", e);
+        alert("Gagal memuat rincian evaluasi. Silakan periksa koneksi atau lihat console log.");
+    } finally {
+        hideLoader();
+    }
+}
+
+function kembaliKeDaftarAsesmenSiswa() {
+    document.getElementById('card-rincian-capaian').classList.add('hidden');
+    document.getElementById('card-detail-jawaban').classList.add('hidden');
+    document.getElementById('view-daftar-asesmen-siswa').classList.remove('hidden');
+    
+    // Perbaikan Bug Tabel Hidden: Sesuaikan ulang jika ada perubahan lebar layar saat disembunyikan
+    if ($.fn.DataTable.isDataTable('#tabel-riwayat-individu')) {
+        $('#tabel-riwayat-individu').DataTable().columns.adjust().draw();
+    }
+}
+
+function exportRincianAsesmenKeExcel(rwt, infoAsm, instrumenAktif) {
+    if (!rwt || !instrumenAktif) return;
+    
+    try {
+        const aoa = [];
+        const namaSiswa = siswaIni ? siswaIni.nama : (document.getElementById('eval-nama-siswa').innerText || rwt.nama_siswa || 'Siswa');
+        const kelasSiswa = siswaIni ? siswaIni.kelas : (document.getElementById('eval-kelas-siswa').innerText.replace('Kelas: ', '') || '-');
+        const sekolahSiswa = siswaIni ? siswaIni.sekolah : '-';
+        const judulAsesmen = infoAsm.nama_materi || 'Asesmen';
+        let tgl = infoAsm.tanggal || new Date().toISOString().split('T')[0];
+        
+        // Header Dokumen
+        aoa.push(['DETAIL RINCIAN ASESMEN SISWA']);
+        aoa.push(['Nama Siswa', namaSiswa]);
+        aoa.push(['Kelas', kelasSiswa]);
+        aoa.push(['Sekolah', sekolahSiswa]);
+        aoa.push(['Judul Asesmen', judulAsesmen]);
+        aoa.push(['Tanggal', tgl]);
+        aoa.push([]); // baris kosong
+        
+        let skorMentah = rwt.detail_skor_mentah || {};
+        
+        // Isi Tabel Data
+        instrumenAktif.forEach(ins => {
+            aoa.push([ins.judul]); // Baris judul Kriteria
+            aoa.push(['Pertanyaan', 'Tipe', 'Jawaban']); // Header kolom
+            
+            if (ins.normatif && Array.isArray(ins.normatif)) {
+                ins.normatif.forEach((item, index) => {
+                    let tipe = item.tipe || '-';
+                    let jawaban = '-';
+                    
+                    if (index === 4) { // Uraian
+                        jawaban = skorMentah[`uraian_${ins.id_kriteria}_4`] || '-';
+                    } else { // Pilihan Ganda
+                        let score = skorMentah[`score_${ins.id_kriteria}_${index}`];
+                        if (score !== undefined) {
+                            if (tipe.toLowerCase() === 'positif') {
+                                jawaban = (score == 1) ? 'Ya' : 'Tidak';
+                            } else if (tipe.toLowerCase() === 'negatif') {
+                                jawaban = (score == 1) ? 'Tidak' : 'Ya';
+                            } else {
+                                jawaban = score;
+                            }
+                        }
+                    }
+                    aoa.push([item.teks || '-', tipe, jawaban]);
+                });
+            }
+            aoa.push([]); // baris kosong antar tabel
+        });
+        
+        const wb = XLSX.utils.book_new();
+        const ws = XLSX.utils.aoa_to_sheet(aoa);
+        
+        // Lebar Kolom
+        ws['!cols'] = [{ wch: 80 }, { wch: 15 }, { wch: 40 }];
+        
+        XLSX.utils.book_append_sheet(wb, ws, "Rincian");
+        
+        // Pembersihan karakter terlarang dari penamaan file
+        const safeNama = namaSiswa.replace(/[^a-zA-Z0-9]/g, '_');
+        const safeAsesmen = judulAsesmen.replace(/[^a-zA-Z0-9]/g, '_');
+        const safeTgl = tgl.replace(/[^a-zA-Z0-9]/g, '_');
+        
+        const fileName = `rincian_asesmen_${safeNama}-${safeAsesmen}-${safeTgl}.xlsx`;
+        XLSX.writeFile(wb, fileName);
+    } catch(e) {
+        console.error("Error Export Excel Rincian:", e);
+        alert("Gagal melakukan export data ke Excel.");
+    }
 }
 
 // ==========================================
@@ -2186,55 +2712,188 @@ async function renderBeranda() {
         document.getElementById('count-assesment').innerText = listAssesment.length;
         document.getElementById('count-riwayat').innerText = riwayatPenilaian.length;
 
-        const ctx = document.getElementById('progresChart');
-        if(!ctx) return;
-        if (progresChartInstance) { progresChartInstance.destroy(); }
+        // Setup Global Variables for Dashboard
+        dashboardDataSiswa = listSiswa;
+        dashboardDataRiwayat = riwayatPenilaian;
 
-        const labelAspekDinamis = listInstrumen.map(ins => ins.judul);
-        const dataRataRataDinamis = listInstrumen.map(ins => {
-            let akumulasiNilaiAspek = 0;
-            let jumlahSiswaDitemukan = 0;
-            riwayatPenilaian.forEach(p => {
-                if(p.nilai_akhir && p.nilai_akhir[ins.id_kriteria] !== undefined) {
-                    let nilaiAspek = p.nilai_akhir[ins.id_kriteria];
-                    let persenAspek = (typeof nilaiAspek === 'object' && nilaiAspek !== null) ? nilaiAspek.persen : nilaiAspek;
-                    akumulasiNilaiAspek += persenAspek;
-                    jumlahSiswaDitemukan++;
-                }
-            });
-            return jumlahSiswaDitemukan > 0 ? Math.round(akumulasiNilaiAspek / jumlahSiswaDitemukan) : 0;
+        // Generate Dropdown Sekolah
+        const sekolahSet = new Set();
+        listSiswa.forEach(s => { if(s.sekolah) sekolahSet.add(s.sekolah); });
+        
+        let htmlSekolah = `<li onclick="terapkanFilterGrafik('Semua', 'Semua')">Tampilkan Semua Sekolah</li>`;
+        Array.from(sekolahSet).sort().forEach(sek => {
+            htmlSekolah += `<li onclick="terapkanFilterGrafik('${sek}', 'Semua')">${sek}</li>`;
         });
+        document.getElementById('list-filter-sekolah').innerHTML = htmlSekolah;
 
-        progresChartInstance = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: labelAspekDinamis.length > 0 ? labelAspekDinamis : ['Belum Ada Instrumen'],
-                datasets: [
-                {
-                    label: 'Rata-rata Capaian Siswa (%)',
-                    data: dataRataRataDinamis.length > 0 ? dataRataRataDinamis : [0],
-                    backgroundColor: '#1E56A0',
-                    borderRadius: 4
-                },
-                {
-                    label: 'Target Ideal Capaian (100%)',
-                    data: labelAspekDinamis.length > 0 ? labelAspekDinamis.map(() => 100) : [100],
-                    backgroundColor: '#E74C3C',
-                    borderRadius: 4,
-                    opacity: 0.5
-                }
-                ]
-            },
-            options: {
-                responsive: true, maintainAspectRatio: false,
-                scales: { y: { min: 0, max: 100 } }
-            }
-        });
+        // Initial Render
+        terapkanFilterGrafik('Semua', 'Semua');
+
     } catch(err) { console.error(err); }
     finally {
-        // untuk menutup loader
         hideLoader(); 
     }
+}
+
+// Variables for Dashboard Drill-Down
+let dashboardDataSiswa = [];
+let dashboardDataRiwayat = [];
+let sekolahTerpilihGrafik = 'Semua';
+let kelasTerpilihGrafik = 'Semua';
+
+function toggleCustomDropdown(id, event) {
+    if(event) event.stopPropagation();
+    document.querySelectorAll('.dropdown-list').forEach(el => {
+        if(el.id !== id) el.classList.add('hidden');
+    });
+    document.getElementById(id).classList.toggle('hidden');
+}
+
+// Hide dropdown if clicked outside
+document.addEventListener('click', function() {
+    document.querySelectorAll('.dropdown-list').forEach(el => el.classList.add('hidden'));
+});
+
+function terapkanFilterGrafik(sekolah, kelas) {
+    sekolahTerpilihGrafik = sekolah;
+    kelasTerpilihGrafik = kelas;
+    
+    // Update Button Labels
+    document.getElementById('btn-filter-sekolah').innerHTML = `🏢 ${sekolah === 'Semua' ? 'Pilih Sekolah' : sekolah} ▾`;
+    document.getElementById('btn-filter-kelas').innerHTML = `🚪 ${kelas === 'Semua' ? 'Pilih Kelas' : kelas} ▾`;
+    
+    // Toggle Kelas Dropdown & Title
+    if (sekolah === 'Semua') {
+        document.getElementById('container-filter-kelas').style.display = 'none';
+        document.getElementById('chart-drilldown-title').innerText = 'Rata-rata Capaian Semua Sekolah';
+    } else {
+        document.getElementById('container-filter-kelas').style.display = 'inline-block';
+        document.getElementById('chart-drilldown-title').innerText = kelas === 'Semua' ? `Rata-rata Kelas di ${sekolah}` : `Capaian Siswa di ${kelas} (${sekolah})`;
+        
+        // Populate Kelas Dropdown
+        const kelasSet = new Set();
+        dashboardDataSiswa.filter(s => s.sekolah === sekolah).forEach(s => {
+            if(s.kelas) kelasSet.add(s.kelas);
+        });
+        let htmlKelas = `<li onclick="terapkanFilterGrafik('${sekolah}', 'Semua')">Tampilkan Semua Kelas</li>`;
+        Array.from(kelasSet).sort().forEach(k => {
+            htmlKelas += `<li onclick="terapkanFilterGrafik('${sekolah}', '${k}')">Kelas ${k}</li>`;
+        });
+        document.getElementById('list-filter-kelas').innerHTML = htmlKelas;
+    }
+    
+    renderGrafikDashboard();
+}
+
+function renderGrafikDashboard() {
+    const ctx = document.getElementById('progresChart');
+    if(!ctx) return;
+    if (progresChartInstance) { progresChartInstance.destroy(); }
+    
+    let labels = [];
+    let dataRataRata = [];
+    
+    // Hitung rata-rata per siswa
+    const mapSiswaAvg = {}; 
+    dashboardDataSiswa.forEach(s => {
+        const riwayats = dashboardDataRiwayat.filter(r => r.id_siswa === s.id_siswa);
+        if(riwayats.length > 0) {
+            let sum = 0, count = 0;
+            riwayats.forEach(r => {
+                if (r.nilai_akhir && r.nilai_akhir.total) {
+                    sum += r.nilai_akhir.total.persen;
+                    count++;
+                }
+            });
+            mapSiswaAvg[s.id_siswa] = count > 0 ? sum / count : 0;
+        }
+    });
+
+    if (sekolahTerpilihGrafik === 'Semua') {
+        // Tampilkan Rata-rata per Sekolah
+        const mapSekolah = {};
+        dashboardDataSiswa.forEach(s => {
+            const sek = s.sekolah || 'Semua Sekolah';
+            if (!mapSekolah[sek]) mapSekolah[sek] = {sum: 0, count: 0};
+            if (mapSiswaAvg[s.id_siswa] !== undefined) {
+                mapSekolah[sek].sum += mapSiswaAvg[s.id_siswa];
+                mapSekolah[sek].count++;
+            }
+        });
+        for (const [sek, stats] of Object.entries(mapSekolah)) {
+            labels.push(sek);
+            dataRataRata.push(stats.count > 0 ? Math.round(stats.sum / stats.count) : 0);
+        }
+    } 
+    else if (kelasTerpilihGrafik === 'Semua') {
+        // Tampilkan Rata-rata per Kelas
+        const mapKelas = {}; 
+        dashboardDataSiswa.filter(s => s.sekolah === sekolahTerpilihGrafik).forEach(s => {
+            const kl = s.kelas || 'Semua Kelas';
+            if (!mapKelas[kl]) mapKelas[kl] = {sum: 0, count: 0};
+            if (mapSiswaAvg[s.id_siswa] !== undefined) {
+                mapKelas[kl].sum += mapSiswaAvg[s.id_siswa];
+                mapKelas[kl].count++;
+            }
+        });
+        for (const [kl, stats] of Object.entries(mapKelas)) {
+            labels.push(kl);
+            dataRataRata.push(stats.count > 0 ? Math.round(stats.sum / stats.count) : 0);
+        }
+    } 
+    else {
+        // Tampilkan Rata-rata per Siswa
+        dashboardDataSiswa.filter(s => s.sekolah === sekolahTerpilihGrafik && s.kelas === kelasTerpilihGrafik).forEach(s => {
+            if (mapSiswaAvg[s.id_siswa] !== undefined) {
+                labels.push(s.nama);
+                dataRataRata.push(Math.round(mapSiswaAvg[s.id_siswa]));
+            }
+        });
+    }
+    
+    if (labels.length === 0) {
+        labels = ['Belum Ada Data'];
+        dataRataRata = [0];
+    }
+    
+    // Penyesuaian Lebar Dinamis Grafik (Responsive Scroll)
+    // 60px adalah lebar minimal yang kita alokasikan per batang
+    const minWidthPerBar = 60; 
+    const calculatedWidth = labels.length * minWidthPerBar;
+    
+    const chartBox = document.getElementById('progresChartBox');
+    if (chartBox) {
+        // Jika hasil kalkulasi lebih lebar dari 100%, gunakan px agar scrollbar muncul
+        chartBox.style.minWidth = `max(100%, ${calculatedWidth}px)`;
+    }
+    
+    progresChartInstance = new Chart(ctx, {
+        type: 'bar',
+        plugins: [ChartDataLabels],
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Rata-rata Capaian (%)',
+                data: dataRataRata,
+                backgroundColor: '#1E56A0',
+                borderRadius: 4
+            }]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            scales: {
+                y: { beginAtZero: true, max: 100 }
+            },
+            plugins: {
+                legend: { display: false },
+                datalabels: {
+                    color: '#fff',
+                    font: { weight: 'bold' },
+                    formatter: function(value) { return value > 0 ? value + '%' : ''; }
+                }
+            }
+        }
+    });
 }
 
 async function exportAssesmentKeExcel(idAssesment) {
@@ -2317,9 +2976,7 @@ async function exportRiwayatIndividuKeExcel() {
     try {
         if(currentRiwayatAll.length === 0) { alert("Tidak ada data riwayat untuk diexport!"); return; }
 
-        const resSiswa = await fetch(`${API_URL}/siswa`);
-        const listSiswa = await resSiswa.json();
-        const siswa = listSiswa.find(s => s.id_siswa === currentSiswaEvaluasiId) || {};
+        const siswa = siswaIni || {};
         
         const resAsm = await fetch(`${API_URL}/asesmen`);
         const dbAsm = await resAsm.json();
@@ -2327,7 +2984,7 @@ async function exportRiwayatIndividuKeExcel() {
         const wsData = [];
         wsData.push([`Riwayat Evaluasi Asesmen PJOK`]); 
         wsData.push([]); 
-        wsData.push([`Nama Siswa`, `:`, siswa.nama]);
+        wsData.push([`Nama Siswa`, `:`, siswa.nama || '-']);
         wsData.push([`NIS/NISN`, `:`, siswa.nis || '-']);
         wsData.push([`Kelas`, `:`, siswa.kelas || '-']);
         wsData.push([`Sekolah`, `:`, siswa.sekolah || '-']);
@@ -2346,7 +3003,13 @@ async function exportRiwayatIndividuKeExcel() {
 
         const wb = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(wb, ws, "Riwayat_Siswa");
-        XLSX.writeFile(wb, `Riwayat_${siswa.nama.replace(/[^a-zA-Z0-9]/g, '_')}.xlsx`);
+        
+        const safeNama = (siswa.nama || 'Siswa').replace(/[^a-zA-Z0-9]/g, '_');
+        const safeKelas = (siswa.kelas || 'Kelas').replace(/[^a-zA-Z0-9]/g, '_');
+        const safeSekolah = (siswa.sekolah || 'Sekolah').replace(/[^a-zA-Z0-9]/g, '_');
+        
+        const fileName = `riwayat_asesmen-${safeNama}-${safeKelas}-${safeSekolah}.xlsx`;
+        XLSX.writeFile(wb, fileName);
 
     } catch(err) { alert("Gagal mengunduh Excel."); }
 }
