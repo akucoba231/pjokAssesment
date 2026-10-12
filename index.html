@@ -208,6 +208,32 @@
             background-color: #f1f2f6;
             color: var(--primary);
         }
+
+        /* --- CONTROL BUTTON SISWA (RESPONSIF) --- */
+        #control-button {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+        }
+
+        @media (max-width: 768px) {
+            #control-button {
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                width: 100%;
+                gap: 10px;
+                margin-top: 10px;
+            }
+            #control-button .btn {
+                width: 100%;
+                max-width: 320px;
+                justify-content: center;
+                text-align: center;
+                margin: 0 auto;
+            }
+        }
     </style>
 
 </head>
@@ -571,7 +597,7 @@
                 <div class="flex-between">
                     <h2 class="page-title" style="margin-bottom: 0;">Pilih Sekolah</h2>
                     <div class="no-display">
-                        <button class="btn btn-primary" onclick="bukaModalImport()">Import Siswa</button>
+                        <button class="btn btn-primary" onclick="bukaModalImport()">📥 Import Siswa</button>
                         <button class="btn btn-success" onclick="bukaModalSiswa()">+ Tambah Siswa</button>
                     </div>
                 </div>
@@ -587,7 +613,7 @@
                     <h2 class="page-title" style="margin-bottom: 0;">Pilih Kelas</h2>
                     <div>
                         <button class="btn btn-outline" onclick="kembaliKePilihSekolah()">⬅ Kembali</button>
-                        <button class="btn btn-primary no-display" onclick="bukaModalImport()">Import Siswa</button>
+                        <button class="btn btn-primary no-display" onclick="bukaModalImport()">📥 Import Siswa</button>
                         <button class="btn btn-success no-display" onclick="bukaModalSiswa()">+ Tambah Siswa</button>
                     </div>
                 </div>
@@ -601,13 +627,14 @@
             <div id="view-data-siswa" class="card hidden">
                 <div class="flex-between">
                     <h2 class="page-title" style="margin-bottom: 0; border: none; padding: 0;">Daftar Siswa</h2>
-                    <div>
+                    <div id="control-button">
                         <button class="btn btn-outline" onclick="kembaliKePilihKelas()">⬅ Kembali</button>
                         <!-- Select disembunyikan agar filter JS DataTable lama tetap bekerja -->
                         <select id="filter-sekolah" class="form-control" style="display: none;" onchange="filterDataSiswa()"></select>
                         <select id="filter-kelas" class="form-control" style="display: none;" onchange="filterDataSiswa()"></select>
-                        <button class="btn btn-primary" onclick="bukaModalImport()">Import Siswa</button>
+                        <button class="btn btn-primary" onclick="bukaModalImport()">📥 Import Siswa</button>
                         <button class="btn btn-success" onclick="bukaModalSiswa()">+ Tambah Siswa</button>
+                        <button class="btn btn-warning" id="btn-export-siswa" onclick="exportDataSiswa()">📤 Export Data Siswa</button>
                     </div>
                 </div>
                 <div class="table-responsive">
@@ -1586,6 +1613,108 @@ function prosesImportExcel(event) {
         }
     };
     reader.readAsArrayBuffer(file);
+}
+
+async function exportDataSiswa() {
+    showLoader();
+    try {
+        let listSiswa = window.availableKelasSiswa;
+        if (!listSiswa || !Array.isArray(listSiswa) || listSiswa.length === 0) {
+            const res = await fetch(`${API_URL}/siswa`);
+            listSiswa = await res.json();
+            window.availableKelasSiswa = listSiswa;
+        }
+
+        const filterSekolah = (document.getElementById('filter-sekolah')?.value || '').trim();
+        const filterKelas = (document.getElementById('filter-kelas')?.value || '').trim();
+
+        let dataFiltered = [...listSiswa];
+        if (filterSekolah) {
+            dataFiltered = dataFiltered.filter(s => s.sekolah === filterSekolah);
+        }
+        if (filterKelas) {
+            dataFiltered = dataFiltered.filter(s => s.kelas === filterKelas);
+        }
+
+        if (dataFiltered.length === 0) {
+            alert("Tidak ada data siswa untuk diexport pada filter yang dipilih.");
+            return;
+        }
+
+        // Urutkan berdasarkan nomor absen, lalu nama
+        dataFiltered.sort((a, b) => {
+            const absA = parseInt(a.absen) || 0;
+            const absB = parseInt(b.absen) || 0;
+            if (absA !== absB) return absA - absB;
+            return (a.nama || '').localeCompare(b.nama || '');
+        });
+
+        // 1. Judul: Data Akun Siswa Kelas {kelas_sesuai_filter} {sekolah_sesuai_filter}
+        const strKelas = filterKelas ? `Kelas ${filterKelas}` : '';
+        const strSekolah = filterSekolah ? filterSekolah : '';
+        const judul = `Data Akun Siswa ${strKelas} ${strSekolah}`.replace(/\s+/g, ' ').trim();
+
+        // 2. Subjudul: {nama_guru} {nip}
+        const guruStr = sessionStorage.getItem('guruAktif');
+        const guru = guruStr ? JSON.parse(guruStr) : {};
+        const namaGuru = guru.nama_lengkap || guru.nama || '';
+        let nipGuru = guru.nip || '';
+        if (nipGuru && !nipGuru.toString().toLowerCase().includes('nip')) {
+            nipGuru = `NIP. ${nipGuru}`;
+        }
+        const subjudul = `${namaGuru} ${nipGuru}`.replace(/\s+/g, ' ').trim() || '-';
+
+        // 3. Susun data untuk SheetJS (aoa)
+        const wsData = [];
+        wsData.push([judul]);        // Baris 1: Judul
+        wsData.push([subjudul]);     // Baris 2: Subjudul
+        wsData.push([]);             // Baris 3: Spacer 1 baris
+        wsData.push(["No", "NIS", "Nama Siswa", "Username", "Password"]); // Baris 4: Header tabel
+
+        // Baris 5+: Data tabel akun siswa
+        let no = 1;
+        dataFiltered.forEach(item => {
+            wsData.push([
+                no++,
+                item.nis ? String(item.nis) : (item.nisn ? String(item.nisn) : '-'),
+                item.nama || '-',
+                item.username || '-',
+                item.password || '123'
+            ]);
+        });
+
+        const ws = XLSX.utils.aoa_to_sheet(wsData);
+
+        // Lebar kolom rapi
+        ws['!cols'] = [
+            { wch: 6 },  // No
+            { wch: 18 }, // NIS
+            { wch: 32 }, // Nama Siswa
+            { wch: 22 }, // Username
+            { wch: 20 }  // Password
+        ];
+
+        // Merge judul dan subjudul melintasi 5 kolom tabel
+        ws['!merges'] = [
+            { s: { r: 0, c: 0 }, e: { r: 0, c: 4 } },
+            { s: { r: 1, c: 0 }, e: { r: 1, c: 4 } }
+        ];
+
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "Akun_Siswa");
+
+        // Penamaan file export yang aman
+        const fileKelas = filterKelas ? `Kelas_${filterKelas}` : 'Semua_Kelas';
+        const fileSekolah = filterSekolah ? filterSekolah : 'Semua_Sekolah';
+        const safeFileName = `Data_Akun_Siswa_${fileKelas}_${fileSekolah}`.replace(/[^a-zA-Z0-9_-]/g, '_') + '.xlsx';
+
+        XLSX.writeFile(wb, safeFileName);
+    } catch (err) {
+        console.error("Error export data siswa:", err);
+        alert("Gagal melakukan export data siswa ke Excel.");
+    } finally {
+        hideLoader();
+    }
 }
 
 // ==========================================
